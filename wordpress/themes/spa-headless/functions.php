@@ -20,6 +20,8 @@ add_action( 'wp_enqueue_scripts', 'spa_theme_assets' );
 add_action( 'wp_head', 'spa_theme_noindex', 0 );
 add_filter( 'block_categories_all', 'spa_theme_block_category' );
 add_filter( 'blockstudio/settings/tailwind/config', 'spa_theme_tailwind_config' );
+add_filter( 'upload_mimes', 'spa_theme_allow_svg_mime' );
+add_filter( 'wp_check_filetype_and_ext', 'spa_theme_fix_svg_mime', 10, 4 );
 
 /**
  * Theme supports. The block editor is the authoring surface.
@@ -56,6 +58,46 @@ function spa_theme_setup(): void {
 			'unlink-homepage-logo' => true,
 		)
 	);
+}
+
+/**
+ * Allow SVG uploads (site logo, media library). Only use trusted files —
+ * SVG can contain script.
+ *
+ * @param array<string, string> $mimes
+ * @return array<string, string>
+ */
+function spa_theme_allow_svg_mime( array $mimes ): array {
+	$mimes['svg'] = 'image/svg+xml';
+
+	return $mimes;
+}
+
+/**
+ * WordPress's real MIME sniffer rejects SVG; restore the type after the
+ * extension check when the file is an SVG.
+ *
+ * @param array{ext?: string|false, type?: string|false, proper_filename?: string|false} $data
+ * @param string                                                                        $file
+ * @param string                                                                        $filename
+ * @param array<string, string>|null                                                    $mimes
+ * @return array{ext?: string|false, type?: string|false, proper_filename?: string|false}
+ */
+function spa_theme_fix_svg_mime( array $data, string $file, string $filename, $mimes ): array {
+	unset( $file, $mimes );
+
+	if ( ! empty( $data['ext'] ) && ! empty( $data['type'] ) ) {
+		return $data;
+	}
+
+	if ( 'svg' !== strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) ) ) {
+		return $data;
+	}
+
+	$data['ext']  = 'svg';
+	$data['type'] = 'image/svg+xml';
+
+	return $data;
 }
 
 /**
