@@ -1,3 +1,5 @@
+import type { SiteIcon } from "./icons";
+
 export interface MenuItem {
   id: number;
   title: string;
@@ -37,6 +39,7 @@ export interface WpSite {
   description: string;
   url: string;
   logo: SiteLogo | null;
+  siteIcon?: SiteIcon | null;
   announcement?: Announcement | null;
 }
 

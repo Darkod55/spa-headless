@@ -1,3 +1,4 @@
+import type { SiteIcon } from "./icons";
 import type { MenuItem, WpMenu, WpSite } from "./menu";
 import type { WpBlock, WpContent, WpRoute } from "./types";
 
@@ -397,6 +398,15 @@ export function fixtureMenu(location = "primary"): WpMenu | null {
   };
 }
 
+/** Live repo favicon fallback: public/logo.svg (BaseLayout uses this when EmDash has no favicon). */
+export function fixtureSiteIcon(): SiteIcon {
+  const url = "/fixtures/favicon.svg";
+  return {
+    mime: "image/svg+xml",
+    sizes: { "32": url, "180": url, "192": url, "270": url },
+  };
+}
+
 export function fixtureSite(): WpSite {
   return {
     title: "The Square Peg Agency",
@@ -409,6 +419,7 @@ export function fixtureSite(): WpSite {
       alt: "The Square Peg Agency",
       mime: "image/svg+xml",
     },
+    siteIcon: fixtureSiteIcon(),
     announcement: {
       enabled: true,
       message: "Is your website underperforming?\nNot ranking on Google or showing up in AI search?",

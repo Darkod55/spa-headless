@@ -4,6 +4,7 @@ import "../styles/content.css";
 import SiteHeader from "../components/layout/SiteHeader.astro";
 import { gaMeasurementId } from "../lib/analytics";
 import { getMenu, getSite } from "../lib/wp/client";
+import { siteIconTags, stripHeadIconTags } from "../lib/wp/icons";
 
 interface Props {
   title: string;
@@ -14,6 +15,8 @@ interface Props {
 const { title, path, head = null } = Astro.props;
 const gaId = gaMeasurementId();
 const [site, menu] = await Promise.all([getSite(), getMenu("primary")]);
+const iconTags = siteIconTags(site.siteIcon);
+const seoHead = head && iconTags.length > 0 ? stripHeadIconTags(head) : head;
 ---
 
 <!doctype html>
@@ -21,10 +24,18 @@ const [site, menu] = await Promise.all([getSite(), getMenu("primary")]);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/fixtures/mark.svg" type="image/svg+xml" />
     {
-      head ? (
-        <Fragment set:html={head} />
+      iconTags.map((tag) =>
+        tag.kind === "link" ? (
+          <link rel={tag.rel} href={tag.href} type={tag.type} sizes={tag.sizes} />
+        ) : (
+          <meta name={tag.name} content={tag.content} />
+        ),
+      )
+    }
+    {
+      seoHead ? (
+        <Fragment set:html={seoHead} />
       ) : (
         <title>{title} — The Square Peg Agency</title>
       )

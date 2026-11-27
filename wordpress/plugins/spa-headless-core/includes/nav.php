@@ -357,6 +357,46 @@ function spa_headless_format_announcement( array $values, string $home ): array 
 }
 
 /**
+ * Site Identity → Site Icon, via get_site_icon_url().
+ *
+ * Sizes match wp_site_icon(): 32 and 192 for rel=icon, 180 for apple-touch,
+ * 270 for the Windows tile image. An SVG has no resized derivatives, so every
+ * size is the original file URL. The Astro layout collapses that to one tag.
+ *
+ * @return array{mime: string, sizes: array{32: string|null, 180: string|null, 192: string|null, 270: string|null}}|null
+ */
+function spa_headless_site_icon(): ?array {
+	if ( ! has_site_icon() ) {
+		return null;
+	}
+
+	$id   = (int) get_option( 'site_icon' );
+	$mime = get_post_mime_type( $id );
+	$mime = is_string( $mime ) ? $mime : '';
+
+	$sizes = array();
+	foreach ( array( 32, 180, 192, 270 ) as $size ) {
+		$url              = get_site_icon_url( $size );
+		$sizes[ (string) $size ] = is_string( $url ) && '' !== $url ? $url : null;
+	}
+
+	$present = array_filter( $sizes );
+	if ( array() === $present ) {
+		return null;
+	}
+
+	return array(
+		'mime'  => $mime,
+		'sizes' => array(
+			'32'  => $sizes['32'],
+			'180' => $sizes['180'],
+			'192' => $sizes['192'],
+			'270' => $sizes['270'],
+		),
+	);
+}
+
+/**
  * Theme mods from Appearance → Customize → Announcement bar.
  *
  * @return array{enabled: bool, message: string, linkLabel: string, url: string, target: string}
@@ -386,6 +426,7 @@ function spa_headless_rest_site(): WP_REST_Response {
 			'description'  => get_bloginfo( 'description' ),
 			'url'          => home_url( '/' ),
 			'logo'         => spa_headless_site_logo(),
+			'siteIcon'     => spa_headless_site_icon(),
 			'announcement' => spa_headless_announcement(),
 		)
 	);
