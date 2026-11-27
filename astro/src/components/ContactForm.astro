@@ -1,0 +1,79 @@
+---
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? "";
+---
+
+<form id="contact-form" class="contact-form" method="post" action="/api/contact">
+  <h2>Send a message</h2>
+  <label>
+    Name
+    <input name="name" autocomplete="name" required maxlength="200" />
+  </label>
+  <label>
+    Email
+    <input name="email" type="email" autocomplete="email" required maxlength="200" />
+  </label>
+  <label>
+    Organisation <span>(optional)</span>
+    <input name="organisation" autocomplete="organization" maxlength="200" />
+  </label>
+  <label>
+    Message
+    <textarea name="message" required maxlength="5000" rows="6"></textarea>
+  </label>
+  <div class="hp" aria-hidden="true">
+    <label>
+      Website
+      <input name="company_website" tabindex="-1" autocomplete="off" />
+    </label>
+  </div>
+  {siteKey && <div class="cf-turnstile" data-sitekey={siteKey}></div>}
+  <button class="btn btn-primary" type="submit">Send</button>
+  <p class="form-status" role="status" aria-live="polite"></p>
+</form>
+
+{
+  siteKey && (
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  )
+}
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("#contact-form");
+  const status = form?.querySelector<HTMLElement>(".form-status");
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!form || !status) {
+      return;
+    }
+
+    const data = new FormData(form);
+    const turnstile = form.querySelector<HTMLTextAreaElement | HTMLInputElement>(
+      '[name="cf-turnstile-response"]',
+    );
+
+    status.textContent = "Sending…";
+
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        name: data.get("name"),
+        email: data.get("email"),
+        organisation: data.get("organisation"),
+        message: data.get("message"),
+        company_website: data.get("company_website"),
+        turnstileToken: turnstile?.value ?? "",
+      }),
+    });
+
+    const payload = (await response.json()) as { ok?: boolean; error?: string };
+    if (response.ok && payload.ok) {
+      status.textContent = "Thanks. We'll come back to you.";
+      form.reset();
+      return;
+    }
+
+    status.textContent = payload.error || "The message could not be sent.";
+  });
+</script>

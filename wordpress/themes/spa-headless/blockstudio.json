@@ -1,0 +1,19 @@
+{
+  "$schema": "https://blockstudio.dev/schema/blockstudio",
+  "assets": {
+    "enqueue": true,
+    "reset": {
+      "enabled": true,
+      "fullWidth": ["page"]
+    },
+    "minify": { "css": true, "js": true },
+    "process": { "scss": false, "scssFiles": true }
+  },
+  "tailwind": {
+    "enabled": true,
+    "config": ""
+  },
+  "dev": {
+    "canvas": { "enabled": true }
+  }
+}

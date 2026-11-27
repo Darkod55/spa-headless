@@ -1,0 +1,42 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "spa/section",
+  "title": "Section",
+  "category": "spa",
+  "icon": "editor-justify",
+  "description": "A headed section whose body is InnerBlocks, usually native core blocks.",
+  "blockstudio": {
+    "attributes": [
+      {
+        "type": "tabs",
+        "tabs": [
+          {
+            "title": "Content",
+            "attributes": [
+              {
+                "type": "group",
+                "attributes": [
+                  {
+                    "id": "heading",
+                    "type": "text",
+                    "label": "Heading",
+                    "default": "Section heading"
+                  },
+                  {
+                    "id": "intro",
+                    "type": "textarea",
+                    "label": "Intro"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Section",
+            "attributes": [{ "type": "custom/section" }]
+          }
+        ]
+      }
+    ]
+  }
+}

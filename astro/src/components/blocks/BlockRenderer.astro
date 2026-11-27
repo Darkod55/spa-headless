@@ -1,0 +1,180 @@
+---
+import type { WpBlock } from "../../lib/wp/types";
+import type {
+  SpaCardGridAttributes,
+  SpaHeroAttributes,
+  SpaSectionAttributes,
+} from "../../generated/blocks";
+import { fallbackPlan } from "../../lib/blocks/fallback";
+import BlockRenderer from "./BlockRenderer.astro";
+import Hero from "./spa/Hero.astro";
+import Section from "./spa/Section.astro";
+import CardGrid from "./spa/CardGrid.astro";
+import Paragraph from "./core/Paragraph.astro";
+import Heading from "./core/Heading.astro";
+import WpImage from "./core/Image.astro";
+import List from "./core/List.astro";
+import ListItem from "./core/ListItem.astro";
+import Buttons from "./core/Buttons.astro";
+import Button from "./core/Button.astro";
+import Group from "./core/Group.astro";
+import Columns from "./core/Columns.astro";
+import Column from "./core/Column.astro";
+
+interface Props {
+  block: WpBlock;
+}
+
+const { block } = Astro.props;
+const name = block.blockName;
+const pieces = fallbackPlan(block);
+const mapped = new Set([
+  "spa/hero",
+  "spa/section",
+  "spa/card-grid",
+  "core/paragraph",
+  "core/heading",
+  "core/image",
+  "core/list",
+  "core/list-item",
+  "core/buttons",
+  "core/button",
+  "core/group",
+  "core/columns",
+  "core/column",
+]);
+---
+
+{
+  name === "spa/hero" && (
+    <Hero attrs={block.attrs as SpaHeroAttributes}>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </Hero>
+  )
+}
+{
+  name === "spa/section" && (
+    <Section attrs={block.attrs as SpaSectionAttributes}>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </Section>
+  )
+}
+{
+  name === "spa/card-grid" && (
+    <CardGrid attrs={block.attrs as SpaCardGridAttributes}>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </CardGrid>
+  )
+}
+{
+  name === "core/paragraph" && (
+    <Paragraph block={block}>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </Paragraph>
+  )
+}
+{
+  name === "core/heading" && (
+    <Heading block={block}>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </Heading>
+  )
+}
+{
+  name === "core/image" && (
+    <WpImage block={block}>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </WpImage>
+  )
+}
+{
+  name === "core/list" && block.innerBlocks.length > 0 && (
+    <List block={block}>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </List>
+  )
+}
+{
+  name === "core/list" && block.innerBlocks.length === 0 && <Fragment set:html={block.innerHTML} />
+}
+{
+  name === "core/list-item" && (
+    <ListItem block={block}>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </ListItem>
+  )
+}
+{
+  name === "core/buttons" && (
+    <Buttons>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </Buttons>
+  )
+}
+{
+  name === "core/button" && (
+    <Button block={block}>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </Button>
+  )
+}
+{
+  name === "core/group" && (
+    <Group>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </Group>
+  )
+}
+{
+  name === "core/columns" && (
+    <Columns>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </Columns>
+  )
+}
+{
+  name === "core/column" && (
+    <Column>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </Column>
+  )
+}
+{
+  (name === null || !mapped.has(name)) && (
+    <div class="wp-fallback" data-block={name ?? "freeform"}>
+      {pieces.map((piece) => {
+        if (piece.kind === "html") {
+          return <Fragment set:html={piece.html} />;
+        }
+        const child = block.innerBlocks[piece.index];
+        return child ? <BlockRenderer block={child} /> : null;
+      })}
+    </div>
+  )
+}

@@ -1,0 +1,17 @@
+---
+import type { WpBlock } from "../../../lib/wp/types";
+
+interface Props {
+  block: WpBlock;
+}
+
+const { block } = Astro.props;
+const html =
+  block.innerHTML ||
+  (typeof block.attrs.content === "string" ? `<p>${block.attrs.content}</p>` : "");
+---
+
+<div class="wp-paragraph">
+  <Fragment set:html={html} />
+  <slot />
+</div>

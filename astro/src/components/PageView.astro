@@ -1,0 +1,29 @@
+---
+import Base from "../layouts/Base.astro";
+import BlockRenderer from "./blocks/BlockRenderer.astro";
+import ContactForm from "./ContactForm.astro";
+import type { WpContent } from "../lib/wp/types";
+
+interface Props {
+  content: WpContent;
+  head: string | null;
+}
+
+const { content, head } = Astro.props;
+const hasHero = content.blocks.some((block) => block.blockName === "spa/hero");
+const showTitle = !content.meta.spa_hide_title && !hasHero;
+---
+
+<Base title={content.title} path={content.path} head={head}>
+  {
+    content.status !== "publish" && (
+      <p class="draft-banner">Preview of a {content.status} {content.type}.</p>
+    )
+  }
+  <article>
+    {content.meta.spa_eyebrow && !hasHero && <p class="page-kicker wrap">{content.meta.spa_eyebrow}</p>}
+    {showTitle && <h1 class="page-title wrap">{content.title}</h1>}
+    {content.blocks.map((block) => <BlockRenderer block={block} />)}
+    {content.path === "/contact" && <ContactForm />}
+  </article>
+</Base>

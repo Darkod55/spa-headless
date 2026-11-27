@@ -1,0 +1,77 @@
+---
+import "../styles/global.css";
+import { gaMeasurementId } from "../lib/analytics";
+
+interface Props {
+  title: string;
+  path: string;
+  head?: string | null;
+}
+
+const { title, path, head = null } = Astro.props;
+const gaId = gaMeasurementId();
+const nav = [
+  { href: "/about", label: "About" },
+  { href: "/services", label: "Services" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
+];
+---
+
+<!doctype html>
+<html lang="en" data-ga={gaId}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/fixtures/mark.svg" type="image/svg+xml" />
+    {
+      head ? (
+        <Fragment set:html={head} />
+      ) : (
+        <title>{title} — The Square Peg Agency</title>
+      )
+    }
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="/">The Square Peg Agency</a>
+      <nav class="nav" aria-label="Primary">
+        {
+          nav.map((item) => (
+            <a href={item.href} aria-current={path === item.href ? "page" : undefined}>
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+    </header>
+    <main id="content">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>The Square Peg Agency</p>
+      <nav aria-label="Legal">
+        <a href="/privacy-policy">Privacy</a>
+        <a href="/cookie-policy">Cookies</a>
+        <a href="/terms-and-conditions">Terms</a>
+      </nav>
+    </footer>
+    <script>
+      const measurementId = document.documentElement.dataset.ga ?? "";
+      if (/^G-[A-Z0-9]+$/.test(measurementId)) {
+        const analytics = window as Window & { dataLayer?: unknown[][] };
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+        document.head.append(script);
+        analytics.dataLayer = analytics.dataLayer ?? [];
+        const gtag = (...args: unknown[]) => {
+          analytics.dataLayer?.push(args);
+        };
+        gtag("js", new Date());
+        gtag("config", measurementId);
+      }
+    </script>
+  </body>
+</html>

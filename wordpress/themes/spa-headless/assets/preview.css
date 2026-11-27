@@ -1,0 +1,114 @@
+:root {
+	color: #1c1915;
+	background: #f4f1ea;
+	font-family: "Avenir Next", "Segoe UI", sans-serif;
+	line-height: 1.5;
+}
+
+body {
+	margin: 0;
+}
+
+.spa-cms-note {
+	margin: 0;
+	padding: 0.6rem 1.25rem;
+	background: #1f4d3a;
+	color: #f4f1ea;
+	font-size: 0.85rem;
+}
+
+.spa-cms-note a {
+	color: inherit;
+}
+
+.spa-section {
+	padding: 4.5rem 1.5rem;
+}
+
+.spa-section.has-accent {
+	background: #e7f0eb;
+}
+
+.spa-container {
+	width: min(72rem, 100%);
+	margin-inline: auto;
+}
+
+.spa-container.is-flush {
+	padding-bottom: 0;
+}
+
+.spa-hero h1,
+.spa-section h2,
+.spa-card h3 {
+	font-family: "Iowan Old Style", Palatino, Georgia, serif;
+	font-weight: 500;
+	letter-spacing: -0.02em;
+	line-height: 1.1;
+}
+
+.spa-hero h1 {
+	font-size: clamp(2.5rem, 6vw, 4.5rem);
+	margin: 0.4rem 0 0;
+}
+
+.spa-kicker {
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	font-size: 0.78rem;
+	color: #1f4d3a;
+}
+
+.spa-lead,
+.spa-section p {
+	max-width: 40rem;
+	color: #3f3a33;
+	font-size: 1.05rem;
+}
+
+.spa-actions,
+.spa-card-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+}
+
+.spa-card-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+	gap: 1rem;
+	margin-top: 1.5rem;
+}
+
+.spa-card {
+	padding: 1.25rem;
+	background: #fffcf7;
+	border: 1px solid #ddd6c8;
+	border-radius: 1rem;
+}
+
+.spa-button {
+	display: inline-flex;
+	padding: 0.65rem 1rem;
+	border-radius: 999px;
+	text-decoration: none;
+	color: #1c1915;
+	border: 1px solid #ddd6c8;
+}
+
+.spa-button.is-primary {
+	background: #1f4d3a;
+	color: #f4f1ea;
+	border-color: #1f4d3a;
+}
+
+.spa-hero-media {
+	margin-top: 1.5rem;
+}
+
+.spa-hero-media img,
+.spa-card img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 1rem;
+}

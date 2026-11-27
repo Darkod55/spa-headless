@@ -1,0 +1,22 @@
+{
+  "$schema": "https://blockstudio.dev/schema/field",
+  "name": "section",
+  "title": "Section",
+  "attributes": [
+    {
+      "type": "group",
+      "attributes": [
+        {
+          "id": "removeBottomPadding",
+          "type": "toggle",
+          "label": "Remove bottom padding"
+        },
+        {
+          "id": "accentBg",
+          "type": "toggle",
+          "label": "Accent background"
+        }
+      ]
+    }
+  ]
+}

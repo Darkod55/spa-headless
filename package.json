@@ -1,0 +1,24 @@
+{
+  "name": "spa-headless",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.4",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "generate": "tsx scripts/generate-block-types.ts",
+    "test": "tsx --test scripts/block-fields.test.ts && php scripts/blocks-normalize-test.php",
+    "check": "pnpm generate && pnpm --filter @spa/astro check",
+    "build": "pnpm generate && pnpm --filter @spa/astro build",
+    "dev": "pnpm generate && pnpm --filter @spa/astro dev"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "tsx": "^4.20.6",
+    "typescript": "~5.9.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  }
+}

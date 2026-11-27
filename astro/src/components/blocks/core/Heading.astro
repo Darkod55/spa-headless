@@ -1,0 +1,20 @@
+---
+import type { WpBlock } from "../../../lib/wp/types";
+
+interface Props {
+  block: WpBlock;
+}
+
+const { block } = Astro.props;
+const level = typeof block.attrs.level === "number" ? block.attrs.level : undefined;
+const html =
+  block.innerHTML ||
+  (typeof block.attrs.content === "string" && level
+    ? `<h${level}>${block.attrs.content}</h${level}>`
+    : "");
+---
+
+<div class="wp-heading" data-level={level}>
+  <Fragment set:html={html} />
+  <slot />
+</div>

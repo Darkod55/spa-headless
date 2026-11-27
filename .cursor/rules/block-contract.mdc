@@ -1,0 +1,27 @@
+---
+description: End-to-end contract for BlockStudio blocks and their Astro components
+globs:
+  - wordpress/themes/spa-headless/blockstudio/**/*
+  - astro/src/components/blocks/**/*
+  - astro/src/generated/**/*
+  - scripts/**/*.ts
+alwaysApply: true
+---
+
+# Block contract
+
+`block.json` is the source of truth for fields. BlockStudio registers blocks from the active theme (`wordpress/themes/spa-headless/blockstudio/`), not from the plugin. The plugin (`spa-headless-core`) only exposes `parse_blocks()` and the rest of the headless API.
+
+When a block field is added, renamed, or removed, update all of these in the same change:
+
+1. `wordpress/themes/spa-headless/blockstudio/sections/<slug>/block.json` (`name` is `spa/<slug>`, fields under `blockstudio.attributes`).
+2. The block's `index.php` (`$a` for attributes, `<InnerBlocks />` only when editors nest blocks). Escape every value.
+3. `astro/src/components/blocks/spa/<PascalSlug>.astro` — one component, with a `<slot />` for inner blocks. The file must mention every field id.
+4. `astro/src/components/blocks/spa/<slug>.contract.ts` — object of field ids (`true`, or a nested object for a repeater) `as const satisfies` the generated `Spa<Name>FieldMap`.
+5. `astro/src/components/blocks/BlockRenderer.astro` — register `'spa/<slug>'` and pass inner blocks into the slot.
+
+Then run `pnpm generate`. `astro check` and `astro build` run it first and fail when a BlockStudio block has no component, the contract does not match `block.json` (including repeater rows), or the renderer does not register the block.
+
+Storage rules: tabs and id-less groups are not fields. A named group prefixes child ids with `groupId_`. `custom/section` inlines the shared section toggles. Do not invent a parallel field list in PHP or TypeScript.
+
+Unmapped blocks render saved `innerHTML` / `innerContent`. Do not add ACF. Use `register_post_meta` with `show_in_rest` for post meta. Use the REST API, not WPGraphQL.
