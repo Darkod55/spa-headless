@@ -1,4 +1,5 @@
-import { fixtureContent, fixtureHead, fixtureRoutes } from "./fixtures";
+import { fixtureContent, fixtureHead, fixtureMenu, fixtureRoutes, fixtureSite } from "./fixtures";
+import type { WpMenu, WpSite } from "./menu";
 import type { WpContent, WpRoute } from "./types";
 
 export type FixturesMode = "force" | "auto" | "off";
@@ -58,6 +59,22 @@ async function wpGet(pathname: string, search?: Record<string, string>): Promise
     headers: { Accept: "application/json" },
     signal: AbortSignal.timeout(2500),
   });
+}
+
+function isMenu(value: unknown): value is WpMenu {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+  const record = value as Partial<WpMenu>;
+  return typeof record.location === "string" && Array.isArray(record.items);
+}
+
+function isSite(value: unknown): value is WpSite {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+  const record = value as Partial<WpSite>;
+  return typeof record.title === "string" && (record.logo === null || typeof record.logo === "object");
 }
 
 function isContent(value: unknown): value is WpContent {
@@ -212,5 +229,56 @@ export async function getRankMathHead(path: string): Promise<string | null> {
     }
     rememberUnreachable(error);
     return fixtureHead(normalized);
+  }
+}
+
+export async function getMenu(location = "primary"): Promise<WpMenu> {
+  if (usingFixtures()) {
+    return fixtureMenu(location) ?? { location, items: [] };
+  }
+
+  try {
+    const response = await wpGet(`/wp-json/spa/v1/menus/${encodeURIComponent(location)}`);
+    if (response.status === 404) {
+      return { location, items: [] };
+    }
+    if (!response.ok) {
+      throw new Error(`spa/v1/menus/${location} returned ${response.status}`);
+    }
+    const payload: unknown = await response.json();
+    if (!isMenu(payload)) {
+      throw new Error(`spa/v1/menus/${location} returned an unexpected payload.`);
+    }
+    return payload;
+  } catch (error) {
+    if (fixturesMode() === "off") {
+      throw error;
+    }
+    rememberUnreachable(error);
+    return fixtureMenu(location) ?? { location, items: [] };
+  }
+}
+
+export async function getSite(): Promise<WpSite> {
+  if (usingFixtures()) {
+    return fixtureSite();
+  }
+
+  try {
+    const response = await wpGet("/wp-json/spa/v1/site");
+    if (!response.ok) {
+      throw new Error(`spa/v1/site returned ${response.status}`);
+    }
+    const payload: unknown = await response.json();
+    if (!isSite(payload)) {
+      throw new Error("spa/v1/site returned an unexpected payload.");
+    }
+    return payload;
+  } catch (error) {
+    if (fixturesMode() === "off") {
+      throw error;
+    }
+    rememberUnreachable(error);
+    return fixtureSite();
   }
 }

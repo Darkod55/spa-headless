@@ -12,13 +12,13 @@ void sectionFields;
 
 <section
   class:list={[
-    "band",
+    "block-section",
     { "is-accent": attrs.accentBg, "is-flush": attrs.removeBottomPadding },
   ]}
 >
-  <div class="wrap">
-    {attrs.heading && <h2>{attrs.heading}</h2>}
-    {attrs.intro && <p class="lead">{attrs.intro}</p>}
+  <div class="container">
+    {attrs.heading && <h2 class="type-h2">{attrs.heading}</h2>}
+    {attrs.intro && <p class="type-lead">{attrs.intro}</p>}
     <div class="stack">
       <slot />
     </div>

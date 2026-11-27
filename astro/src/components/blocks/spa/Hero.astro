@@ -14,19 +14,19 @@ const image = attrs.image && !Array.isArray(attrs.image) ? attrs.image : null;
 
 <section
   class:list={[
-    "hero",
+    "block-section",
     { "is-accent": attrs.accentBg, "is-flush": attrs.removeBottomPadding },
   ]}
 >
-  <div class="wrap">
-    {attrs.eyebrow && <p class="kicker">{attrs.eyebrow}</p>}
-    {attrs.heading && <h1>{attrs.heading}</h1>}
-    {attrs.description && <p class="lead">{attrs.description}</p>}
+  <div class="container">
+    {attrs.eyebrow && <p class="type-eyebrow">{attrs.eyebrow}</p>}
+    {attrs.heading && <h1 class="type-display">{attrs.heading}</h1>}
+    {attrs.description && <p class="type-lead">{attrs.description}</p>}
     {(attrs.primaryButton?.url || attrs.secondaryButton?.url) && (
       <div class="actions">
         {attrs.primaryButton?.url && (
           <a
-            class="btn btn-primary"
+            class="btn btn--primary"
             href={attrs.primaryButton.url}
             target={attrs.primaryButton.opensInNewTab ? "_blank" : undefined}
             rel={attrs.primaryButton.opensInNewTab ? "noopener noreferrer" : undefined}
@@ -36,7 +36,7 @@ const image = attrs.image && !Array.isArray(attrs.image) ? attrs.image : null;
         )}
         {attrs.secondaryButton?.url && (
           <a
-            class="btn"
+            class="btn btn--dark"
             href={attrs.secondaryButton.url}
             target={attrs.secondaryButton.opensInNewTab ? "_blank" : undefined}
             rel={attrs.secondaryButton.opensInNewTab ? "noopener noreferrer" : undefined}

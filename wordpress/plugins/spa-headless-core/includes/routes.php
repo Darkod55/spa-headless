@@ -48,6 +48,37 @@ function spa_headless_register_routes(): void {
 
 	register_rest_route(
 		'spa/v1',
+		'/menus/(?P<location>[a-z0-9_-]+)',
+		array(
+			'methods'             => 'GET',
+			'permission_callback' => '__return_true',
+			'callback'            => 'spa_headless_rest_menu',
+			'args'                => array(
+				'location' => array(
+					'type'              => 'string',
+					'sanitize_callback' => 'sanitize_key',
+				),
+				'path'     => array(
+					'type'              => 'string',
+					'required'          => false,
+					'sanitize_callback' => 'sanitize_text_field',
+				),
+			),
+		)
+	);
+
+	register_rest_route(
+		'spa/v1',
+		'/site',
+		array(
+			'methods'             => 'GET',
+			'permission_callback' => '__return_true',
+			'callback'            => 'spa_headless_rest_site',
+		)
+	);
+
+	register_rest_route(
+		'spa/v1',
 		'/preview/(?P<id>\d+)',
 		array(
 			'methods'             => 'GET',

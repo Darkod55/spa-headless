@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@astrojs/node": "^11.1.14",
+    "@fontsource/montserrat": "^5.3.0",
+    "@fontsource/oswald": "^5.3.0",
     "astro": "^7.4.13"
   },
   "devDependencies": {

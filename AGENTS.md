@@ -7,8 +7,9 @@ Deployment (cms subdomain, xCloud, rebuild webhook) is out of scope.
 ## Where things live
 
 - `wordpress/themes/spa-headless/` — BlockStudio blocks. BlockStudio only auto-registers a `blockstudio/` directory on the **active theme**, and `blockstudio.json` belongs to the theme. That is why blocks are not in the plugin.
-- `wordpress/plugins/spa-headless-core/` — REST `blocks` field (`parse_blocks()`), `spa/v1` routes, CORS allowlist for `http://localhost:4321`, preview token, and `register_post_meta` (`show_in_rest`, not ACF).
+- `wordpress/plugins/spa-headless-core/` — REST `blocks` field (`parse_blocks()`), `spa/v1` routes (content, `menus/primary`, `site`), CORS allowlist for `http://localhost:4321`, preview token, and `register_post_meta` (`show_in_rest`, not ACF).
 - `astro/` — public front end. `WP_URL` in `astro/.env` (gitignored). `WP_FIXTURES=auto` uses checked-in fixtures when WordPress is down, so `astro check` and `astro build` work in CI.
+- `astro/src/styles/global.css` — the live site's design system, ported from `Darkod55/spa` `src/styles/global.css`. That site does not use Tailwind. Tokens, the type scale, Oswald and Montserrat (self-hosted through `@fontsource`, the same packages the live site imports), reset, `.container`, form fields, and surface utilities (`bg-primary`, `.type-h2`, …) live there. Block and header CSS should use those variables, not a second palette. `content.css` only places scaffold blocks. `header.css` is the header chrome.
 - `scripts/generate-block-types.ts` — reads every BlockStudio `block.json` and writes `astro/src/generated/blocks.ts`.
 
 Do not commit `.env`, uploads, `node_modules`, `vendor`, or `dist`. Commit `astro/.env.example` only.
@@ -70,6 +71,17 @@ pnpm dev
 ```
 
 `pnpm dev` serves Astro at `http://localhost:4321`. WordPress runs in Local WP, not in this repo. Symlink steps are in `README.md`.
+
+## Header
+
+The theme registers the `primary` menu location and `custom-logo`. The plugin exposes:
+
+- `GET /wp-json/spa/v1/menus/primary?path=/about` — nested items (`id`, `title`, `url`, `target`, `classes`, `parent`, `children`, `current`, `currentAncestor`). Same-host URLs are root-relative. Optional `path` sets the current flags; Astro also recomputes them for the page it renders.
+- `GET /wp-json/spa/v1/site` — `title`, `description`, and `logo` (`url`, `width`, `height`, `alt`, `mime`). SVG logos use the viewBox when WordPress has no pixel size. The image URL stays on WordPress.
+
+A top-level item with the CSS class `cta` (or `button`) is the “Let’s talk” button, not a text link. Items with children are a desktop dropdown and an indented group in the mobile panel. Both follow `WP_FIXTURES` the same way page content does.
+
+In wp-admin: Appearance → Menus, create a menu, assign it to Primary, and enable CSS classes under Screen Options if the CTA class field is hidden. Logo: Appearance → Customize → Site Identity → Logo. Site title is the alt text when the logo has none.
 
 ## Fixtures
 

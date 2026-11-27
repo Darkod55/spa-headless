@@ -33,6 +33,29 @@ function spa_theme_setup(): void {
 		'html5',
 		array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' )
 	);
+
+	// The Astro header reads this location from spa/v1/menus/primary.
+	register_nav_menus(
+		array(
+			'primary' => __( 'Primary', 'spa-headless' ),
+		)
+	);
+
+	/*
+	 * Appearance → Customize → Site Identity → Logo.
+	 * SVG is supported when WordPress accepts the upload; width and height
+	 * stay flexible so a wordmark is not cropped.
+	 */
+	add_theme_support(
+		'custom-logo',
+		array(
+			'height'               => 60,
+			'width'                => 232,
+			'flex-height'          => true,
+			'flex-width'           => true,
+			'unlink-homepage-logo' => true,
+		)
+	);
 }
 
 /**

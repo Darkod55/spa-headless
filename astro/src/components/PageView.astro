@@ -21,8 +21,8 @@ const showTitle = !content.meta.spa_hide_title && !hasHero;
     )
   }
   <article>
-    {content.meta.spa_eyebrow && !hasHero && <p class="page-kicker wrap">{content.meta.spa_eyebrow}</p>}
-    {showTitle && <h1 class="page-title wrap">{content.title}</h1>}
+    {content.meta.spa_eyebrow && !hasHero && <p class="type-eyebrow container">{content.meta.spa_eyebrow}</p>}
+    {showTitle && <h1 class="type-h1-page container">{content.title}</h1>}
     {content.blocks.map((block) => <BlockRenderer block={block} />)}
     {content.path === "/contact" && <ContactForm />}
   </article>

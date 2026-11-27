@@ -26,6 +26,7 @@ require_once SPA_HEADLESS_CORE_DIR . 'includes/blocks.php';
 require_once SPA_HEADLESS_CORE_DIR . 'includes/cors.php';
 require_once SPA_HEADLESS_CORE_DIR . 'includes/meta.php';
 require_once SPA_HEADLESS_CORE_DIR . 'includes/routes.php';
+require_once SPA_HEADLESS_CORE_DIR . 'includes/nav.php';
 
 add_action( 'init', 'spa_headless_register_meta' );
 add_action( 'rest_api_init', 'spa_headless_register_blocks_field' );

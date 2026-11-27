@@ -2,22 +2,22 @@
 const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? "";
 ---
 
-<form id="contact-form" class="contact-form" method="post" action="/api/contact">
-  <h2>Send a message</h2>
-  <label>
-    Name
+<form id="contact-form" class="contact-form container" method="post" action="/api/contact">
+  <h2 class="type-h2">Send a message</h2>
+  <label class="form-field">
+    <span class="form-field__label">Name</span>
     <input name="name" autocomplete="name" required maxlength="200" />
   </label>
-  <label>
-    Email
+  <label class="form-field">
+    <span class="form-field__label">Email</span>
     <input name="email" type="email" autocomplete="email" required maxlength="200" />
   </label>
-  <label>
-    Organisation <span>(optional)</span>
+  <label class="form-field">
+    <span class="form-field__label">Organisation <span class="type-meta">(optional)</span></span>
     <input name="organisation" autocomplete="organization" maxlength="200" />
   </label>
-  <label>
-    Message
+  <label class="form-field">
+    <span class="form-field__label">Message</span>
     <textarea name="message" required maxlength="5000" rows="6"></textarea>
   </label>
   <div class="hp" aria-hidden="true">
@@ -27,7 +27,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? "";
     </label>
   </div>
   {siteKey && <div class="cf-turnstile" data-sitekey={siteKey}></div>}
-  <button class="btn btn-primary" type="submit">Send</button>
+  <button class="btn btn--primary" type="submit"><span class="btn__label">Send</span></button>
   <p class="form-status" role="status" aria-live="polite"></p>
 </form>
 

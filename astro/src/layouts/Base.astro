@@ -1,6 +1,9 @@
 ---
 import "../styles/global.css";
+import "../styles/content.css";
+import SiteHeader from "../components/layout/SiteHeader.astro";
 import { gaMeasurementId } from "../lib/analytics";
+import { getMenu, getSite } from "../lib/wp/client";
 
 interface Props {
   title: string;
@@ -10,12 +13,7 @@ interface Props {
 
 const { title, path, head = null } = Astro.props;
 const gaId = gaMeasurementId();
-const nav = [
-  { href: "/about", label: "About" },
-  { href: "/services", label: "Services" },
-  { href: "/blog", label: "Blog" },
-  { href: "/contact", label: "Contact" },
-];
+const [site, menu] = await Promise.all([getSite(), getMenu("primary")]);
 ---
 
 <!doctype html>
@@ -34,18 +32,7 @@ const nav = [
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
-    <header class="site-header">
-      <a class="brand" href="/">The Square Peg Agency</a>
-      <nav class="nav" aria-label="Primary">
-        {
-          nav.map((item) => (
-            <a href={item.href} aria-current={path === item.href ? "page" : undefined}>
-              {item.label}
-            </a>
-          ))
-        }
-      </nav>
-    </header>
+    <SiteHeader site={site} items={menu.items} path={path} />
     <main id="content">
       <slot />
     </main>

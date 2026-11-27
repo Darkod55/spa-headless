@@ -1,3 +1,4 @@
+import type { MenuItem, WpMenu, WpSite } from "./menu";
 import type { WpBlock, WpContent, WpRoute } from "./types";
 
 export interface FixtureEntry {
@@ -356,4 +357,57 @@ export function fixtureContent(path: string): WpContent | null {
 
 export function fixtureHead(path: string): string | null {
   return byPath.get(path)?.head ?? null;
+}
+
+function menuItem(
+  id: number,
+  title: string,
+  url: string,
+  extras: Partial<MenuItem> = {},
+): MenuItem {
+  return {
+    id,
+    title,
+    url,
+    target: "",
+    classes: [],
+    parent: 0,
+    children: [],
+    current: false,
+    currentAncestor: false,
+    ...extras,
+  };
+}
+
+/** Matches the live header, plus one nested item so dropdowns can be checked. */
+export function fixtureMenu(location = "primary"): WpMenu | null {
+  if (location !== "primary") {
+    return null;
+  }
+  return {
+    location,
+    items: [
+      menuItem(1, "Home", "/"),
+      menuItem(2, "About", "/about"),
+      menuItem(3, "Services", "/services", {
+        children: [menuItem(5, "Website design", "/services", { parent: 3 })],
+      }),
+      menuItem(4, "Let's talk", "/contact", { classes: ["cta"] }),
+    ],
+  };
+}
+
+export function fixtureSite(): WpSite {
+  return {
+    title: "The Square Peg Agency",
+    description: "Strategic marketing for addiction, mental health and wellness.",
+    url: "http://squarepeg-cms.local/",
+    logo: {
+      url: "/fixtures/logo.svg",
+      width: 820,
+      height: 212,
+      alt: "The Square Peg Agency",
+      mime: "image/svg+xml",
+    },
+  };
 }

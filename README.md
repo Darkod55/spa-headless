@@ -82,6 +82,23 @@ Open http://localhost:4321. `astro/.env` is gitignored.
 
 Draft preview is http://localhost:4321/preview/{postId} while `pnpm dev` is running (the route is not prerendered). It sends `X-SPA-Preview-Token`. An empty token disables preview on both sides.
 
+## Design system
+
+The public styles are the live site's global stylesheet, copied into `astro/src/styles/global.css` from [Darkod55/spa](https://github.com/Darkod55/spa) (`src/styles/global.css`, which `BaseLayout.astro` imports). That project does not use Tailwind. Colours, the type scale, spacing, breakpoints, and the 1280px container are CSS custom properties in that file. Oswald and Montserrat are the same `@fontsource` packages the live site loads (weights 400–700); Vite serves the font files from those packages, so they are not committed as binaries.
+
+Blocks and the header use those tokens (`.container`, `.type-display`, `.type-lead`, `var(--color-navy)`, and so on). Do not add a parallel palette.
+
+## Menu and logo
+
+The header reads WordPress, and falls back with the rest of the site when `WP_FIXTURES` says to.
+
+1. Appearance → Menus → create a menu. The live header is Home, About, and Services. Tick **Primary** under Menu Settings and save.
+2. “Let’s talk” is a menu item with the CSS class `cta`. In the menu editor, open Screen Options (top of the screen) and enable **CSS Classes** if that field is hidden. Add the Contact page, set its class to `cta`, and save.
+3. To nest a dropdown, drag an item to the right under its parent. Desktop shows a menu; the mobile panel indents the children.
+4. Appearance → Customize → Site Identity → **Logo**. The site title is the alt text when the logo has none, and the text in the header when no logo is set. PNG, WebP, and JPEG work. An SVG is used as an image (not redrawn) when WordPress accepts the upload; if it has no pixel size, the viewBox supplies width and height.
+
+`GET /wp-json/spa/v1/menus/primary` returns the tree. Links on the WordPress host are paths such as `/about`. `GET /wp-json/spa/v1/site` returns the title, description, and logo. The logo URL stays on the CMS, because the file is in the media library.
+
 ## Slugs
 
 Migration has to keep the live paths. Fixtures already use them: `/`, `/about`, `/services`, `/contact`, `/blog`, `/privacy-policy`, `/cookie-policy`, `/terms-and-conditions`, and the `/blog/…` posts currently on the site. The Astro route is the WordPress permalink, not a renamed slug.
