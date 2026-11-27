@@ -1,7 +1,7 @@
 ---
 import "../../styles/header.css";
 import MenuList from "./MenuList.astro";
-import { splitMenu, withCurrent, type MenuItem, type WpSite } from "../../lib/wp/menu";
+import { announcementLines, splitMenu, withCurrent, type MenuItem, type WpSite } from "../../lib/wp/menu";
 
 interface Props {
   site: WpSite;
@@ -15,9 +15,46 @@ const { links, cta } = splitMenu(menu);
 const logo = site.logo;
 const logoAlt = logo?.alt || site.title || "Home";
 const ctaExternal = cta?.target === "_blank";
+const announcement = site.announcement?.enabled ? site.announcement : null;
+const announcementParts = announcement ? announcementLines(announcement.message) : [];
+const announcementExternal = announcement?.target === "_blank";
 ---
 
 <div class="site-chrome" id="site-chrome">
+  {
+    announcement && (announcementParts.length > 0 || announcement.url) && (
+      <aside class="audit-bar" aria-label="Website audit">
+        <div class="audit-bar__deco audit-bar__deco--left" aria-hidden="true" />
+        <div class="audit-bar__deco audit-bar__deco--right" aria-hidden="true" />
+        <div class="container audit-bar__inner">
+          {
+            announcementParts.length > 0 && (
+              <p class="audit-bar__text">
+                {announcementParts.map((line, index) => (
+                  <>
+                    {index > 0 && <br class="audit-bar__break" />}
+                    {index > 0 ? ` ${line}` : line}
+                  </>
+                ))}
+              </p>
+            )
+          }
+          {
+            announcement.url && announcement.linkLabel && (
+              <a
+                class="audit-bar__link"
+                href={announcement.url}
+                target={announcementExternal ? "_blank" : undefined}
+                rel={announcementExternal ? "noopener noreferrer" : undefined}
+              >
+                {announcement.linkLabel}
+              </a>
+            )
+          }
+        </div>
+      </aside>
+    )
+  }
   <header class="site-header">
     <div class="container site-header__bar">
       <a class="site-header__logo" href="/" aria-label={`${site.title || "Home"} – home`}>

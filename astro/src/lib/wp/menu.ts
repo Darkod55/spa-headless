@@ -24,11 +24,28 @@ export interface SiteLogo {
   mime: string;
 }
 
+export interface Announcement {
+  enabled: boolean;
+  message: string;
+  linkLabel: string;
+  url: string;
+  target: string;
+}
+
 export interface WpSite {
   title: string;
   description: string;
   url: string;
   logo: SiteLogo | null;
+  announcement?: Announcement | null;
+}
+
+/** Lines of the announcement. A newline is the mobile-only break. */
+export function announcementLines(message: string): string[] {
+  return message
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
 }
 
 /** Path used for current-page checks. Query and hash are ignored. */

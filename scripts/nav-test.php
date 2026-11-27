@@ -106,4 +106,22 @@ spa_nav_assert( false === $blog[0]['current'], 'The section item is not the exac
 $size = spa_headless_svg_dimensions( '<svg viewBox="0 0 819.62 211.85"></svg>' );
 spa_nav_assert( 820 === $size['width'] && 212 === $size['height'], 'SVG viewBox should supply missing pixel size.' );
 
+$bar = spa_headless_format_announcement(
+	array(
+		'enabled'   => true,
+		'message'   => "Is your website underperforming?\nNot ranking on Google or showing up in AI search?",
+		'linkLabel' => 'Book your free website audit',
+		'url'       => 'http://squarepeg-cms.local/contact/?enquiry=website-audit',
+		'target'    => '_blank',
+	),
+	$home
+);
+spa_nav_assert( true === $bar['enabled'], 'Announcement should stay enabled.' );
+spa_nav_assert( '/contact?enquiry=website-audit' === $bar['url'], 'Announcement links on this host should be relative.' );
+spa_nav_assert( '_blank' === $bar['target'], 'A new-tab target should be kept.' );
+
+$closed = spa_headless_format_announcement( array( 'enabled' => false, 'target' => 'javascript:alert(1)' ), $home );
+spa_nav_assert( false === $closed['enabled'], 'The toggle should be able to hide the bar.' );
+spa_nav_assert( '' === $closed['target'], 'Only _blank is a valid link target.' );
+
 fwrite( STDOUT, "nav ok\n" );

@@ -321,15 +321,72 @@ function spa_headless_site_logo(): ?array {
 }
 
 /**
+ * Defaults match the live announcement bar. A newline in the message is the
+ * mobile-only line break; desktop CSS hides that break.
+ *
+ * @return array{enabled: bool, message: string, linkLabel: string, url: string, target: string}
+ */
+function spa_headless_announcement_defaults(): array {
+	return array(
+		'enabled'   => true,
+		'message'   => "Is your website underperforming?\nNot ranking on Google or showing up in AI search?",
+		'linkLabel' => 'Book your free website audit',
+		'url'       => '/contact?enquiry=website-audit',
+		'target'    => '',
+	);
+}
+
+/**
+ * @param array<string, mixed> $values
+ * @return array{enabled: bool, message: string, linkLabel: string, url: string, target: string}
+ */
+function spa_headless_format_announcement( array $values, string $home ): array {
+	$defaults = spa_headless_announcement_defaults();
+	$message  = isset( $values['message'] ) && is_string( $values['message'] ) ? $values['message'] : $defaults['message'];
+	$label    = isset( $values['linkLabel'] ) && is_string( $values['linkLabel'] ) ? $values['linkLabel'] : $defaults['linkLabel'];
+	$url      = isset( $values['url'] ) && is_string( $values['url'] ) ? $values['url'] : $defaults['url'];
+	$target   = ( isset( $values['target'] ) && '_blank' === $values['target'] ) ? '_blank' : '';
+
+	return array(
+		'enabled'   => array_key_exists( 'enabled', $values ) ? (bool) $values['enabled'] : $defaults['enabled'],
+		'message'   => $message,
+		'linkLabel' => $label,
+		'url'       => spa_headless_public_href( $url, $home ),
+		'target'    => $target,
+	);
+}
+
+/**
+ * Theme mods from Appearance → Customize → Announcement bar.
+ *
+ * @return array{enabled: bool, message: string, linkLabel: string, url: string, target: string}
+ */
+function spa_headless_announcement(): array {
+	$defaults = spa_headless_announcement_defaults();
+
+	return spa_headless_format_announcement(
+		array(
+			'enabled'   => get_theme_mod( 'spa_announcement_enabled', $defaults['enabled'] ),
+			'message'   => get_theme_mod( 'spa_announcement_message', $defaults['message'] ),
+			'linkLabel' => get_theme_mod( 'spa_announcement_link_label', $defaults['linkLabel'] ),
+			'url'       => get_theme_mod( 'spa_announcement_link_url', $defaults['url'] ),
+			'target'    => get_theme_mod( 'spa_announcement_link_target', $defaults['target'] ),
+		),
+		home_url( '/' )
+	);
+}
+
+/**
  * @return WP_REST_Response
  */
 function spa_headless_rest_site(): WP_REST_Response {
 	return rest_ensure_response(
 		array(
-			'title'       => get_bloginfo( 'name' ),
-			'description' => get_bloginfo( 'description' ),
-			'url'         => home_url( '/' ),
-			'logo'        => spa_headless_site_logo(),
+			'title'        => get_bloginfo( 'name' ),
+			'description'  => get_bloginfo( 'description' ),
+			'url'          => home_url( '/' ),
+			'logo'         => spa_headless_site_logo(),
+			'announcement' => spa_headless_announcement(),
 		)
 	);
 }
