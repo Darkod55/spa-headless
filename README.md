@@ -97,7 +97,9 @@ The header reads WordPress, and falls back with the rest of the site when `WP_FI
 3. To nest a dropdown, drag an item to the right under its parent. Desktop shows a menu; the mobile panel indents the children.
 4. Appearance → Customize → Site Identity → **Logo**. The site title is the alt text when the logo has none, and the text in the header when no logo is set. PNG, WebP, and JPEG work. An SVG is used as an image (not redrawn) when WordPress accepts the upload; if it has no pixel size, the viewBox supplies width and height.
 
-`GET /wp-json/spa/v1/menus/primary` returns the tree. Links on the WordPress host are paths such as `/about`. `GET /wp-json/spa/v1/site` returns the title, description, and logo. The logo URL stays on the CMS, because the file is in the media library.
+`GET /wp-json/spa/v1/menus/primary` returns the tree. Links on the WordPress host are paths such as `/about`. `GET /wp-json/spa/v1/site` returns the title, description, logo, and announcement bar. The logo URL stays on the CMS, because the file is in the media library.
+
+The red strip above the header is Appearance → Customize → **Announcement bar**. It has a show toggle, the message, the link label, the link URL, and whether the link opens in the same tab or a new one. A line break in the message is hidden on desktop and shown on screens under 768px, which is how the live bar wraps. The bar does not dismiss; it stays until the toggle is off, and it sticks with the header. The fixture uses the live sentence and “Book your free website audit”.
 
 ## Slugs
 

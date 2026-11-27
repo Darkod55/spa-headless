@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 add_action( 'after_setup_theme', 'spa_theme_setup' );
+add_action( 'customize_register', 'spa_theme_customize_announcement' );
 add_action( 'wp_enqueue_scripts', 'spa_theme_assets' );
 add_action( 'wp_head', 'spa_theme_noindex', 0 );
 add_filter( 'block_categories_all', 'spa_theme_block_category' );
@@ -196,5 +197,124 @@ function spa_link_values( $link ): array {
 		'url'     => $url,
 		'title'   => $title,
 		'new_tab' => ! empty( $link['opensInNewTab'] ),
+	);
+}
+
+/**
+ * Announcement bar above the header. The Astro app reads these theme mods
+ * from GET /wp-json/spa/v1/site. There is no dismiss control: the live bar
+ * stays until it is turned off here, and it sticks with the header.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function spa_theme_customize_announcement( WP_Customize_Manager $wp_customize ): void {
+	$defaults = function_exists( 'spa_headless_announcement_defaults' )
+		? spa_headless_announcement_defaults()
+		: array(
+			'enabled'   => true,
+			'message'   => "Is your website underperforming?\nNot ranking on Google or showing up in AI search?",
+			'linkLabel' => 'Book your free website audit',
+			'url'       => '/contact?enquiry=website-audit',
+			'target'    => '',
+		);
+
+	$wp_customize->add_section(
+		'spa_announcement',
+		array(
+			'title'    => __( 'Announcement bar', 'spa-headless' ),
+			'priority' => 30,
+		)
+	);
+
+	$wp_customize->add_setting(
+		'spa_announcement_enabled',
+		array(
+			'default'           => $defaults['enabled'],
+			'sanitize_callback' => static function ( $value ): bool {
+				return rest_sanitize_boolean( $value );
+			},
+		)
+	);
+	$wp_customize->add_control(
+		'spa_announcement_enabled',
+		array(
+			'section' => 'spa_announcement',
+			'label'   => __( 'Show the announcement bar', 'spa-headless' ),
+			'type'    => 'checkbox',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'spa_announcement_message',
+		array(
+			'default'           => $defaults['message'],
+			'sanitize_callback' => 'sanitize_textarea_field',
+		)
+	);
+	$wp_customize->add_control(
+		'spa_announcement_message',
+		array(
+			'section'     => 'spa_announcement',
+			'label'       => __( 'Message', 'spa-headless' ),
+			'description' => __( 'A line break is hidden on desktop and shown on small screens, matching the live bar.', 'spa-headless' ),
+			'type'        => 'textarea',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'spa_announcement_link_label',
+		array(
+			'default'           => $defaults['linkLabel'],
+			'sanitize_callback' => 'sanitize_text_field',
+		)
+	);
+	$wp_customize->add_control(
+		'spa_announcement_link_label',
+		array(
+			'section' => 'spa_announcement',
+			'label'   => __( 'Link label', 'spa-headless' ),
+			'type'    => 'text',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'spa_announcement_link_url',
+		array(
+			'default'           => $defaults['url'],
+			'sanitize_callback' => static function ( $value ): string {
+				return esc_url_raw( is_string( $value ) ? trim( $value ) : '' );
+			},
+		)
+	);
+	$wp_customize->add_control(
+		'spa_announcement_link_url',
+		array(
+			'section'     => 'spa_announcement',
+			'label'       => __( 'Link URL', 'spa-headless' ),
+			'description' => __( 'A path such as /contact?enquiry=website-audit, or a full URL.', 'spa-headless' ),
+			'type'        => 'text',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'spa_announcement_link_target',
+		array(
+			'default'           => $defaults['target'],
+			'sanitize_callback' => static function ( $value ): string {
+				return '_blank' === $value ? '_blank' : '';
+			},
+		)
+	);
+	$wp_customize->add_control(
+		'spa_announcement_link_target',
+		array(
+			'section' => 'spa_announcement',
+			'label'   => __( 'Open link in', 'spa-headless' ),
+			'type'    => 'select',
+			'choices' => array(
+				''       => __( 'Same tab', 'spa-headless' ),
+				'_blank' => __( 'A new tab', 'spa-headless' ),
+			),
+		)
 	);
 }

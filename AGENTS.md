@@ -77,11 +77,11 @@ pnpm dev
 The theme registers the `primary` menu location and `custom-logo`. The plugin exposes:
 
 - `GET /wp-json/spa/v1/menus/primary?path=/about` — nested items (`id`, `title`, `url`, `target`, `classes`, `parent`, `children`, `current`, `currentAncestor`). Same-host URLs are root-relative. Optional `path` sets the current flags; Astro also recomputes them for the page it renders.
-- `GET /wp-json/spa/v1/site` — `title`, `description`, and `logo` (`url`, `width`, `height`, `alt`, `mime`). SVG logos use the viewBox when WordPress has no pixel size. The image URL stays on WordPress.
+- `GET /wp-json/spa/v1/site` — `title`, `description`, `logo` (`url`, `width`, `height`, `alt`, `mime`), and `announcement` (`enabled`, `message`, `linkLabel`, `url`, `target`). SVG logos use the viewBox when WordPress has no pixel size. The image URL stays on WordPress. The announcement is the red bar above the header. A newline in `message` is hidden on desktop and shown on small screens. There is no dismiss control; the bar sticks with the header until Customize turns it off.
 
 A top-level item with the CSS class `cta` (or `button`) is the “Let’s talk” button, not a text link. Items with children are a desktop dropdown and an indented group in the mobile panel. Both follow `WP_FIXTURES` the same way page content does.
 
-In wp-admin: Appearance → Menus, create a menu, assign it to Primary, and enable CSS classes under Screen Options if the CTA class field is hidden. Logo: Appearance → Customize → Site Identity → Logo. Site title is the alt text when the logo has none.
+In wp-admin: Appearance → Menus, create a menu, assign it to Primary, and enable CSS classes under Screen Options if the CTA class field is hidden. Logo: Appearance → Customize → Site Identity → Logo. Site title is the alt text when the logo has none. Announcement: Appearance → Customize → Announcement bar (show, message, link label, URL, same tab or new tab).
 
 ## Fixtures
 

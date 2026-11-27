@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { splitMenu, withCurrent, type MenuItem } from "../astro/src/lib/wp/menu.ts";
+import { announcementLines, splitMenu, withCurrent, type MenuItem } from "../astro/src/lib/wp/menu.ts";
 
 function item(partial: Partial<MenuItem> & Pick<MenuItem, "id" | "title" | "url">): MenuItem {
   return {
@@ -32,6 +32,13 @@ test("withCurrent marks the page and a nested ancestor", () => {
   assert.equal(menu[1]?.current, false);
   assert.equal(menu[1]?.currentAncestor, true);
   assert.equal(menu[1]?.children[0]?.current, true);
+});
+
+test("announcementLines keeps the mobile break and drops blank lines", () => {
+  assert.deepEqual(
+    announcementLines("Is your website underperforming?\n\nNot ranking on Google or showing up in AI search?"),
+    ["Is your website underperforming?", "Not ranking on Google or showing up in AI search?"],
+  );
 });
 
 test("splitMenu lifts the cta class out of the link list", () => {

@@ -409,5 +409,12 @@ export function fixtureSite(): WpSite {
       alt: "The Square Peg Agency",
       mime: "image/svg+xml",
     },
+    announcement: {
+      enabled: true,
+      message: "Is your website underperforming?\nNot ranking on Google or showing up in AI search?",
+      linkLabel: "Book your free website audit",
+      url: "/contact?enquiry=website-audit",
+      target: "",
+    },
   };
 }
