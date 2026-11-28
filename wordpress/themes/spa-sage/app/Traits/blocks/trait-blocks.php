@@ -281,6 +281,34 @@ trait blocks
     /**
      * Populating text colours for elements
      */
+    /**
+     * BlockStudio indexes a reusable field by the `name` inside field.json.
+     * `custom/background-colour` does not match `background_colour`, so the
+     * reference stays unexpanded and the inspector skips it (no id).
+     * Register both keys.
+     */
+    public function registerColourFieldNames() {
+        add_filter('blockstudio/fields', function ($fields) {
+            $base = get_stylesheet_directory() . '/app/blocks/fields/';
+            foreach (array('background-colour', 'text-colour') as $name) {
+                $path = $base . $name . '/field.json';
+                if (! is_readable($path)) {
+                    continue;
+                }
+                $decoded = json_decode((string) file_get_contents($path), true);
+                if (! is_array($decoded)) {
+                    continue;
+                }
+                $fields[$name] = $decoded;
+                if (! empty($decoded['name']) && is_string($decoded['name'])) {
+                    $fields[$decoded['name']] = $decoded;
+                }
+            }
+
+            return $fields;
+        });
+    }
+
     public function populateTextColours() {
         add_filter('blockstudio/blocks/attributes/populate', function ($options) {
             $surfaces = [

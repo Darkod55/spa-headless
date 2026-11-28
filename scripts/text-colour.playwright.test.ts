@@ -14,6 +14,10 @@ type AstroBadge = {
   hero: { background: string; color: string; size: string; weight: string; spacing: string; padding: string; transform: string; clip: string };
   light: { background: string; color: string };
   gap: string;
+  heroText: string;
+  lightText: string;
+  markupText: string[];
+  heading: string;
 };
 
 type EditorBadge = {
@@ -176,8 +180,17 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
       const hero = document.querySelector(".hero__copy .badge");
       const light = document.querySelector(".badge--bg-gray");
       const copy = document.querySelector(".hero__copy");
-      if (!hero || !light || !copy) return null;
-      return { hero: paint(hero), light: paint(light), gap: getComputedStyle(copy).rowGap };
+      const heading = document.querySelector(".hero__copy h1");
+      if (!hero || !light || !copy || !heading) return null;
+      return {
+        hero: paint(hero),
+        light: paint(light),
+        gap: getComputedStyle(copy).rowGap,
+        heroText: hero.textContent.trim(),
+        lightText: light.textContent.trim(),
+        markupText: [...document.querySelectorAll(".badge")].map((el) => el.textContent.trim()),
+        heading: heading.textContent.trim(),
+      };
     })()`);
     if (!astroBadge) {
       throw new Error("the fixture page is missing a badge");
@@ -193,6 +206,10 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
     assert.equal(astroBadge.gap, "22px");
     assert.equal(astroBadge.light.background, "#f4f5f7");
     assert.equal(astroBadge.light.color, "#031433");
+    assert.equal(astroBadge.heroText, "Different by design");
+    assert.equal(astroBadge.lightText, "Different by design");
+    assert.ok(astroBadge.markupText.includes("From the saved markup"));
+    assert.ok(astroBadge.heading.includes("stand out?"));
 
     const editorCss = builtEditorCss();
     const badgeSource = badgeCss();
@@ -211,7 +228,7 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
           <div class="hero__copy">
             <div class="block-editor-block-list__layout">
               <div class="wp-block" data-block="badge-1" data-type="spa/badge">
-                <span class="badge badge--bg-secondary badge--text-white"><span class="badge__text">Different by design</span></span>
+                <span class="badge badge--bg-secondary badge--text-white"><span class="badge__text block-editor-rich-text__editable">Different by design</span></span>
               </div>
               <div class="wp-block has-text-secondary-on-tertiary fs-h2 fw-700" data-block="heading-1" data-type="core/heading">
                 <h1 class="wp-block-heading block-editor-rich-text__editable">Why fit in when you can <mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-secondary-on-primary-color">stand out?</mark></h1>
@@ -283,18 +300,20 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
           return match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : value;
         };
         const badge = document.querySelector("[data-block='badge-1'] .badge");
+        const label = badge && badge.querySelector(".block-editor-rich-text__editable");
         const list = document.querySelector(".hero__copy .block-editor-block-list__layout");
-        if (!badge || !list) return null;
-        const style = getComputedStyle(badge);
+        if (!badge || !label || !list) return null;
+        const shell = getComputedStyle(badge);
+        const type = getComputedStyle(label);
         return {
-          background: hex(style.backgroundColor),
-          color: hex(style.color),
-          size: style.fontSize,
-          weight: style.fontWeight,
-          spacing: style.letterSpacing,
-          padding: style.padding,
-          transform: style.textTransform,
-          clip: style.clipPath,
+          background: hex(shell.backgroundColor),
+          color: hex(type.color),
+          size: type.fontSize,
+          weight: type.fontWeight,
+          spacing: type.letterSpacing,
+          padding: shell.padding,
+          transform: type.textTransform,
+          clip: shell.clipPath,
           gap: getComputedStyle(list).rowGap,
         };
       })()`);

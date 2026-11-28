@@ -52,7 +52,7 @@ They share `app/blocks/hero-banner/template.php` and `resources/css/components/s
 
 ## Badge
 
-`spa/badge` is the live eyebrow (`Label.astro`, default size). It is a parallelogram from `clip-path`, slant `12px`, padding `8px 26px`, Oswald `1rem` / weight `500`, letter-spacing `0.12em`, uppercase. Default background is secondary (`#c8102e`) and default text is white. White text on a white or gray background becomes navy. Text is a RichText field. Background and text colour reuse `custom/background-colour` and `custom/text-colour`. The text-colour `set` is cleared on this block so the classes in `spa-badge.css` own the colour in both the editor and Astro. The block is not limited to the hero.
+`spa/badge` is the live eyebrow (`Label.astro`, default size). It is a parallelogram from `clip-path`, slant `12px`, padding `8px 26px`, Oswald `1rem` / weight `500`, letter-spacing `0.12em`, uppercase. Default background is secondary (`#c8102e`) and default text is white. White text on a white or gray background becomes navy. Text is RichText, edited in the canvas. BlockStudio hides `richtext` fields from the sidebar. Background and text colour reuse `custom/background-colour` and `custom/text-colour`. The `name` inside those `field.json` files must match the `custom/…` type, or the reference is not expanded and the sidebar skips it. A RichText value that was never edited is not stored; Astro uses `.badge__text` in `innerHTML`, then the default. The block is not limited to the hero. Its CSS is imported from `theme.css` so the editor bundle includes it.
 
 `spa/hero` is the old scaffold. `inserter` is false. Leave it registered so existing content still renders.
 

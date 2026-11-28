@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { badgeClasses } from "../astro/src/lib/blocks/badge.ts";
+import { badgeClasses, badgeText } from "../astro/src/lib/blocks/badge.ts";
 
 test("a badge defaults to the red eyebrow with white type", () => {
   assert.deepEqual(badgeClasses(undefined, undefined), ["badge", "badge--bg-secondary", "badge--text-white"]);
@@ -13,6 +13,19 @@ test("white type on a white or gray badge becomes navy", () => {
     "badge--bg-gray",
     "badge--text-primary",
   ]);
+});
+
+test("a badge with no saved text uses the markup, then the default", () => {
+  assert.equal(badgeText({}), "Different by design");
+  assert.equal(badgeText({ text: "" }), "Different by design");
+  assert.equal(badgeText({ text: "Saved label" }), "Saved label");
+  assert.equal(
+    badgeText(
+      {},
+      '<span class="badge badge--bg-secondary"><span class="badge__text">From the saved markup</span></span>',
+    ),
+    "From the saved markup",
+  );
 });
 
 test("an explicit text colour is kept, including on a light badge", () => {

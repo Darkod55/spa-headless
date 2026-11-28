@@ -1,9 +1,9 @@
 /*
   Live site Label (src/components/ui/Label.astro), default size, red variant.
   Parallelogram via clip-path, slant 12px. Not a skew transform.
-  Shared by the editor and Astro.
+  Imported by the theme bundle so the editor iframe has it. Colour
+  variables come from color-tokens.css, already on :root.
 */
-@import "../theme/color-tokens.css";
 
 .badge {
   --badge-slant: 12px;
@@ -66,12 +66,27 @@
 .badge--text-red-on-royal { --badge-color: var(--color-secondary-on-tertiary); }
 
 /*
-  The hero paints inner headings white by inheritance. The badge sets its
-  own colour, including when it sits in that column. The editor wrapper
-  (.wp-block) is outside this element.
+  The hero editor rule paints `.block-editor-rich-text__editable` with
+  `color: inherit`. The badge's RichText element has that class, so the
+  type, tracking, and colour have to be repeated on it or the label
+  looks like a plain paragraph.
 */
+.badge,
 .hero__copy .badge,
-.editor-styles-wrapper .hero__copy .badge {
-  color: var(--badge-color);
+.editor-styles-wrapper .hero__copy .badge,
+.editor-styles-wrapper .hero__copy .badge .block-editor-rich-text__editable,
+.editor-styles-wrapper .hero__copy .badge .badge__text {
   background: var(--badge-bg);
+  color: var(--badge-color);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.editor-styles-wrapper .hero__copy .badge .block-editor-rich-text__editable,
+.editor-styles-wrapper .hero__copy .badge .badge__text {
+  background: transparent;
 }

@@ -8,6 +8,18 @@
   "supports": {
     "html": false
   },
+  "attributes": {
+    "text": {
+      "type": "string",
+      "default": "Different by design"
+    },
+    "bg_colour": {
+      "type": "object"
+    },
+    "text_colour": {
+      "type": "object"
+    }
+  },
   "style": "file:../../resources/css/components/spa-badge.css",
   "editorStyle": "file:../../resources/css/components/spa-badge.css",
   "blockstudio": {
@@ -19,17 +31,22 @@
         "default": "Different by design"
       },
       {
+        "id": "bg_colour",
         "type": "custom/background-colour",
         "overrides": {
-          "bg_colour": { "default": "var(--color-secondary)" }
+          "bg_colour": {
+            "id": "bg_colour",
+            "default": "var(--color-secondary)"
+          }
         }
       },
       {
+        "id": "text_colour",
         "type": "custom/text-colour",
         "overrides": {
           "text_colour": {
-            "default": "var(--color-white)",
-            "set": []
+            "id": "text_colour",
+            "default": "var(--color-white)"
           }
         }
       }

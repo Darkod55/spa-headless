@@ -383,10 +383,14 @@ const textColour = page({
       ],
     ),
     block("spa/badge", {
-      text: "On a light ground",
       bg_colour: { value: "var(--color-gray)", slug: "gray", name: "Gray" },
-      text_colour: { value: "var(--color-white)", slug: "white", name: "White" },
     }),
+    block(
+      "spa/badge",
+      {},
+      [],
+      '<span class="badge badge--bg-secondary badge--text-white"><span class="badge__text">From the saved markup</span></span>',
+    ),
     block(
       "core/heading",
       {

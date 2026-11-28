@@ -33,6 +33,7 @@ if (!class_exists(__NAMESPACE__.'\\MpxBlocks')) {
             $this->duplicatePartnersSliderGallery();
             $this->removeIsStyleClassFromMpxBlocks();
             $this->moveCoreButtonClassesToLink();
+            $this->registerColourFieldNames();
             $this->populateTextColours();
             $this->populateBGColours();
             $this->populateSpriteIcons();
