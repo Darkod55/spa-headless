@@ -2,6 +2,7 @@
 /**
  * spa/badge. The Astro component repeats these classes.
  * Styles: resources/css/components/spa-badge.css (the live Label, default size).
+ * The letter stagger is Astro-only. This template stays one RichText.
  *
  * @var array<string, mixed> $a
  */

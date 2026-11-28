@@ -27,6 +27,23 @@ export function badgeClasses(background: unknown, text: unknown): string[] {
 export const badgeDefaultText = "Different by design";
 
 /**
+ * The live hero passes `animate` on. A toggle that was never saved is
+ * missing from the block, so that absence stays on.
+ */
+export function badgeAnimates(value: unknown): boolean {
+  if (value === false || value === "false" || value === 0 || value === "0") {
+    return false;
+  }
+  return true;
+}
+
+/** Plain characters, matching Label.astro. A space stays a character. */
+export function badgeChars(text: string): string[] {
+  const plain = text.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  return Array.from(plain);
+}
+
+/**
  * A RichText value that was never edited is not stored. The rendered
  * markup still contains `.badge__text` when WordPress applied the default.
  */

@@ -385,6 +385,11 @@ const textColour = page({
     block("spa/badge", {
       bg_colour: { value: "var(--color-gray)", slug: "gray", name: "Gray" },
     }),
+    block("spa/badge", {
+      text: "Still label",
+      animate: false,
+      bg_colour: { value: "var(--color-primary)", slug: "primary", name: "Primary" },
+    }),
     block(
       "spa/badge",
       {},

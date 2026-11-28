@@ -18,6 +18,8 @@ type AstroBadge = {
   lightText: string;
   markupText: string[];
   heading: string;
+  motion: { on: boolean; name: string; duration: string; delay: string; second: string; easing: string };
+  still: { on: boolean; chars: number; text: string };
 };
 
 type EditorBadge = {
@@ -28,6 +30,8 @@ type EditorBadge = {
   spacing: string;
   padding: string;
   transform: string;
+  animation: string;
+  animateClass: boolean;
   clip: string;
   gap: string;
 };
@@ -177,19 +181,37 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
           clip: style.clipPath,
         };
       };
+      const labelOf = (el) => {
+        const hidden = el.querySelector(".visually-hidden");
+        return (hidden ? hidden.textContent : el.textContent).replace(/\\u00a0/g, " ").trim();
+      };
       const hero = document.querySelector(".hero__copy .badge");
       const light = document.querySelector(".badge--bg-gray");
       const copy = document.querySelector(".hero__copy");
       const heading = document.querySelector(".hero__copy h1");
-      if (!hero || !light || !copy || !heading) return null;
+      const still = [...document.querySelectorAll(".badge")].find((el) => el.textContent.includes("Still label"));
+      const first = hero && hero.querySelector(".badge__char");
+      const second = first && first.nextElementSibling;
+      if (!hero || !light || !copy || !heading || !still || !first || !second) return null;
+      const firstStyle = getComputedStyle(first);
+      const secondStyle = getComputedStyle(second);
       return {
         hero: paint(hero),
         light: paint(light),
         gap: getComputedStyle(copy).rowGap,
-        heroText: hero.textContent.trim(),
-        lightText: light.textContent.trim(),
-        markupText: [...document.querySelectorAll(".badge")].map((el) => el.textContent.trim()),
+        heroText: labelOf(hero),
+        lightText: labelOf(light),
+        markupText: [...document.querySelectorAll(".badge")].map((el) => labelOf(el)),
         heading: heading.textContent.trim(),
+        motion: {
+          on: hero.classList.contains("badge--animate"),
+          name: firstStyle.animationName,
+          duration: firstStyle.animationDuration,
+          delay: firstStyle.animationDelay,
+          second: secondStyle.animationDelay,
+          easing: firstStyle.animationTimingFunction,
+        },
+        still: { on: still.classList.contains("badge--animate"), chars: still.querySelectorAll(".badge__char").length, text: labelOf(still) },
       };
     })()`);
     if (!astroBadge) {
@@ -210,6 +232,28 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
     assert.equal(astroBadge.lightText, "Different by design");
     assert.ok(astroBadge.markupText.includes("From the saved markup"));
     assert.ok(astroBadge.heading.includes("stand out?"));
+    assert.equal(astroBadge.motion.on, true);
+    assert.equal(astroBadge.motion.name, "label-char-in");
+    assert.equal(astroBadge.motion.duration, "0.55s");
+    assert.equal(astroBadge.motion.delay, "0.1s");
+    assert.equal(Number(astroBadge.motion.second.replace("s", "")).toFixed(3), "0.132");
+    assert.ok(astroBadge.motion.easing === "ease-out" || astroBadge.motion.easing.includes("cubic-bezier"));
+    assert.equal(astroBadge.still.on, false);
+    assert.equal(astroBadge.still.chars, 0);
+    assert.equal(astroBadge.still.text, "Still label");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    const reduced = await page.evaluate<{ name: string; opacity: string } | null>(`(() => {
+      const ch = document.querySelector(".hero__copy .badge .badge__char");
+      if (!ch) return null;
+      const style = getComputedStyle(ch);
+      return { name: style.animationName, opacity: style.opacity };
+    })()`);
+    if (!reduced) {
+      throw new Error("the animated badge lost its characters");
+    }
+    assert.equal(reduced.name, "none");
+    assert.equal(reduced.opacity, "1");
+    await page.emulateMedia({ reducedMotion: "no-preference" });
 
     const editorCss = builtEditorCss();
     const badgeSource = badgeCss();
@@ -315,6 +359,8 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
           transform: type.textTransform,
           clip: shell.clipPath,
           gap: getComputedStyle(list).rowGap,
+          animation: type.animationName,
+          animateClass: badge.classList.contains("badge--animate"),
         };
       })()`);
       if (!editorBadge) {
@@ -329,6 +375,9 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
       assert.equal(editorBadge.transform, "uppercase");
       assert.notEqual(editorBadge.clip, "none");
       assert.equal(editorBadge.gap, "22px");
+      assert.equal(editorBadge.animation, "none");
+      assert.equal(editorBadge.animateClass, false);
+      assert.equal(editorCss.includes("label-char-in"), false);
     } finally {
       server.close();
     }

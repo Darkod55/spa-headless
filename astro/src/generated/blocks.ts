@@ -38,6 +38,7 @@ export interface SpaBadgeAttributes {
   text?: string;
   bg_colour?: string | SpaColorValue;
   text_colour?: string | SpaColorValue;
+  animate?: boolean;
 }
 
 /** Card grid — spa/card-grid (wordpress/themes/spa-headless/blockstudio/sections/card-grid/block.json) */
@@ -89,6 +90,7 @@ export interface SpaBadgeFieldMap {
   text: true;
   bg_colour: true;
   text_colour: true;
+  animate: true;
 }
 
 export interface SpaCardGridFieldMap {

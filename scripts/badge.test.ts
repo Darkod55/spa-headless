@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { badgeClasses, badgeText } from "../astro/src/lib/blocks/badge.ts";
+import { badgeAnimates, badgeChars, badgeClasses, badgeText } from "../astro/src/lib/blocks/badge.ts";
 
 test("a badge defaults to the red eyebrow with white type", () => {
   assert.deepEqual(badgeClasses(undefined, undefined), ["badge", "badge--bg-secondary", "badge--text-white"]);
@@ -26,6 +26,15 @@ test("a badge with no saved text uses the markup, then the default", () => {
     ),
     "From the saved markup",
   );
+});
+
+test("an unsaved animate toggle stays on, and an explicit off stays off", () => {
+  assert.equal(badgeAnimates(undefined), true);
+  assert.equal(badgeAnimates(true), true);
+  assert.equal(badgeAnimates(false), false);
+  assert.equal(badgeAnimates("false"), false);
+  assert.deepEqual(badgeChars("Different by design"), Array.from("Different by design"));
+  assert.deepEqual(badgeChars("<span>Hi</span>"), ["H", "i"]);
 });
 
 test("an explicit text colour is kept, including on a light badge", () => {

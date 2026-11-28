@@ -1,8 +1,9 @@
 ---
 import type { SpaBadgeAttributes } from "../../../generated/blocks";
-import { badgeClasses, badgeText } from "../../../lib/blocks/badge";
+import { badgeAnimates, badgeChars, badgeClasses, badgeText } from "../../../lib/blocks/badge";
 import { badgeFields } from "./badge.contract";
 import "../../../../../wordpress/themes/spa-sage/resources/css/components/spa-badge.css";
+import "../../../styles/badge-animate.css";
 
 interface Props {
   block: { attrs: SpaBadgeAttributes; innerHTML?: string };
@@ -11,9 +12,26 @@ interface Props {
 const { block } = Astro.props;
 void badgeFields;
 const text = badgeText(block.attrs, block.innerHTML ?? "");
-const classes = badgeClasses(block.attrs.bg_colour, block.attrs.text_colour);
+const animate = badgeAnimates(block.attrs.animate);
+const chars = animate ? badgeChars(text) : [];
+const classes = [...badgeClasses(block.attrs.bg_colour, block.attrs.text_colour), animate && "badge--animate"];
 ---
 
 <span class:list={classes}>
-  <span class="badge__text" set:html={text} />
+  {
+    animate ? (
+      <span class="badge__text">
+        <span class="visually-hidden">{chars.join("")}</span>
+        <span aria-hidden="true">
+          {chars.map((ch, i) => (
+            <span class="badge__char" style={`--i: ${i}`}>
+              {ch === " " ? "\u00A0" : ch}
+            </span>
+          ))}
+        </span>
+      </span>
+    ) : (
+      <span class="badge__text" set:html={text} />
+    )
+  }
 </span>
