@@ -336,6 +336,44 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
     assert.equal(buttons.saved.arrow, true);
     assert.equal(buttons.saved.href, "/saved");
     assert.equal(buttons.gap, "14px");
+    await page.hover('a.cta--primary[href="/contact"]');
+    await page.waitForFunction(`(() => {
+      const el = document.querySelector('a.cta--primary[href="/contact"]');
+      const match = getComputedStyle(el).backgroundColor.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+      const hex = match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : "";
+      return hex === "#970c23";
+    })()`);
+    const primaryHover = await page.evaluate<{ background: string; color: string; arrow: string }>(`(() => {
+      const el = document.querySelector('a.cta--primary[href="/contact"]');
+      const arrow = el.querySelector(".cta__arrow");
+      const hex = (value) => {
+        const match = value.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+        return match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : value;
+      };
+      const style = getComputedStyle(el);
+      return { background: hex(style.backgroundColor), color: hex(style.color), arrow: hex(getComputedStyle(arrow).color) };
+    })()`);
+    assert.equal(primaryHover.background, "#970c23");
+    assert.equal(primaryHover.color, "#ffffff");
+    assert.equal(primaryHover.arrow, "#ffffff");
+    await page.hover("a.cta--light");
+    await page.waitForFunction(`(() => {
+      const el = document.querySelector("a.cta--light");
+      const match = getComputedStyle(el).backgroundColor.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+      const hex = match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : "";
+      return hex === "#f4f5f7";
+    })()`);
+    const lightHover = await page.evaluate<{ background: string; color: string }>(`(() => {
+      const el = document.querySelector("a.cta--light");
+      const hex = (value) => {
+        const match = value.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+        return match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : value;
+      };
+      const style = getComputedStyle(el);
+      return { background: hex(style.backgroundColor), color: hex(style.color) };
+    })()`);
+    assert.equal(lightHover.background, "#f4f5f7");
+    assert.equal(lightHover.color, "#031433");
 
     const editorCss = builtEditorCss();
     const badgeSource = badgeCss();
@@ -345,6 +383,25 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
       the wrapper className. The inner RichText h1 receives neither.
     */
     const editorHtml = `<!doctype html>
+      <style>
+        a:hover, a:focus, a:active, .wp-element-button:hover { color: #970c23; }
+        .wp-block-button__link, .wp-element-button {
+          display: inline-block;
+          border-radius: 9999px;
+          background: #32373c;
+          color: #fff;
+          padding: 0.667em 1.333em;
+          font-size: 1.125em;
+          font-family: sans-serif;
+          text-decoration: underline;
+        }
+        .editor-styles-wrapper .hero__copy .block-editor-block-list__layout {
+          display: flex;
+          flex-direction: column;
+          gap: 22px;
+        }
+        .editor-styles-wrapper .hero__copy .block-editor-rich-text__editable { color: inherit; }
+      </style>
       <style>${editorCss}</style>
       <style>${badgeSource}</style>
       <style>.editor-styles-wrapper [data-block="heading-1"] { color: var(--color-secondary-on-tertiary) }</style>
@@ -362,23 +419,29 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
               <div class="wp-block has-text-secondary" data-block="para-1" data-type="core/paragraph">
                 <p class="wp-block-paragraph block-editor-rich-text__editable">A paragraph with text colour secondary.</p>
               </div>
-              <div class="wp-block cta cta--primary cta--arrow" data-type="core/button" data-button="primary">
-                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Primary</a></div>
-              </div>
-              <div class="wp-block cta cta--light cta--arrow" data-type="core/button" data-button="light">
-                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Light</a></div>
-              </div>
-              <div class="wp-block cta cta--light cta--no-arrow" data-type="core/button" data-button="light-off">
-                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Light off</a></div>
-              </div>
-              <div class="wp-block cta cta--dark cta--arrow" data-type="core/button" data-button="dark">
-                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Dark</a></div>
-              </div>
-              <div class="wp-block cta cta--outline-light cta--arrow" data-type="core/button" data-button="outline">
-                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Outline</a></div>
-              </div>
-              <div class="wp-block cta cta--text cta--no-arrow" data-type="core/button" data-button="text">
-                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Text</a></div>
+              <div class="wp-block wp-block-buttons" data-type="core/buttons">
+                <div class="block-editor-inner-blocks">
+                  <div class="block-editor-block-list__layout">
+                    <div class="wp-block cta cta--primary cta--arrow" data-type="core/button" data-button="primary">
+                      <div class="wp-block-button"><a class="wp-block-button__link wp-element-button block-editor-rich-text__editable" href="/contact">Book a discovery call</a></div>
+                    </div>
+                    <div class="wp-block cta cta--light cta--no-arrow" data-type="core/button" data-button="light-off">
+                      <div class="wp-block-button"><a class="wp-block-button__link wp-element-button block-editor-rich-text__editable" href="/services">How we help</a></div>
+                    </div>
+                    <div class="wp-block cta cta--light cta--arrow" data-type="core/button" data-button="light">
+                      <div class="wp-block-button"><a class="wp-block-button__link wp-element-button block-editor-rich-text__editable">Light</a></div>
+                    </div>
+                    <div class="wp-block cta cta--dark cta--arrow" data-type="core/button" data-button="dark">
+                      <div class="wp-block-button"><a class="wp-block-button__link wp-element-button block-editor-rich-text__editable">Dark</a></div>
+                    </div>
+                    <div class="wp-block cta cta--outline-light cta--arrow" data-type="core/button" data-button="outline">
+                      <div class="wp-block-button"><a class="wp-block-button__link wp-element-button block-editor-rich-text__editable">Outline</a></div>
+                    </div>
+                    <div class="wp-block cta cta--text cta--no-arrow" data-type="core/button" data-button="text">
+                      <div class="wp-block-button"><a class="wp-block-button__link wp-element-button block-editor-rich-text__editable">Text</a></div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="wp-block" data-block="heading-2" data-type="core/heading">
                 <h2 class="wp-block-heading block-editor-rich-text__editable">Uncoloured hero heading</h2>
@@ -538,6 +601,65 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
       assert.equal(editorButtons.outline.shell, "#ffffff");
       assert.equal(editorButtons.text.color, "#c8102e");
       assert.equal(editorButtons.text.clip, "none");
+      const editorShape = await page.evaluate<{
+        padding: string;
+        font: string;
+        size: string;
+        weight: string;
+        clip: boolean;
+        direction: string;
+        gap: string;
+        primaryWidth: number;
+        lightWidth: number;
+        rowWidth: number;
+      }>(`(() => {
+        const link = document.querySelector('[data-button="primary"] .wp-block-button__link');
+        const light = document.querySelector('[data-button="light"] .wp-block-button__link');
+        const row = document.querySelector('[data-type="core/buttons"] .block-editor-block-list__layout');
+        const style = getComputedStyle(link);
+        const rowStyle = getComputedStyle(link.closest('[data-type="core/button"]').parentElement);
+        return {
+          padding: style.padding,
+          font: style.fontFamily,
+          size: style.fontSize,
+          weight: String(style.fontWeight),
+          clip: style.clipPath !== "none",
+          direction: rowStyle.flexDirection,
+          gap: rowStyle.gap,
+          primaryWidth: link.getBoundingClientRect().width,
+          lightWidth: light.getBoundingClientRect().width,
+          rowWidth: row.getBoundingClientRect().width,
+        };
+      })()`);
+      assert.equal(editorShape.padding, "0px 34px");
+      assert.match(editorShape.font, /Oswald/i);
+      assert.equal(editorShape.size, "16px");
+      assert.equal(editorShape.weight, "500");
+      assert.equal(editorShape.clip, true);
+      assert.equal(editorShape.direction, "row");
+      assert.equal(editorShape.gap, "14px");
+      assert.ok(editorShape.primaryWidth < editorShape.rowWidth * 0.8);
+      assert.ok(editorShape.lightWidth < editorShape.primaryWidth);
+      await page.hover('[data-button="primary"] .wp-block-button__link');
+      await page.waitForFunction(`(() => {
+        const link = document.querySelector('[data-button="primary"] .wp-block-button__link');
+        const match = getComputedStyle(link).backgroundColor.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+        const hex = match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : "";
+        return hex === "#970c23";
+      })()`);
+      const editorHover = await page.evaluate<{ background: string; color: string; arrow: string }>(`(() => {
+        const link = document.querySelector('[data-button="primary"] .wp-block-button__link');
+        const after = getComputedStyle(link, "::after");
+        const hex = (value) => {
+          const match = value.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+          return match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : value;
+        };
+        const style = getComputedStyle(link);
+        return { background: hex(style.backgroundColor), color: hex(style.color), arrow: hex(after.backgroundColor) };
+      })()`);
+      assert.equal(editorHover.background, "#970c23");
+      assert.equal(editorHover.color, "#ffffff");
+      assert.equal(editorHover.arrow, "#ffffff");
     } finally {
       server.close();
     }

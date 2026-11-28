@@ -30,7 +30,7 @@ const arrow = buttonShowsArrow(attrs);
 const label = buttonLabel(attrs, block.innerHTML ?? "");
 const url = buttonUrl(attrs, block.innerHTML ?? "");
 const newTab = buttonOpensNewTab(attrs);
-const classes = ["cta", `cta--${type}`, arrow ? "cta--arrow" : "cta--no-arrow"];
+const classes = ["cta", "focus-clip", `cta--${type}`, arrow ? "cta--arrow" : "cta--no-arrow"];
 ---
 
 {
