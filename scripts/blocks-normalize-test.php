@@ -167,7 +167,7 @@ $nested_image = spa_headless_normalize_blocks(
 spa_assert( 4 === $nested_image[0]['attrs']['image']['id'], 'A hero image stored only under blockstudio.attributes should be normalized.' );
 spa_assert( 800 === $nested_image[0]['attrs']['image']['width'], 'Nested hero image dimensions should survive.' );
 
-$saved = spa_headless_repair_parsed_blocks(
+$saved = spa_headless_normalize_blocks(
 	array(
 		array(
 			'blockName'    => 'spa/hero-banner-main',
@@ -241,5 +241,25 @@ spa_assert( ! array_key_exists( 'text_colour', $saved[0]['innerBlocks'][1]['attr
 $legacy = spa_headless_colour_object( 'navy' );
 spa_assert( is_array( $legacy ) && 'navy' === $legacy['slug'] && 'var(--color-navy)' === $legacy['value'], 'A legacy slug string becomes a colour object.' );
 spa_assert( null === spa_headless_colour_object( '' ), 'An empty string is not a colour.' );
+
+$plugin_root = dirname( __DIR__ ) . '/wordpress/plugins/spa-headless-core';
+$plugin_php  = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $plugin_root ) );
+foreach ( $plugin_php as $file ) {
+	if ( ! $file instanceof SplFileInfo || ! $file->isFile() || 'php' !== $file->getExtension() ) {
+		continue;
+	}
+	$source = (string) file_get_contents( $file->getPathname() );
+	spa_assert(
+		1 !== preg_match( '/register_rest_field\s*\([^;]*[\'"]blocks[\'"]/s', $source ),
+		'No wp/v2 REST field may be named blocks (' . $file->getFilename() . '). The editor treats that key as its own block list.'
+	);
+}
+spa_assert( ! function_exists( 'spa_headless_register_blocks_field' ), 'The wp/v2 blocks field must stay unregistered.' );
+spa_assert( ! function_exists( 'spa_headless_rest_repair_editor_content' ), 'The editor must receive content.raw untouched.' );
+spa_assert( ! function_exists( 'spa_headless_widen_registered_colour_attributes' ), 'Colour attribute widening was only a workaround for the blocks field collision.' );
+
+$bootstrap = (string) file_get_contents( $plugin_root . '/spa-headless-core.php' );
+spa_assert( ! str_contains( $bootstrap, 'rest_prepare_page' ), 'rest_prepare_page must not rewrite the editor payload.' );
+spa_assert( ! str_contains( $bootstrap, 'rest_prepare_post' ), 'rest_prepare_post must not rewrite the editor payload.' );
 
 fwrite( STDOUT, "blocks normalizer ok\n" );

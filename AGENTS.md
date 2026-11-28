@@ -20,6 +20,10 @@ WordPress is the CMS. Astro is the public site. This is the rebuild of [thesquar
 - BlockStudio `set` runs on `render_block` and is not saved into `innerHTML`. Extension values live at `attrs.blockstudio.attributes`. The REST normalizer copies them onto `attrs`. Astro applies the classes from `attrs`.
 - Keep `pnpm test`, `pnpm check`, and `pnpm build` green. Builds with no `WP_URL` use fixtures.
 
+## Common mistakes
+
+- Registering a REST field named `blocks` on `wp/v2` posts or pages. The editor treats that property as its own block list and then ignores `content.raw`, so the canvas is empty. Parsed blocks belong on `spa/v1` only. Do not rewrite `content.raw` to compensate.
+
 The active theme is `wordpress/themes/spa-sage` (Sage 11, Tailwind 4, Vite, Blade, Acorn). BlockStudio's root is `app/blocks` via the `blockstudio/path` filter. Shared fields are `app/blocks/fields`. Core extensions are `app/blocks/extensions`. Block namespace is `spa/*`. `wordpress/themes/spa-headless` is deprecated and stays in the repo; do not add blocks there.
 
 Theme build (npm stays inside the theme; the repo root stays pnpm):

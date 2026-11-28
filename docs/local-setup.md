@@ -90,28 +90,11 @@ A hero already saved as `"background": "navy"` still renders. You do not have to
 - `SPA_PREVIEW_TOKEN` matches on both sides and is not in git.
 - `pnpm test`, `pnpm check`, and `pnpm build` pass before you push.
 
-## If the editor is empty but Astro still shows the hero
+## If the editor canvas is empty
 
-Do not press Update. That would save the empty canvas over the published page.
+Pull this repo and hard-refresh the editor. The plugin must not add a `blocks` field to `wp/v2` posts or pages. That name is reserved by the editor; a parsed tree there replaces `content.raw` and the canvas opens empty. Content saved while the canvas was empty was serialized from the blocks open in that session, so a save of a visible page is the page you saw.
 
-The grey bar on http://localhost:4321 means Astro is not reading WordPress. No bar means the published page still has the hero, and the editor is showing an autosave or a browser backup.
-
-In Local’s site shell (read-only):
-
-```bash
-wp post list --post_type=page --fields=ID,post_title,post_name,post_status
-wp option get page_on_front
-wp post get <homepage ID> --field=post_content | head -50
-wp post list --post_type=revision --post_parent=<homepage ID> --fields=ID,post_date,post_name,post_title
-```
-
-Autosaves are named like `123-autosave-v1`. Also open the browser console on the editor and look for a red error before touching the page. `curl -s http://squarepeg-cms.local/wp-json/spa/v1/content?path=/` shows what Astro reads. `wp-content/debug.log` shows a PHP fatal if block registration failed.
-
-To put a revision back, after you have identified the one that still contains `wp:spa/hero-banner-main`:
-
-```bash
-wp post restore <revision ID>
-```
+The grey bar on http://localhost:4321 means Astro is not reading WordPress. No bar means the published page is what `spa/v1/content` returned.
 
 ## Common mistakes
 

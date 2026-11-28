@@ -12,7 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Post types that expose the `blocks` REST field and the spa/v1 routes.
+ * Post types the spa/v1 routes serve.
+ *
+ * Do not register a wp/v2 REST field named `blocks` on these types. The
+ * block editor treats `blocks` on the post entity as its own parsed list
+ * (name, attributes, clientId). A parse_blocks() array (blockName, attrs)
+ * in that slot replaces content.raw and the canvas opens empty.
  *
  * @return list<string>
  */
@@ -292,8 +297,8 @@ function spa_headless_colour_object( mixed $value ): ?array {
  *
  * An empty top-level value (the colour control writes "") loses to the
  * object stored at blockstudio.attributes. The nest is kept. Empty colour
- * attributes are removed so the editor is not given a string where it
- * expects an object.
+ * attributes are removed from the spa/v1 payload. The editor reads
+ * content.raw as it was saved; this function does not rewrite it.
  *
  * @param array<string, mixed> $attrs
  */
@@ -334,150 +339,6 @@ function spa_headless_flatten_blockstudio_attributes( array &$attrs ): void {
 }
 
 /**
- * Repair parsed blocks so a saved "" colour does not hide the real object.
- *
- * @param array<int, mixed> $blocks
- * @return array<int, mixed>
- */
-function spa_headless_repair_parsed_blocks( array $blocks ): array {
-	$repaired = array();
-
-	foreach ( $blocks as $block ) {
-		if ( ! is_array( $block ) ) {
-			continue;
-		}
-
-		$attrs = isset( $block['attrs'] ) && is_array( $block['attrs'] ) ? $block['attrs'] : array();
-		spa_headless_flatten_blockstudio_attributes( $attrs );
-		$block['attrs'] = $attrs;
-
-		if ( isset( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
-			$block['innerBlocks'] = spa_headless_repair_parsed_blocks( $block['innerBlocks'] );
-		}
-
-		$repaired[] = $block;
-	}
-
-	return $repaired;
-}
-
-/**
- * Rewrite post_content the block editor will parse. The database is not changed.
- */
-function spa_headless_repair_post_content( string $content ): string {
-	if ( '' === $content || ! function_exists( 'parse_blocks' ) || ! function_exists( 'serialize_blocks' ) ) {
-		return $content;
-	}
-	if ( ! str_contains( $content, 'text_colour' ) && ! str_contains( $content, 'blockstudio' ) ) {
-		return $content;
-	}
-
-	$repaired = serialize_blocks( spa_headless_repair_parsed_blocks( parse_blocks( $content ) ) );
-
-	return is_string( $repaired ) && '' !== $repaired ? $repaired : $content;
-}
-
-/**
- * The editor reads content.raw, not the spa/v1 payload. Give it the colour
- * object so BlockStudio can read .slug and the hero stays in the canvas.
- *
- * @param WP_REST_Response|mixed $response
- * @param WP_Post|mixed          $post
- * @param WP_REST_Request|mixed  $request
- * @return mixed
- */
-function spa_headless_rest_repair_editor_content( $response, $post, $request ) {
-	unset( $post );
-	if ( ! $response instanceof WP_REST_Response || ! $request instanceof WP_REST_Request ) {
-		return $response;
-	}
-	if ( 'edit' !== $request->get_param( 'context' ) ) {
-		return $response;
-	}
-
-	$data = $response->get_data();
-	if ( ! is_array( $data ) || ! isset( $data['content']['raw'] ) || ! is_string( $data['content']['raw'] ) ) {
-		return $response;
-	}
-
-	$repaired = spa_headless_repair_post_content( $data['content']['raw'] );
-	if ( $repaired !== $data['content']['raw'] ) {
-		$data['content']['raw'] = $repaired;
-		$response->set_data( $data );
-	}
-
-	return $response;
-}
-
-/**
- * Accept both the legacy string and the colour object. An object-only schema
- * drops "" during parse; a string-only schema drops the saved object.
- *
- * @param array<string, mixed> $args
- * @return array<string, mixed>
- */
-function spa_headless_widen_colour_attribute_args( array $args ): array {
-	if ( ! isset( $args['attributes'] ) || ! is_array( $args['attributes'] ) ) {
-		$args['attributes'] = array();
-	}
-
-	foreach ( array( 'text_colour', 'background' ) as $key ) {
-		if ( ! isset( $args['attributes'][ $key ] ) || ! is_array( $args['attributes'][ $key ] ) ) {
-			continue;
-		}
-		$args['attributes'][ $key ]['type'] = array( 'string', 'object' );
-	}
-
-	return $args;
-}
-
-/**
- * @param array<string, mixed> $args
- * @return array<string, mixed>
- */
-function spa_headless_register_block_type_args( array $args, string $name ): array {
-	$colour_blocks = array( 'core/heading', 'core/paragraph', 'spa/hero-banner-main', 'spa/hero-banner-default' );
-	if ( ! in_array( $name, $colour_blocks, true ) ) {
-		return $args;
-	}
-
-	return spa_headless_widen_colour_attribute_args( $args );
-}
-
-/**
- * BlockStudio adds extension attributes as it registers the block. Widen the
- * type again after that, and add text_colour if the extension stored it only
- * inside blockstudio.attributes.
- */
-function spa_headless_widen_registered_colour_attributes(): void {
-	if ( ! class_exists( 'WP_Block_Type_Registry' ) ) {
-		return;
-	}
-
-	$registry = WP_Block_Type_Registry::get_instance();
-	foreach ( array( 'core/heading', 'core/paragraph', 'spa/hero-banner-main', 'spa/hero-banner-default' ) as $name ) {
-		$block = $registry->get_registered( $name );
-		if ( ! $block instanceof WP_Block_Type ) {
-			continue;
-		}
-		if ( ! is_array( $block->attributes ) ) {
-			$block->attributes = array();
-		}
-		if ( ( 'core/heading' === $name || 'core/paragraph' === $name ) && ! isset( $block->attributes['text_colour'] ) ) {
-			$block->attributes['text_colour'] = array(
-				'type' => array( 'string', 'object' ),
-			);
-		}
-		foreach ( array( 'text_colour', 'background' ) as $key ) {
-			if ( ! isset( $block->attributes[ $key ] ) || ! is_array( $block->attributes[ $key ] ) ) {
-				continue;
-			}
-			$block->attributes[ $key ]['type'] = array( 'string', 'object' );
-		}
-	}
-}
-
-/**
  * @return list<array<string, mixed>>
  */
 function spa_headless_blocks_from_content( string $content ): array {
@@ -488,51 +349,3 @@ function spa_headless_blocks_from_content( string $content ): array {
 	return spa_headless_normalize_blocks( parse_blocks( $content ) );
 }
 
-/**
- * Register `blocks` on the core posts and pages REST resources.
- */
-function spa_headless_register_blocks_field(): void {
-	register_rest_field(
-		spa_headless_post_types(),
-		'blocks',
-		array(
-			'get_callback' => static function ( array $post ): array {
-				$post_id = isset( $post['id'] ) ? (int) $post['id'] : 0;
-				$content = get_post_field( 'post_content', $post_id );
-				if ( ! is_string( $content ) ) {
-					return array();
-				}
-
-				return spa_headless_blocks_from_content( $content );
-			},
-			'schema'       => array(
-				'description' => 'Block tree from parse_blocks(): blockName, attrs, innerBlocks, innerHTML, innerContent.',
-				'type'        => 'array',
-				'context'     => array( 'view', 'edit' ),
-				'items'       => array(
-					'type'       => 'object',
-					'properties' => array(
-						'blockName'    => array(
-							'type' => array( 'string', 'null' ),
-						),
-						'attrs'        => array(
-							'type' => 'object',
-						),
-						'innerBlocks'  => array(
-							'type' => 'array',
-						),
-						'innerHTML'    => array(
-							'type' => 'string',
-						),
-						'innerContent' => array(
-							'type'  => 'array',
-							'items' => array(
-								'type' => array( 'string', 'null' ),
-							),
-						),
-					),
-				),
-			),
-		)
-	);
-}

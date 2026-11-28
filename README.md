@@ -138,9 +138,8 @@ Hero Banner Main and Hero Banner Default are the page heroes. The background is 
 
 Core blocks the renderer knows: paragraph, heading, image, list (and list item), buttons (and button), group, columns (and column). Any other block, including classic HTML, renders the saved `innerHTML`, with inner blocks spliced in from `innerContent`.
 
-Block JSON on the REST API:
+Block JSON on the REST API (not on `wp/v2`; that `blocks` key belongs to the editor):
 
-- `blocks` on `wp/v2/pages` and `wp/v2/posts`
 - `GET /wp-json/spa/v1/routes`
 - `GET /wp-json/spa/v1/content?path=/about`
 - `GET /wp-json/spa/v1/preview/123` with header `X-SPA-Preview-Token`

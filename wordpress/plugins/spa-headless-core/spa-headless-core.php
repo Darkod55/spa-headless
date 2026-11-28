@@ -29,12 +29,7 @@ require_once SPA_HEADLESS_CORE_DIR . 'includes/routes.php';
 require_once SPA_HEADLESS_CORE_DIR . 'includes/nav.php';
 
 add_action( 'init', 'spa_headless_register_meta' );
-add_action( 'init', 'spa_headless_widen_registered_colour_attributes', 999 );
-add_filter( 'register_block_type_args', 'spa_headless_register_block_type_args', 20, 2 );
-add_action( 'rest_api_init', 'spa_headless_register_blocks_field' );
 add_action( 'rest_api_init', 'spa_headless_register_routes' );
-add_filter( 'rest_prepare_page', 'spa_headless_rest_repair_editor_content', 20, 3 );
-add_filter( 'rest_prepare_post', 'spa_headless_rest_repair_editor_content', 20, 3 );
 add_action( 'admin_notices', 'spa_headless_blockstudio_notice' );
 
 /**

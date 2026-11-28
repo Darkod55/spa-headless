@@ -2,9 +2,8 @@
 /**
  * Read-only routes the Astro app uses to resolve a public path.
  *
- * Block data is also available as the `blocks` field on wp/v2/posts and
- * wp/v2/pages. These routes exist so a permalink path (including the blog
- * prefix) resolves to one payload without the front end guessing.
+ * `blocks` is only on these spa/v1 responses. It is not a wp/v2 field:
+ * the block editor reserves that key on the post entity.
  *
  * @package Spa_Headless
  */

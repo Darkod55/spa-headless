@@ -21,7 +21,7 @@ The plugin does not register blocks. It turns `parse_blocks()` into the JSON Ast
 3. The layout also fetches `GET /wp-json/spa/v1/site`, `GET /wp-json/spa/v1/menus/{location}`, and Rank Math `getHead`.
 4. `BlockRenderer.astro` walks `blocks`. A known block gets an Astro component. Anything else renders saved `innerHTML`, with inner blocks spliced in from `innerContent`.
 
-The same block tree is on `wp/v2` posts and pages as the `blocks` field. `spa/v1/content` is the path resolver so Astro does not guess permalinks. Paths have no trailing slash. Posts live under `/blog/{slug}`. Pages are `/{slug}`. Keep those slugs identical to the live site.
+`blocks` is only on `spa/v1` (`content` and `preview`). Astro does not read `wp/v2` for page content. `spa/v1/content` is the path resolver so Astro does not guess permalinks. Paths have no trailing slash. Posts live under `/blog/{slug}`. Pages are `/{slug}`. Keep those slugs identical to the live site.
 
 ## Endpoints
 
@@ -58,11 +58,11 @@ CORS allows `http://localhost:4321` and `http://127.0.0.1:4321`, plus origins in
 
 An empty WordPress page is not replaced with the fixture hero. If localhost:4321 is showing sample content, a grey bar at the top says so. No bar means the HTML came from the published WordPress page.
 
-The block editor does not load that published copy when a newer autosave or browser backup exists. An empty canvas with “Type / to choose a block” means the editor opened that other copy. Do not press Update until `post_content` has been read. See [local-setup.md](local-setup.md).
+The block editor loads a post from `wp/v2` and parses `content.raw`. It also treats a `blocks` property on that record as the already-parsed editor blocks (`name`, `attributes`, `clientId`). Do not register a REST field with that name. A `parse_blocks()` array (`blockName`, `attrs`) in that slot replaces `content.raw`, and the canvas opens empty for every post, on every theme. Saves still write `post_content` from the in-session blocks. `spa/v1` keeps the name `blocks` because the editor never loads those routes.
 
 ## Checklist
 
-- New public data goes through `spa/v1` or the `blocks` field, not a one-off fetch in a component.
+- New public data goes through `spa/v1`, not a field on `wp/v2`, and not a one-off fetch in a component.
 - A new menu location is registered in the theme and read with `getMenu`. An empty assignment is an empty list.
 - Slugs match the live site.
 - Fixture mode still builds with `WP_URL` unset.
@@ -73,3 +73,4 @@ The block editor does not load that published copy when a newer autosave or brow
 - Pointing Rank Math `getHead` at a path. The `url` argument is an absolute WordPress URL.
 - Adding a block renderer that ignores `attrs.blockstudio.attributes` after a WordPress upgrade of the normalizer. Read the flattened `attrs`.
 - Fetching the live site's repo or host as if it were this codebase.
+- Registering a wp/v2 REST field named `blocks` on posts or pages. That key belongs to the block editor. Put the parsed tree on `spa/v1` only, and leave `content.raw` untouched.
