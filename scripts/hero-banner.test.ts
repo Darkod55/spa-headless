@@ -40,6 +40,9 @@ test("the hero template keeps InnerBlocks unlocked and shapes click-through", ()
   assert.match(css, /\.hero__band[\s\S]*?pointer-events:\s*none/);
   assert.match(css, /\.hero__photo\s*\{[^}]*pointer-events:\s*none/);
   assert.match(css, /\.editor-styles-wrapper \.hero__copy[\s\S]*color:\s*var\(--hero-text/);
+  assert.match(css, /\[data-type\^="spa\/hero-banner"\]/);
+  assert.match(css, /max-width:\s*none !important/);
+  assert.doesNotMatch(css, /100vw/);
 });
 
 test("each background class sets bg, both shapes, and readable text", () => {

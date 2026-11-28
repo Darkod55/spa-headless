@@ -283,6 +283,36 @@
   The inline toolbar and appender sit inside .hero and were inheriting
   white, which left a blank white control. Shapes stay click-through.
 */
+/*
+  The editor constrains every root block to theme.json contentSize and
+  centers it. These heroes are full-bleed on the public site, including
+  blocks saved before align existed. The rule keys off the block type,
+  not the align attribute, and uses the canvas padding so it does not
+  add a horizontal scrollbar. Inner heading and paragraph stay inside
+  .hero__copy (500px / 600px). Scoped to the editor so Astro is unchanged.
+*/
+.editor-styles-wrapper .block-editor-block-list__layout.is-root-container > .wp-block[data-type^="spa/hero-banner"] {
+  box-sizing: border-box;
+  max-width: none !important;
+  width: calc(100% + var(--wp--style--root--padding-left, 0px) + var(--wp--style--root--padding-right, 0px)) !important;
+  margin-left: calc(var(--wp--style--root--padding-left, 0px) * -1) !important;
+  margin-right: calc(var(--wp--style--root--padding-right, 0px) * -1) !important;
+}
+
+.editor-styles-wrapper .hero.alignfull {
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.editor-styles-wrapper .hero .wp-block {
+  max-width: 100% !important;
+  width: auto;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
 .editor-styles-wrapper .hero {
   overflow: visible;
 }

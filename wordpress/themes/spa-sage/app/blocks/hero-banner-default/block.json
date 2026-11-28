@@ -5,6 +5,16 @@
   "category": "spa",
   "icon": "cover",
   "description": "Inner-page hero. Shorter than the homepage banner. Heading and paragraph are inner blocks.",
+  "supports": {
+    "align": ["full"],
+    "html": false
+  },
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    }
+  },
   "style": "file:../../resources/css/components/spa-hero-banner.css",
   "editorStyle": "file:../../resources/css/components/spa-hero-banner.css",
   "blockstudio": {
