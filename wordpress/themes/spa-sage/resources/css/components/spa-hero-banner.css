@@ -202,10 +202,11 @@
 }
 
 .hero__copy {
+  --hero-copy-gap: 22px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 22px;
+  gap: var(--hero-copy-gap);
 }
 
 .hero__copy > .wp-heading,
@@ -338,6 +339,47 @@
   z-index: 3;
 }
 
+/*
+  The front end puts the heading and paragraph directly in .hero__copy,
+  so its flex gap separates them. The editor wraps each in .wp-block
+  inside .block-editor-block-list__layout, and that list zeros margins.
+  Use the same --hero-copy-gap on the list. Do not change the public gap.
+*/
+.editor-styles-wrapper .hero__copy .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start;
+  gap: var(--hero-copy-gap) !important;
+}
+
+.editor-styles-wrapper .hero__copy .block-editor-block-list__layout > .wp-block {
+  margin-block: 0 !important;
+}
+
+.editor-styles-wrapper .hero--main .hero__copy :is(h1, h2, .wp-block-heading) {
+  margin: 0;
+  font-size: var(--fs-display);
+  line-height: 0.96;
+}
+
+.editor-styles-wrapper .hero--default .hero__copy :is(h1, h2, .wp-block-heading) {
+  margin: 0;
+  font-size: var(--fs-h1-page);
+  line-height: 0.98;
+}
+
+.editor-styles-wrapper .hero--main .hero__copy :is(p, .wp-block-paragraph) {
+  margin: 0;
+  font-size: 1.1875rem;
+  line-height: 1.55;
+}
+
+.editor-styles-wrapper .hero--default .hero__copy :is(p, .wp-block-paragraph) {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
 .editor-styles-wrapper .hero__copy :is(
   h1,
   h2,
@@ -377,7 +419,7 @@
   .hero--default .hero__copy {
     max-width: 50%;
     padding-block: 50px;
-    gap: 18px;
+    --hero-copy-gap: 18px;
   }
 }
 
