@@ -1,6 +1,7 @@
 ---
 description: End-to-end contract for BlockStudio blocks and their Astro components
 globs:
+  - wordpress/themes/spa-sage/app/blocks/**/*
   - wordpress/themes/spa-headless/blockstudio/**/*
   - astro/src/components/blocks/**/*
   - astro/src/generated/**/*

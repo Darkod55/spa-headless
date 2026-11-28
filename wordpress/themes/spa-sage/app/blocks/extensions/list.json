@@ -68,7 +68,7 @@
             "set": [
               {
                 "attribute": "class",
-                "value": "mpx-list"
+                "value": "spa-list"
               }
             ]
           },
@@ -90,7 +90,7 @@
             "set": [
               {
                 "attribute": "class",
-                "value": "mpx-list mpx-list--tags"
+                "value": "spa-list spa-list--tags"
               }
             ]
           },
@@ -122,7 +122,7 @@
             "set": [
               {
                 "attribute": "style",
-                "value": "--mpx-list-tag-bg: {attributes.tag_bg_colour.value}"
+                "value": "--spa-list-tag-bg: {attributes.tag_bg_colour.value}"
               }
             ]
           },
@@ -153,7 +153,7 @@
             "set": [
               {
                 "attribute": "style",
-                "value": "--mpx-list-bullet: {attributes.bullet_colour.value}"
+                "value": "--spa-list-bullet: {attributes.bullet_colour.value}"
               }
             ]
           },
@@ -175,7 +175,7 @@
             "set": [
               {
                 "attribute": "class",
-                "value": "mpx-list--divided"
+                "value": "spa-list--divided"
               }
             ]
           },
@@ -202,7 +202,7 @@
             "set": [
               {
                 "attribute": "style",
-                "value": "--mpx-list-divider: {attributes.divider_colour.value}"
+                "value": "--spa-list-divider: {attributes.divider_colour.value}"
               }
             ]
           }

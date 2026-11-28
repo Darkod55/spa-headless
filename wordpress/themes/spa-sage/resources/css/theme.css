@@ -10,26 +10,22 @@
 */
 @import "./theme/buttons.css";
 @import "./theme/forms.css";
-@import "./theme/flodesk.css";
 @import "./theme/nav.css";
 @import "./theme/typography.css";
 @import "./theme/posts.css";
 @import "./theme/global.css";
 @import "./theme/editor-safelist.css";
 /* Outside theme/ so Blockstudio's bridgeTailwindConfig() glob does not re-emit it. */
-@import "./components/mpx-subheading.css";
-@import "./components/mpx-buttons.css";
-@import "./components/mpx-icon-divider.css";
-@import "./components/mpx-box.css";
-@import "./components/mpx-keynote.css";
-@import "./components/mpx-row.css";
-@import "./components/mpx-podcast.css";
-@import "./components/mpx-event.css";
-@import "./components/mpx-modules.css";
+@import "./components/spa-subheading.css";
+@import "./components/spa-buttons.css";
+@import "./components/spa-icon-divider.css";
+@import "./components/spa-box.css";
+@import "./components/spa-keynote.css";
+@import "./components/spa-row.css";
+@import "./components/spa-hero-banner.css";
 
-@source inline("text-primary text-secondary text-tertiary text-navy-light text-coral-dark text-dark-blue text-light text-gold text-black text-white text-white/75 text-white-75");
-@source inline("bg-primary bg-secondary bg-tertiary bg-navy-light bg-coral-dark bg-dark-blue bg-light bg-gold bg-black bg-white bg-white-75");
-@source inline("bg-img-cream bg-img-midnight bg-img-sky bg-img-terracotta bg-img-gold");
+@source inline("text-primary text-secondary text-tertiary text-navy text-red text-royal text-dark-blue text-black text-white text-gold text-light");
+@source inline("bg-primary bg-secondary bg-tertiary bg-navy bg-red bg-royal bg-dark-blue bg-black bg-white bg-gold bg-light");
 @source inline("font-heading italic uppercase is-portrait");
 /**
  * One-off utilities applied via the block editor's "Additional CSS class(es)"

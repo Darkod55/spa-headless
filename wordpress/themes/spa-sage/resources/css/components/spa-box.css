@@ -1,10 +1,10 @@
 /**
- * mpx/partial-box — optional bg, frosted panel, and padding.
- * core/list extension — `.mpx-list` / `.mpx-list--divided` / `.mpx-list--tags`.
+ * spa/partial-box — optional bg, frosted panel, and padding.
+ * core/list extension — `.spa-list` / `.spa-list--divided` / `.spa-list--tags`.
  */
 
 @layer components {
-  .mpx-box {
+  .spa-box {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -13,20 +13,20 @@
     border-radius: var(--radius-surface);
   }
 
-  .mpx-box--has-bg {
-    background-color: var(--mpx-box-bg, var(--color-primary));
+  .spa-box--has-bg {
+    background-color: var(--spa-box-bg, var(--color-primary));
   }
 
   /**
    * Frosted glass — matches subheading panel chrome, without padding.
    * Use with Padding toggle when inset is needed (e.g. newsletter cards).
    */
-  .mpx-box--panel {
+  .spa-box--panel {
     border: 1px solid color-mix(in srgb, var(--color-white) 20%, transparent);
     background-color: color-mix(in srgb, var(--color-white) 10%, transparent);
   }
 
-  .mpx-box--padded {
+  .spa-box--padded {
     padding: var(--padding-surface);
 
     @media (width >= theme(--breakpoint-lg)) {
@@ -38,7 +38,7 @@
    * Gap owns vertical rhythm — kill default p/ul/heading margins
    * so they don’t stack with the box gap.
    */
-  .mpx-box > :is(h1, h2, h3, h4, h5, h6, p, ul, ol) {
+  .spa-box > :is(h1, h2, h3, h4, h5, h6, p, ul, ol) {
     margin-block: 0;
   }
 
@@ -46,9 +46,9 @@
    * Theme-styled core/list (extension toggle).
    * Matches speaking Topics panel: flex row, bullet + text, py-4 dividers.
    */
-  .mpx-list,
-  ul.mpx-list,
-  ol.mpx-list {
+  .spa-list,
+  ul.spa-list,
+  ol.spa-list {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -57,11 +57,11 @@
     gap: 0;
   }
 
-  .mpx-list:not(.mpx-list--divided):not(.mpx-list--tags) {
+  .spa-list:not(.spa-list--divided):not(.spa-list--tags) {
     gap: 1.25rem;
   }
 
-  .mpx-list > li {
+  .spa-list > li {
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
@@ -70,27 +70,27 @@
     list-style: none;
   }
 
-  .mpx-list > li::marker {
+  .spa-list > li::marker {
     content: none;
   }
 
   /**
    * Flex item bullet (not absolute) — sits on the first text line.
    */
-  .mpx-list > li::before {
+  .spa-list > li::before {
     content: "";
     flex: 0 0 0.375rem;
     width: 0.375rem;
     height: 0.375rem;
     margin-top: 0.55em;
     border-radius: 50%;
-    background-color: var(--mpx-list-bullet, var(--color-secondary));
+    background-color: var(--spa-list-bullet, var(--color-secondary));
   }
 
   /**
    * Keep nested rich-text / strong / breaks in one column beside the bullet.
    */
-  .mpx-list > li > * {
+  .spa-list > li > * {
     flex: 1 1 auto;
     min-width: 0;
     margin: 0;
@@ -99,27 +99,27 @@
   /**
    * Title + description rows (bold/strong first line, body below).
    */
-  .mpx-list > li > :is(strong, b):first-child {
+  .spa-list > li > :is(strong, b):first-child {
     display: block;
     font-family: var(--font-heading);
     font-weight: 400;
     margin-bottom: 0.25rem;
   }
 
-  .mpx-list--divided > li {
+  .spa-list--divided > li {
     padding-block: 1rem;
     border-bottom: 1px solid
       var(
-        --mpx-list-divider,
+        --spa-list-divider,
         color-mix(in srgb, currentColor 12%, transparent)
       );
   }
 
-  .mpx-list--divided > li:first-child {
+  .spa-list--divided > li:first-child {
     padding-top: 0;
   }
 
-  .mpx-list--divided > li:last-child {
+  .spa-list--divided > li:last-child {
     padding-bottom: 0;
     border-bottom: none;
   }
@@ -129,9 +129,9 @@
    * Mutually exclusive with styled bullets / dividers in the editor UI.
    * Text colour / size inherit from the list (typography extension classes).
    */
-  .mpx-list--tags,
-  ul.mpx-list--tags,
-  ol.mpx-list--tags {
+  .spa-list--tags,
+  ul.spa-list--tags,
+  ol.spa-list--tags {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
@@ -142,21 +142,21 @@
    * Defaults only when typography classes are absent — :where() keeps
    * specificity at 0 so `.text-*` / `.fs-*` on the list always win.
    */
-  .mpx-list--tags:where(:not([class*="text-"])) {
+  .spa-list--tags:where(:not([class*="text-"])) {
     color: color-mix(in srgb, var(--color-primary) 58%, transparent);
   }
 
-  .mpx-list--tags:where(:not([class*="fs-"])) {
+  .spa-list--tags:where(:not([class*="fs-"])) {
     font-size: var(--font-size-sm);
   }
 
-  .mpx-list--tags > li {
+  .spa-list--tags > li {
     display: inline-flex;
     align-items: center;
     gap: 0;
     padding: 0.4rem 0.85rem;
     border-radius: var(--radius-surface);
-    background-color: var(--mpx-list-tag-bg, var(--color-light));
+    background-color: var(--spa-list-tag-bg, var(--color-light));
     color: inherit;
     font-family: inherit;
     font-size: inherit;
@@ -166,12 +166,12 @@
     line-height: 1.35;
   }
 
-  .mpx-list--tags > li::before {
+  .spa-list--tags > li::before {
     content: none;
     display: none;
   }
 
-  .mpx-list--tags > li > * {
+  .spa-list--tags > li > * {
     flex: none;
     margin: 0;
     color: inherit;

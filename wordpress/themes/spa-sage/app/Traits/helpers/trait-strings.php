@@ -83,7 +83,7 @@ trait strings
 
     /**
      * Build parent-level `--col-{n}-width-*` / `--col-{n}-grow-*` CSS for
-     * the two-column `mpx/columns` layout (desktop + tablet; mobile is 100% in CSS).
+     * the two-column `spa/columns` layout (desktop + tablet; mobile is 100% in CSS).
      *
      * Gap used in % calcs must match the rendered column-gap, or two ~50%
      * columns overflow and wrap to full width (looks like 100% each):
@@ -364,7 +364,7 @@ trait strings
 
         if ($page_content !== '') {
             foreach (parse_blocks($page_content) as $block) {
-                if (($block['blockName'] ?? '') === 'mpx/hero') {
+                if (($block['blockName'] ?? '') === 'spa/hero') {
                     $hero_banner_block = render_block($block);
                 } else {
                     $remaining_content .= render_block($block);

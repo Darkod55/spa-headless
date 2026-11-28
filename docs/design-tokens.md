@@ -2,7 +2,7 @@
 
 The public stylesheet is `astro/src/styles/global.css`, ported from [Darkod55/spa](https://github.com/Darkod55/spa) `src/styles/global.css`. That site does not use Tailwind. Do not add a second palette.
 
-Oswald and Montserrat (weights 400–700) come from `@fontsource`. Vite serves those files. The editor cannot see `node_modules` through the theme symlink, so `assets/editor.css` loads four latin woff2 files copied into `assets/fonts/`.
+Oswald and Montserrat (weights 400–700) are self-hosted woff2 files in `wordpress/themes/spa-sage/resources/fonts` (OFL). The theme tokens are `resources/css/theme/variables.css` and `fonts.css`. Astro still loads `@fontsource` for the public site.
 
 ## Tokens
 
@@ -21,7 +21,7 @@ Oswald and Montserrat (weights 400–700) come from `@fontsource`. Vite serves t
 
 `--header-height` is the header bar at rest. The scrolled bar sets `min-height: 0`. The homepage hero subtracts this variable. It does not subtract the announcement bar.
 
-Brand utility classes live in `wordpress/themes/spa-headless/assets/brand-colours.css`, which Astro imports from `Base.astro` and the editor enqueues:
+Brand utility classes live in `wordpress/themes/spa-sage/resources/css/components/spa-brand-colours.css`, which Astro imports from `Base.astro`:
 
 - `.has-text-{navy|red|royal|black|white}`
 - `.has-bg-{navy|red|royal|black|white}` for later
@@ -30,10 +30,10 @@ Hex is only in the token files. Fields store `var(--color-*)` plus a slug.
 
 ## Add a colour
 
-1. Add the hex token to `astro/src/styles/global.css` and the same variable to `assets/editor.css`.
-2. Add one row to `spa_brand_colours()` in `wordpress/themes/spa-headless/inc/colors.php`: `value` `var(--color-…)`, `name`, `slug`.
-3. Add `.has-text-{slug}` and `.has-bg-{slug}` to `assets/brand-colours.css`.
-4. If the hero should accept it as a background, add `hero--bg-{slug}` with `--hero-bg`, `--hero-shape-1`, `--hero-shape-2`, and `--hero-text` in `assets/hero-banner.css`, and add the slug to `brandColourSlugs` in `astro/src/lib/blocks/color.ts` and the PHP map in `inc/hero-banner.php`.
+1. Add the hex token to `astro/src/styles/global.css` and to `wordpress/themes/spa-sage/resources/css/theme/variables.css`.
+2. Add one row to `textColours` and `bgColours` in `app/Traits/blocks/trait-blocks.php`: `value` `var(--color-…)`, `name`, `slug`.
+3. Add `.has-text-{slug}` and `.has-bg-{slug}` to `resources/css/components/spa-brand-colours.css`.
+4. If the hero should accept it as a background, add `hero--bg-{slug}` with `--hero-bg`, `--hero-shape-1`, `--hero-shape-2`, and `--hero-text` in `resources/css/components/spa-hero-banner.css`, and add the slug to `brandColourSlugs` in `astro/src/lib/blocks/color.ts` and `spa_sage_hero_modifier()`.
 5. Extend the colour tests. Run `pnpm test`.
 
 White text on a white background is not allowed. The white hero uses navy text (`--hero-text: #031433`).

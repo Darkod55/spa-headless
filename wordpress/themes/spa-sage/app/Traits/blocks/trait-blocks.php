@@ -14,8 +14,8 @@ trait blocks
         add_filter('block_categories_all', function ($categories) {
             return array_merge(
                 [
-                    ['slug' => 'metapixels-blocks', 'title' => __('MPX Blocks', 'sage')],
-                    ['slug' => 'metapixels-partials', 'title' => __('MPX Partials', 'sage')],
+                    ['slug' => 'spa', 'title' => __('Square Peg', 'sage')],
+                    ['slug' => 'spa-partials', 'title' => __('Square Peg partials', 'sage')],
                 ],
                 $categories
             );
@@ -42,7 +42,7 @@ trait blocks
         add_action('init', function() {
 
             register_block_pattern_category(
-                'mpx-global',
+                'spa-global',
                 [
                     'label'       => _x( 'Global', 'Block pattern category' ),
                     'description' => __( 'A collection of global blocks' )
@@ -144,7 +144,7 @@ trait blocks
      * CSS that must ship only via Vite (not re-emitted into Blockstudio's
      * inline <style id="blockstudio-tailwind-editor">) should live outside
      * theme/ and be @import'ed from theme.css — see
-     * resources/css/components/mpx-subheading.css.
+     * resources/css/components/spa-subheading.css.
      *
      * @font-face rules are stripped: font files are fingerprinted into
      * public/build by Vite; relative font urls would 404 in Blockstudio's
@@ -174,30 +174,30 @@ trait blocks
     public function mpxRemoveInnerBlocksWrapper() {
         add_filter('blockstudio/blocks/components/innerblocks/frontend/wrap', function ($render, $block) {
             if (in_array($block->name, [
-                'mpx/partial-button',
-                'mpx/partial-buttons',
-                'mpx/partial-column',
-                'mpx/partial-subheading',
-                'mpx/partial-cards',
-                'mpx/partial-card',
-                'mpx/partial-card-icon',
-                'mpx/partial-card-image',
-                'mpx/partial-card-testimonial-simple',
-                'mpx/partial-icon',
-                'mpx/partial-divider',
-                'mpx/partial-box',
-                'mpx/partial-row',
-                'mpx/partial-checklist',
-                'mpx/partial-checklist-item',
-                'mpx/partial-gallery',
-                'mpx/hero',
-                'mpx/hero-v2',
-                'mpx/column-cover',
-                'mpx/one-column',
-                'mpx/columns',
-                'mpx/keynote',
-                'mpx/partners-slider',
-                'mpx/events',
+                'spa/partial-button',
+                'spa/partial-buttons',
+                'spa/partial-column',
+                'spa/partial-subheading',
+                'spa/partial-cards',
+                'spa/partial-card',
+                'spa/partial-card-icon',
+                'spa/partial-card-image',
+                'spa/partial-card-testimonial-simple',
+                'spa/partial-icon',
+                'spa/partial-divider',
+                'spa/partial-box',
+                'spa/partial-row',
+                'spa/partial-checklist',
+                'spa/partial-checklist-item',
+                'spa/partial-gallery',
+                'spa/hero',
+                'spa/hero-v2',
+                'spa/column-cover',
+                'spa/one-column',
+                'spa/columns',
+                'spa/keynote',
+                'spa/partners-slider',
+                'spa/events',
             ], true)) {
                 $render = false;
             }
@@ -207,7 +207,7 @@ trait blocks
     }
 
     /**
-     * Frontend: unwrap mpx/partial-button and move Advanced → Additional
+     * Frontend: unwrap spa/partial-button and move Advanced → Additional
      * CSS classes onto the inner .wp-block-button.
      *
      * Editor keeps useBlockProps (selection + className on the wrapper).
@@ -216,14 +216,14 @@ trait blocks
      * the real button element instead.
      */
     public function unwrapPartialButton() {
-        add_filter('render_block_mpx/partial-button', function ($content, $block) {
+        add_filter('render_block_spa/partial-button', function ($content, $block) {
             if ($content === '') {
                 return $content;
             }
 
-            if (str_contains($content, 'wp-block-mpx-partial-button')
+            if (str_contains($content, 'wp-block-spa-partial-button')
                 && preg_match(
-                    '#<div\b[^>]*\bwp-block-mpx-partial-button\b[^>]*>(.*?)</div>#s',
+                    '#<div\b[^>]*\bwp-block-spa-partial-button\b[^>]*>(.*?)</div>#s',
                     $content,
                     $matches
                 )
@@ -270,7 +270,7 @@ trait blocks
     public function removeIsStyleClassFromMpxBlocks() {
         add_filter('render_block', function ($block_content, $block) {
             if (isset($block['blockName'])) {
-                if ((strpos($block['blockName'], 'mpx/') === 0) && (strpos($block_content, 'is-style-' ) !== false))
+                if ((strpos($block['blockName'], 'spa/') === 0) && (strpos($block_content, 'is-style-' ) !== false))
                     $block_content = str_replace('is-style-', '', $block_content);
             }
 
@@ -283,37 +283,15 @@ trait blocks
      */
     public function populateTextColours() {
         add_filter('blockstudio/blocks/attributes/populate', function ($options) {
-            $options['textColours'] = [
-                ['value' => 'var(--color-primary)', 'name' => 'Primary', 'slug' => 'primary'],
-                ['value' => 'var(--color-secondary)', 'name' => 'Secondary', 'slug' => 'secondary'],
-                ['value' => 'var(--color-tertiary)', 'name' => 'Tertiary', 'slug' => 'tertiary'],
-                ['value' => 'var(--color-navy-light)', 'name' => 'Navy light', 'slug' => 'navy-light'],
-                ['value' => 'var(--color-coral-dark)', 'name' => 'Coral dark', 'slug' => 'coral-dark'],
-                ['value' => 'var(--color-dark-blue)', 'name' => 'Dark Blue', 'slug' => 'dark-blue'],
-                ['value' => 'var(--color-light)', 'name' => 'Light', 'slug' => 'light'],
-                ['value' => 'var(--color-gold)', 'name' => 'Gold', 'slug' => 'gold'],
+            $brand = [
+                ['value' => 'var(--color-navy)', 'name' => 'Navy', 'slug' => 'navy'],
+                ['value' => 'var(--color-red)', 'name' => 'Red', 'slug' => 'red'],
+                ['value' => 'var(--color-royal)', 'name' => 'Royal', 'slug' => 'royal'],
                 ['value' => 'var(--color-black)', 'name' => 'Black', 'slug' => 'black'],
                 ['value' => 'var(--color-white)', 'name' => 'White', 'slug' => 'white'],
-                ['value' => 'var(--color-white-75)', 'name' => 'White 75%', 'slug' => 'white/75'],
-                ['value' => 'color-mix(in srgb, var(--color-white) 10%, transparent)', 'name' => 'White 10%', 'slug' => 'white/10'],
-                ['value' => 'color-mix(in srgb, var(--color-gold) 40%, transparent)', 'name' => 'Gold 40%', 'slug' => 'gold/40'],
             ];
-
-            $options['tagBgColours'] = [
-                ['value' => 'var(--color-light)', 'name' => 'Light', 'slug' => 'light'],
-                ['value' => 'var(--color-white)', 'name' => 'White', 'slug' => 'white'],
-                ['value' => 'var(--color-tertiary)', 'name' => 'Tertiary', 'slug' => 'tertiary'],
-                ['value' => 'var(--color-primary)', 'name' => 'Primary', 'slug' => 'primary'],
-                ['value' => 'var(--color-secondary)', 'name' => 'Secondary', 'slug' => 'secondary'],
-                ['value' => 'var(--color-navy-light)', 'name' => 'Navy light', 'slug' => 'navy-light'],
-                ['value' => 'var(--color-coral-dark)', 'name' => 'Coral dark', 'slug' => 'coral-dark'],
-                ['value' => 'var(--color-dark-blue)', 'name' => 'Dark Blue', 'slug' => 'dark-blue'],
-                ['value' => 'var(--color-gold)', 'name' => 'Gold', 'slug' => 'gold'],
-                ['value' => 'color-mix(in srgb, var(--color-secondary) 35%, transparent)', 'name' => 'Secondary 35%', 'slug' => 'secondary/35'],
-                ['value' => 'color-mix(in srgb, var(--color-primary) 12%, transparent)', 'name' => 'Primary 12%', 'slug' => 'primary/12'],
-                ['value' => 'color-mix(in srgb, var(--color-white) 10%, transparent)', 'name' => 'White 10%', 'slug' => 'white/10'],
-                ['value' => 'color-mix(in srgb, var(--color-gold) 40%, transparent)', 'name' => 'Gold 40%', 'slug' => 'gold/40'],
-            ];
+            $options['textColours'] = $brand;
+            $options['tagBgColours'] = $brand;
 
             return $options;
         });
@@ -326,22 +304,11 @@ trait blocks
     public function populateBGColours() {
         add_filter('blockstudio/blocks/attributes/populate', function ($options) {
             $options['bgColours'] = [
-                ['value' => 'var(--color-primary)', 'name' => 'Primary', 'slug' => 'bg-primary'],
-                ['value' => 'var(--color-secondary)', 'name' => 'Secondary', 'slug' => 'bg-secondary'],
-                ['value' => 'var(--color-tertiary)', 'name' => 'Tertiary', 'slug' => 'bg-tertiary'],
-                ['value' => 'var(--color-navy-light)', 'name' => 'Navy light', 'slug' => 'bg-navy-light'],
-                ['value' => 'var(--color-coral-dark)', 'name' => 'Coral dark', 'slug' => 'bg-coral-dark'],
-                ['value' => 'var(--color-dark-blue)', 'name' => 'Dark Blue', 'slug' => 'bg-dark-blue'],
-                ['value' => 'var(--color-light)', 'name' => 'Light', 'slug' => 'bg-light'],
-                ['value' => 'var(--color-gold)', 'name' => 'Gold', 'slug' => 'bg-gold'],
-                ['value' => 'var(--color-black)', 'name' => 'Black', 'slug' => 'bg-black'],
-                ['value' => 'var(--color-white)', 'name' => 'White', 'slug' => 'bg-white'],
-                // Image gradients (slug → CSS utility with background-image; value is swatch only)
-                ['value' => '#fcf7eb', 'name' => 'Gradient cream', 'slug' => 'bg-img-cream'],
-                ['value' => '#3a31a7', 'name' => 'Gradient midnight', 'slug' => 'bg-img-midnight'],
-                ['value' => '#8498d3', 'name' => 'Gradient sky', 'slug' => 'bg-img-sky'],
-                ['value' => '#dd785c', 'name' => 'Gradient terracotta', 'slug' => 'bg-img-terracotta'],
-                ['value' => '#dec08a', 'name' => 'Gradient gold', 'slug' => 'bg-img-gold'],
+                ['value' => 'var(--color-navy)', 'name' => 'Navy', 'slug' => 'navy'],
+                ['value' => 'var(--color-red)', 'name' => 'Red', 'slug' => 'red'],
+                ['value' => 'var(--color-royal)', 'name' => 'Royal', 'slug' => 'royal'],
+                ['value' => 'var(--color-black)', 'name' => 'Black', 'slug' => 'black'],
+                ['value' => 'var(--color-white)', 'name' => 'White', 'slug' => 'white'],
             ];
 
             return $options;
@@ -349,7 +316,7 @@ trait blocks
     }
 
     /**
-     * Icon options for mpx/partial-icon + mpx/partial-card, sourced from
+     * Icon options for spa/partial-icon + spa/partial-card, sourced from
      * the footer-icons SVG sprite symbol ids.
      */
     public function populateSpriteIcons() {
@@ -654,7 +621,7 @@ trait blocks
      * exact translate of one group width. Skipped in the editor.
      */
     public function duplicatePartnersSliderGallery() {
-        add_filter('render_block_mpx/partners-slider', function ($content) {
+        add_filter('render_block_spa/partners-slider', function ($content) {
             if (
                 $content === ''
                 || str_contains($content, 'is-editor')
@@ -667,7 +634,7 @@ trait blocks
             $dom = new \DOMDocument();
             $previous = libxml_use_internal_errors(true);
             $dom->loadHTML(
-                '<?xml encoding="utf-8"><div id="mpx-partners-root">' . $content . '</div>',
+                '<?xml encoding="utf-8"><div id="spa-partners-root">' . $content . '</div>',
                 LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
             );
             libxml_clear_errors();
@@ -685,7 +652,7 @@ trait blocks
             foreach ($galleries as $gallery) {
                 if (
                     ! $gallery instanceof \DOMElement
-                    || $gallery->getAttribute('data-mpx-marquee') === 'true'
+                    || $gallery->getAttribute('data-spa-marquee') === 'true'
                 ) {
                     continue;
                 }
@@ -702,10 +669,10 @@ trait blocks
                 }
 
                 $groupA = $dom->createElement('div');
-                $groupA->setAttribute('class', 'mpx-partners-group');
+                $groupA->setAttribute('class', 'spa-partners-group');
 
                 $groupB = $dom->createElement('div');
-                $groupB->setAttribute('class', 'mpx-partners-group');
+                $groupB->setAttribute('class', 'spa-partners-group');
                 $groupB->setAttribute('aria-hidden', 'true');
 
                 foreach ($children as $child) {
@@ -715,10 +682,10 @@ trait blocks
 
                 $gallery->appendChild($groupA);
                 $gallery->appendChild($groupB);
-                $gallery->setAttribute('data-mpx-marquee', 'true');
+                $gallery->setAttribute('data-spa-marquee', 'true');
             }
 
-            $root = $dom->getElementById('mpx-partners-root');
+            $root = $dom->getElementById('spa-partners-root');
             if (! $root) {
                 return $content;
             }
@@ -856,7 +823,7 @@ trait blocks
                 }
 
                 $items .= sprintf(
-                    '<div id="%1$s" class="mpx-faq-card"><%2$s class="mpx-faq-card__question">%3$s</%2$s><div class="mpx-faq-card__answer text-tertiary">%4$s</div></div>',
+                    '<div id="%1$s" class="spa-faq-card"><%2$s class="spa-faq-card__question">%3$s</%2$s><div class="spa-faq-card__answer text-tertiary">%4$s</div></div>',
                     esc_attr( $item_id ),
                     $title_wrapper,
                     wp_kses_post( $question_text ),
@@ -872,7 +839,7 @@ trait blocks
             $two_columns = (bool) ( $bs_attrs['two_columns'] ?? false );
             $white_cards = (bool) ( $bs_attrs['white_cards'] ?? false );
 
-            $grid_classes = 'mpx-faqs-grid grid-auto-cards grid-auto-cards-gap';
+            $grid_classes = 'spa-faqs-grid grid-auto-cards grid-auto-cards-gap';
             if ( $two_columns ) {
                 $grid_classes .= ' is-two-columns';
             }
@@ -905,7 +872,7 @@ trait blocks
 
             if ($post_type) {
                 $editor_slug = $post_type === 'post' ? 'posts' : $post_type;
-                $classes .= ' mpx-edit-' . sanitize_html_class($editor_slug);
+                $classes .= ' spa-edit-' . sanitize_html_class($editor_slug);
             }
 
             if (isset($post) && $post->post_type === 'page') {

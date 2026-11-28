@@ -9,7 +9,7 @@ if (! process.env.APP_URL) {
 }
 
 export default defineConfig({
-  base: '/wp-content/themes/edy-nathan/public/build/',
+  base: '/wp-content/themes/spa-sage/public/build/',
   plugins: [
     tailwindcss(),
     laravel({

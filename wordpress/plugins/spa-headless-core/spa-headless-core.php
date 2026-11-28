@@ -51,6 +51,6 @@ function spa_headless_blockstudio_notice(): void {
 	}
 
 	echo '<div class="notice notice-warning"><p>';
-	echo esc_html__( 'Square Peg blocks are registered by BlockStudio from the active theme. Activate BlockStudio and the Square Peg Headless theme.', 'spa-headless' );
+	echo esc_html__( 'Square Peg blocks are registered by BlockStudio from the active theme. Activate BlockStudio and the Square Peg Agency theme (spa-sage).', 'spa-headless' );
 	echo '</p></div>';
 }

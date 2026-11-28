@@ -1,0 +1,56 @@
+/*
+  Classes for the brand colour dataset. Hex lives in global.css and editor.css
+  (--color-navy, --color-red, --color-royal, --color-black, --color-white).
+  Loaded in the editor and imported by Astro. .hero__copy rules win over the
+  hero's inherited heading colour when an editor sets a text colour.
+*/
+
+.has-text-navy,
+.hero__copy .has-text-navy,
+.editor-styles-wrapper .hero__copy .has-text-navy {
+  color: var(--color-navy);
+}
+
+.has-text-red,
+.hero__copy .has-text-red,
+.editor-styles-wrapper .hero__copy .has-text-red {
+  color: var(--color-red);
+}
+
+.has-text-royal,
+.hero__copy .has-text-royal,
+.editor-styles-wrapper .hero__copy .has-text-royal {
+  color: var(--color-royal);
+}
+
+.has-text-black,
+.hero__copy .has-text-black,
+.editor-styles-wrapper .hero__copy .has-text-black {
+  color: var(--color-black);
+}
+
+.has-text-white,
+.hero__copy .has-text-white,
+.editor-styles-wrapper .hero__copy .has-text-white {
+  color: var(--color-white);
+}
+
+.has-bg-navy {
+  background-color: var(--color-navy);
+}
+
+.has-bg-red {
+  background-color: var(--color-red);
+}
+
+.has-bg-royal {
+  background-color: var(--color-royal);
+}
+
+.has-bg-black {
+  background-color: var(--color-black);
+}
+
+.has-bg-white {
+  background-color: var(--color-white);
+}

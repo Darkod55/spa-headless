@@ -31,7 +31,8 @@ trait media {
         $logo_size          = ($atts['logo_size'] == 'logo') ? ['200', '80'] : $atts['logo_size'];
         $custom_logo_class  = $atts['custom_logo_class'];
         $custom_logo_id     = get_theme_mod('custom_logo');
-        $custom_logo_alt_id = get_theme_mod('custom_logo_alt');
+        $custom_logo_alt_id = get_theme_mod('spa_alt_logo');
+        $alt_in_footer      = (bool) get_theme_mod('spa_alt_logo_in_footer', false);
         $site_logo          = '';
 
         /**
@@ -39,7 +40,7 @@ trait media {
          * (`logo_variant: 'alt'`) without one having been uploaded falls
          * back to the default logo instead of rendering nothing.
          */
-        $use_alt = ('alt' === $atts['logo_variant']) && $custom_logo_alt_id;
+        $use_alt = ('alt' === $atts['logo_variant']) && $alt_in_footer && $custom_logo_alt_id;
         $attachment_id = $use_alt ? $custom_logo_alt_id : $custom_logo_id;
 
         // Logo width from Customizer (default must match the setting default).

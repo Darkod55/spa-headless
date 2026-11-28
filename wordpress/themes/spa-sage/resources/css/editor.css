@@ -44,10 +44,10 @@
     /**
      * Limited column sits *inside* the site container (grid), not on the section.
      */
-    & .mpx-one-column__measure.mw-1000,
+    & .spa-one-column__measure.mw-1000,
     & .mw-1000 {
       width: 100%;
-      max-width: var(--mpx-content-max, var(--width-content));
+      max-width: var(--spa-content-max, var(--width-content));
     }
 
     & .content-align-left,
@@ -104,10 +104,10 @@
 
     /*
      * Cards / other grids — per-item `--col-width-*` / `--col-grow-*`.
-     * Exclude `.mpx-columns` (parent owns `--col-1-*` / `--col-2-*`).
+     * Exclude `.spa-columns` (parent owns `--col-1-*` / `--col-2-*`).
      */
-    &.grid-auto-cards:not(.mpx-columns) > .block-editor-block-list__layout,
-    &.grid-auto-cards:not(.mpx-columns) > .block-editor-inner-blocks > .block-editor-block-list__layout {
+    &.grid-auto-cards:not(.spa-columns) > .block-editor-block-list__layout,
+    &.grid-auto-cards:not(.spa-columns) > .block-editor-inner-blocks > .block-editor-block-list__layout {
       --_min: var(--grid-min-desktop, 50%);
 
       display: flex !important;
@@ -117,8 +117,8 @@
       min-width: var(--width-container);
 
       & > *,
-      & > .wp-block-mpx-partial-column,
-      & > [data-type="mpx/partial-column"] {
+      & > .wp-block-spa-partial-column,
+      & > [data-type="spa/partial-column"] {
         flex-grow: var(
           --col-grow-desktop,
           var(--col-grow-tablet, var(--col-grow-mobile, 1))
@@ -132,9 +132,9 @@
         min-width: 0;
       }
 
-      & > .mpx-subheading,
-      & > .wp-block-mpx-partial-subheading,
-      & > [data-type="mpx/partial-subheading"] {
+      & > .spa-subheading,
+      & > .wp-block-spa-partial-subheading,
+      & > [data-type="spa/partial-subheading"] {
         flex: 0 0 100% !important;
         width: 100% !important;
         max-width: 100% !important;
@@ -143,11 +143,11 @@
     }
 
     /*
-     * mpx/columns — parent CSS vars on `.mpx-columns` (`--col-1-*` / `--col-2-*`).
+     * spa/columns — parent CSS vars on `.spa-columns` (`--col-1-*` / `--col-2-*`).
      * Use `nth-child(n of …)` so we hit column blocks even when not :first-child.
      */
-    &.mpx-columns.grid-auto-cards > .block-editor-block-list__layout,
-    &.mpx-columns.grid-auto-cards > .block-editor-inner-blocks > .block-editor-block-list__layout {
+    &.spa-columns.grid-auto-cards > .block-editor-block-list__layout,
+    &.spa-columns.grid-auto-cards > .block-editor-inner-blocks > .block-editor-block-list__layout {
       display: flex !important;
       flex-wrap: wrap;
       align-items: stretch;
@@ -162,7 +162,7 @@
         row-gap: var(--grid-gap-row, 20px);
       }
 
-      & > [data-type="mpx/partial-column"] {
+      & > [data-type="spa/partial-column"] {
         display: flex;
         flex-direction: column;
         flex-shrink: 1;
@@ -171,55 +171,55 @@
         min-width: 0;
       }
 
-      & > [data-type="mpx/partial-column"] > .mpx-partial-column,
-      & > [data-type="mpx/partial-column"] > .mpx-partial-column--has-bg {
+      & > [data-type="spa/partial-column"] > .spa-partial-column,
+      & > [data-type="spa/partial-column"] > .spa-partial-column--has-bg {
         flex: 1 1 auto;
         width: 100%;
         min-height: 100%;
       }
 
-      & > [data-type="mpx/partial-column"]:nth-child(1 of [data-type="mpx/partial-column"]) {
+      & > [data-type="spa/partial-column"]:nth-child(1 of [data-type="spa/partial-column"]) {
         flex-grow: var(--col-1-grow-mobile, 1);
         flex-basis: var(--col-1-width-mobile, 100%);
       }
 
-      & > [data-type="mpx/partial-column"]:nth-child(2 of [data-type="mpx/partial-column"]) {
+      & > [data-type="spa/partial-column"]:nth-child(2 of [data-type="spa/partial-column"]) {
         flex-grow: var(--col-2-grow-mobile, 1);
         flex-basis: var(--col-2-width-mobile, 100%);
       }
 
       @media (width >= theme(--breakpoint-md)) {
-        & > [data-type="mpx/partial-column"]:nth-child(1 of [data-type="mpx/partial-column"]) {
+        & > [data-type="spa/partial-column"]:nth-child(1 of [data-type="spa/partial-column"]) {
           flex-grow: var(--col-1-grow-tablet, 1);
           flex-basis: var(--col-1-width-tablet, 50%);
         }
 
-        & > [data-type="mpx/partial-column"]:nth-child(2 of [data-type="mpx/partial-column"]) {
+        & > [data-type="spa/partial-column"]:nth-child(2 of [data-type="spa/partial-column"]) {
           flex-grow: var(--col-2-grow-tablet, 1);
           flex-basis: var(--col-2-width-tablet, 50%);
         }
       }
 
       @media (width >= theme(--breakpoint-lg)) {
-        & > [data-type="mpx/partial-column"]:nth-child(1 of [data-type="mpx/partial-column"]) {
+        & > [data-type="spa/partial-column"]:nth-child(1 of [data-type="spa/partial-column"]) {
           flex-grow: var(--col-1-grow-desktop, 1);
           flex-basis: var(--col-1-width-desktop, var(--col-1-width-tablet, 50%));
         }
 
-        & > [data-type="mpx/partial-column"]:nth-child(2 of [data-type="mpx/partial-column"]) {
+        & > [data-type="spa/partial-column"]:nth-child(2 of [data-type="spa/partial-column"]) {
           flex-grow: var(--col-2-grow-desktop, 1);
           flex-basis: var(--col-2-width-desktop, var(--col-2-width-tablet, 50%));
         }
       }
     }
 
-    &.mpx-columns.grid-auto-cards.is-flipped > .block-editor-block-list__layout,
-    &.mpx-columns.grid-auto-cards.is-flipped > .block-editor-inner-blocks > .block-editor-block-list__layout {
-      & > [data-type="mpx/partial-column"]:nth-child(1 of [data-type="mpx/partial-column"]) {
+    &.spa-columns.grid-auto-cards.is-flipped > .block-editor-block-list__layout,
+    &.spa-columns.grid-auto-cards.is-flipped > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      & > [data-type="spa/partial-column"]:nth-child(1 of [data-type="spa/partial-column"]) {
         order: 2;
       }
 
-      & > [data-type="mpx/partial-column"]:nth-child(2 of [data-type="mpx/partial-column"]) {
+      & > [data-type="spa/partial-column"]:nth-child(2 of [data-type="spa/partial-column"]) {
         order: 1;
       }
     }
@@ -244,8 +244,8 @@
       }
     }
 
-    &.grid-auto-cards.is-flipped:not(.mpx-columns) > .block-editor-block-list__layout,
-    &.grid-auto-cards.is-flipped:not(.mpx-columns) > .block-editor-inner-blocks > .block-editor-block-list__layout {
+    &.grid-auto-cards.is-flipped:not(.spa-columns) > .block-editor-block-list__layout,
+    &.grid-auto-cards.is-flipped:not(.spa-columns) > .block-editor-inner-blocks > .block-editor-block-list__layout {
       & > :first-child {
         order: 2;
       }
@@ -261,12 +261,12 @@
 .block-library-block__reusable-block-container { max-width: unset !important; }
 
 /**
- * mpx/partial-subheading — inner stack (heading + paragraphs).
+ * spa/partial-subheading — inner stack (heading + paragraphs).
  */
-.mpx-subheading > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-subheading > .block-editor-block-list__layout,
-[data-type="mpx/partial-subheading"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
-[data-type="mpx/partial-subheading"] > .block-editor-block-list__layout {
+.spa-subheading > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-subheading > .block-editor-block-list__layout,
+[data-type="spa/partial-subheading"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+[data-type="spa/partial-subheading"] > .block-editor-block-list__layout {
   display: flex !important;
   flex-direction: column;
   gap: 0.5rem;
@@ -277,9 +277,9 @@
 }
 
 /**
- * mpx/columns — gradient section + card-style column cells in the canvas.
+ * spa/columns — gradient section + card-style column cells in the canvas.
  */
-.mpx-columns-section--gradient {
+.spa-columns-section--gradient {
   background-color: var(--color-primary) !important;
   background-image: linear-gradient(
     90deg,
@@ -288,58 +288,58 @@
   ) !important;
 }
 
-.mpx-partial-column--has-bg > .block-editor-inner-blocks,
-.mpx-partial-column--has-bg > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-partial-column--has-bg > .block-editor-block-list__layout {
+.spa-partial-column--has-bg > .block-editor-inner-blocks,
+.spa-partial-column--has-bg > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-partial-column--has-bg > .block-editor-block-list__layout {
   display: flex !important;
   flex-direction: column;
   width: 100%;
   height: 100%;
 }
 
-.mpx-partial-column--has-bg:not(.mpx-partial-column--no-gap) > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-partial-column--has-bg:not(.mpx-partial-column--no-gap) > .block-editor-block-list__layout,
-[data-type="mpx/partial-column"].mpx-partial-column--has-bg:not(.mpx-partial-column--no-gap)
+.spa-partial-column--has-bg:not(.spa-partial-column--no-gap) > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-partial-column--has-bg:not(.spa-partial-column--no-gap) > .block-editor-block-list__layout,
+[data-type="spa/partial-column"].spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
   > .block-editor-inner-blocks
   > .block-editor-block-list__layout,
-[data-type="mpx/partial-column"].mpx-partial-column--has-bg:not(.mpx-partial-column--no-gap)
+[data-type="spa/partial-column"].spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
   > .block-editor-block-list__layout {
   gap: 1.25rem;
 }
 
-.mpx-partial-column--has-bg:not(.mpx-partial-column--no-gap)
+.spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
   > .block-editor-inner-blocks
   > .block-editor-block-list__layout
   > *,
-.mpx-partial-column--has-bg:not(.mpx-partial-column--no-gap) > .block-editor-block-list__layout > *,
-[data-type="mpx/partial-column"].mpx-partial-column--has-bg:not(.mpx-partial-column--no-gap)
+.spa-partial-column--has-bg:not(.spa-partial-column--no-gap) > .block-editor-block-list__layout > *,
+[data-type="spa/partial-column"].spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
   > .block-editor-inner-blocks
   > .block-editor-block-list__layout
   > *,
-[data-type="mpx/partial-column"].mpx-partial-column--has-bg:not(.mpx-partial-column--no-gap)
+[data-type="spa/partial-column"].spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
   > .block-editor-block-list__layout
   > * {
   margin-block: 0 !important;
 }
 
-.mpx-partial-column--has-bg.mpx-partial-column--no-gap > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-partial-column--has-bg.mpx-partial-column--no-gap > .block-editor-block-list__layout,
-[data-type="mpx/partial-column"].mpx-partial-column--no-gap
+.spa-partial-column--has-bg.spa-partial-column--no-gap > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-partial-column--has-bg.spa-partial-column--no-gap > .block-editor-block-list__layout,
+[data-type="spa/partial-column"].spa-partial-column--no-gap
   > .block-editor-inner-blocks
   > .block-editor-block-list__layout,
-[data-type="mpx/partial-column"].mpx-partial-column--no-gap > .block-editor-block-list__layout {
+[data-type="spa/partial-column"].spa-partial-column--no-gap > .block-editor-block-list__layout {
   gap: 0;
 }
 
 /**
- * mpx/partial-box — editor stack.
+ * spa/partial-box — editor stack.
  * Gap owns spacing (same as frontend); zero default block margins.
  */
-.mpx-box > .block-editor-inner-blocks,
-.mpx-box > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-box > .block-editor-block-list__layout,
-[data-type="mpx/partial-box"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
-[data-type="mpx/partial-box"] > .block-editor-block-list__layout {
+.spa-box > .block-editor-inner-blocks,
+.spa-box > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-box > .block-editor-block-list__layout,
+[data-type="spa/partial-box"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+[data-type="spa/partial-box"] > .block-editor-block-list__layout {
   display: flex !important;
   flex-direction: column;
   gap: 1.5rem;
@@ -350,21 +350,21 @@
 }
 
 /**
- * Styled list in the editor — WP wraps items; target li inside .mpx-list.
+ * Styled list in the editor — WP wraps items; target li inside .spa-list.
  */
-.mpx-list,
-ul.mpx-list,
-.editor-styles-wrapper .mpx-list,
-.editor-styles-wrapper ul.mpx-list {
+.spa-list,
+ul.spa-list,
+.editor-styles-wrapper .spa-list,
+.editor-styles-wrapper ul.spa-list {
   list-style: none !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
-.mpx-list > li,
-.mpx-list .wp-block-list-item,
-[data-type="core/list"].mpx-list [data-type="core/list-item"],
-.editor-styles-wrapper .mpx-list li {
+.spa-list > li,
+.spa-list .wp-block-list-item,
+[data-type="core/list"].spa-list [data-type="core/list-item"],
+.editor-styles-wrapper .spa-list li {
   display: flex !important;
   align-items: flex-start !important;
   gap: 0.75rem !important;
@@ -373,34 +373,34 @@ ul.mpx-list,
   list-style: none !important;
 }
 
-.mpx-list > li::before,
-.editor-styles-wrapper .mpx-list li::before {
+.spa-list > li::before,
+.editor-styles-wrapper .spa-list li::before {
   content: "" !important;
   flex: 0 0 0.375rem !important;
   width: 0.375rem !important;
   height: 0.375rem !important;
   margin-top: 0.55em !important;
   border-radius: 50% !important;
-  background-color: var(--mpx-list-bullet, var(--color-secondary)) !important;
+  background-color: var(--spa-list-bullet, var(--color-secondary)) !important;
 }
 
-.mpx-list--divided > li,
-.editor-styles-wrapper .mpx-list--divided li {
+.spa-list--divided > li,
+.editor-styles-wrapper .spa-list--divided li {
   padding-block: 1rem !important;
   border-bottom: 1px solid
     var(
-      --mpx-list-divider,
+      --spa-list-divider,
       color-mix(in srgb, currentColor 12%, transparent)
     ) !important;
 }
 
-.mpx-list--divided > li:first-child,
-.editor-styles-wrapper .mpx-list--divided li:first-child {
+.spa-list--divided > li:first-child,
+.editor-styles-wrapper .spa-list--divided li:first-child {
   padding-top: 0 !important;
 }
 
-.mpx-list--divided > li:last-child,
-.editor-styles-wrapper .mpx-list--divided li:last-child {
+.spa-list--divided > li:last-child,
+.editor-styles-wrapper .spa-list--divided li:last-child {
   padding-bottom: 0 !important;
   border-bottom: none !important;
 }
@@ -408,12 +408,12 @@ ul.mpx-list,
 /**
  * Tag list — inline pills in the editor canvas.
  */
-.mpx-list--tags,
-ul.mpx-list--tags,
-.editor-styles-wrapper .mpx-list--tags,
-.editor-styles-wrapper ul.mpx-list--tags,
-[data-type="core/list"].mpx-list--tags > .block-editor-inner-blocks > .block-editor-block-list__layout,
-[data-type="core/list"].mpx-list--tags > .block-editor-block-list__layout {
+.spa-list--tags,
+ul.spa-list--tags,
+.editor-styles-wrapper .spa-list--tags,
+.editor-styles-wrapper ul.spa-list--tags,
+[data-type="core/list"].spa-list--tags > .block-editor-inner-blocks > .block-editor-block-list__layout,
+[data-type="core/list"].spa-list--tags > .block-editor-block-list__layout {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: wrap !important;
@@ -421,10 +421,10 @@ ul.mpx-list--tags,
   gap: 0.5rem !important;
 }
 
-.mpx-list--tags > li,
-.mpx-list--tags .wp-block-list-item,
-[data-type="core/list"].mpx-list--tags [data-type="core/list-item"],
-.editor-styles-wrapper .mpx-list--tags li {
+.spa-list--tags > li,
+.spa-list--tags .wp-block-list-item,
+[data-type="core/list"].spa-list--tags [data-type="core/list-item"],
+.editor-styles-wrapper .spa-list--tags li {
   display: inline-flex !important;
   align-items: center !important;
   gap: 0 !important;
@@ -432,7 +432,7 @@ ul.mpx-list--tags,
   padding: 0.4rem 0.85rem !important;
   border-radius: var(--radius-surface) !important;
   border-bottom: none !important;
-  background-color: var(--mpx-list-tag-bg, var(--color-light)) !important;
+  background-color: var(--spa-list-tag-bg, var(--color-light)) !important;
   color: inherit !important;
   font-family: inherit !important;
   font-size: inherit !important;
@@ -443,34 +443,34 @@ ul.mpx-list--tags,
   width: auto !important;
 }
 
-.mpx-list--tags > li::before,
-.editor-styles-wrapper .mpx-list--tags li::before,
-[data-type="core/list"].mpx-list--tags [data-type="core/list-item"]::before {
+.spa-list--tags > li::before,
+.editor-styles-wrapper .spa-list--tags li::before,
+[data-type="core/list"].spa-list--tags [data-type="core/list-item"]::before {
   content: none !important;
   display: none !important;
 }
 
-.mpx-list--tags:where(:not([class*="text-"])),
-ul.mpx-list--tags:where(:not([class*="text-"])),
-[data-type="core/list"].mpx-list--tags:where(:not([class*="text-"])),
-.editor-styles-wrapper .mpx-list--tags:where(:not([class*="text-"])) {
+.spa-list--tags:where(:not([class*="text-"])),
+ul.spa-list--tags:where(:not([class*="text-"])),
+[data-type="core/list"].spa-list--tags:where(:not([class*="text-"])),
+.editor-styles-wrapper .spa-list--tags:where(:not([class*="text-"])) {
   color: color-mix(in srgb, var(--color-primary) 58%, transparent);
 }
 
-.mpx-list--tags:where(:not([class*="fs-"])),
-ul.mpx-list--tags:where(:not([class*="fs-"])),
-[data-type="core/list"].mpx-list--tags:where(:not([class*="fs-"])),
-.editor-styles-wrapper .mpx-list--tags:where(:not([class*="fs-"])) {
+.spa-list--tags:where(:not([class*="fs-"])),
+ul.spa-list--tags:where(:not([class*="fs-"])),
+[data-type="core/list"].spa-list--tags:where(:not([class*="fs-"])),
+.editor-styles-wrapper .spa-list--tags:where(:not([class*="fs-"])) {
   font-size: var(--font-size-sm);
 }
 
 /**
- * mpx/partial-row — space-between subheading + badges.
+ * spa/partial-row — space-between subheading + badges.
  */
-.mpx-row > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-row > .block-editor-block-list__layout,
-[data-type="mpx/partial-row"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
-[data-type="mpx/partial-row"] > .block-editor-block-list__layout {
+.spa-row > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-row > .block-editor-block-list__layout,
+[data-type="spa/partial-row"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+[data-type="spa/partial-row"] > .block-editor-block-list__layout {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: wrap !important;
@@ -480,113 +480,113 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
   width: 100% !important;
 }
 
-.mpx-row > .block-editor-inner-blocks > .block-editor-block-list__layout > *,
-.mpx-row > .block-editor-block-list__layout > *,
-[data-type="mpx/partial-row"] > .block-editor-inner-blocks > .block-editor-block-list__layout > * {
+.spa-row > .block-editor-inner-blocks > .block-editor-block-list__layout > *,
+.spa-row > .block-editor-block-list__layout > *,
+[data-type="spa/partial-row"] > .block-editor-inner-blocks > .block-editor-block-list__layout > * {
   margin-block: 0 !important;
   flex: 0 1 auto !important;
   max-width: 100% !important;
 }
 
 /**
- * mpx/keynote — editor stack mirrors frontend gap.
+ * spa/keynote — editor stack mirrors frontend gap.
  */
-.mpx-keynote__inner {
+.spa-keynote__inner {
   display: grid !important;
   grid-template-columns: auto minmax(0, 1fr) !important;
   column-gap: clamp(1.25rem, 4vw, 3.5rem) !important;
   align-items: start !important;
 }
 
-.mpx-keynote__mark {
+.spa-keynote__mark {
   position: sticky !important;
   top: 1rem !important;
   width: 3.5rem !important;
 }
 
-.mpx-keynote__mark-image {
+.spa-keynote__mark-image {
   display: block !important;
   width: 100% !important;
   height: auto !important;
 }
 
-.mpx-keynote__content > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-keynote__content > .block-editor-block-list__layout,
-[data-type="mpx/keynote"] .mpx-keynote__content > .block-editor-inner-blocks > .block-editor-block-list__layout {
+.spa-keynote__content > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-keynote__content > .block-editor-block-list__layout,
+[data-type="spa/keynote"] .spa-keynote__content > .block-editor-inner-blocks > .block-editor-block-list__layout {
   display: flex !important;
   flex-direction: column !important;
   gap: 1.5rem !important;
 }
 
-.mpx-keynote__content > .block-editor-inner-blocks > .block-editor-block-list__layout > *,
-.mpx-keynote__content > .block-editor-block-list__layout > * {
+.spa-keynote__content > .block-editor-inner-blocks > .block-editor-block-list__layout > *,
+.spa-keynote__content > .block-editor-block-list__layout > * {
   margin-block: 0 !important;
 }
 
 /**
- * Sticky targets `.mpx-columns > :first-child`, which is the column on the
+ * Sticky targets `.spa-columns > :first-child`, which is the column on the
  * front end and `.block-editor-inner-blocks` in the canvas. That wrapper
  * then sticks and the two columns overlap. Leave the editor in normal flow.
  */
-.mpx-columns.is-sticky-left > .block-editor-inner-blocks,
-.mpx-columns.is-sticky-right > .block-editor-inner-blocks,
-.mpx-columns.is-sticky-left > .block-editor-block-list__layout,
-.mpx-columns.is-sticky-right > .block-editor-block-list__layout,
-.mpx-columns.is-sticky-left .block-editor-block-list__layout > [data-type="mpx/partial-column"],
-.mpx-columns.is-sticky-right .block-editor-block-list__layout > [data-type="mpx/partial-column"] {
+.spa-columns.is-sticky-left > .block-editor-inner-blocks,
+.spa-columns.is-sticky-right > .block-editor-inner-blocks,
+.spa-columns.is-sticky-left > .block-editor-block-list__layout,
+.spa-columns.is-sticky-right > .block-editor-block-list__layout,
+.spa-columns.is-sticky-left .block-editor-block-list__layout > [data-type="spa/partial-column"],
+.spa-columns.is-sticky-right .block-editor-block-list__layout > [data-type="spa/partial-column"] {
   position: static !important;
   top: auto !important;
 }
 
 /**
- * mpx/columns vertical align (editor).
+ * spa/columns vertical align (editor).
  *
- * useBlockProps is on the column root itself (`[data-type].mpx-partial-column`),
+ * useBlockProps is on the column root itself (`[data-type].spa-partial-column`),
  * not a nested child. InnerBlocks sits directly under that root.
- * `--mpx-col-justify` is set on the section / `.mpx-columns` wrapper.
+ * `--spa-col-justify` is set on the section / `.spa-columns` wrapper.
  */
-.mpx-columns-section [data-type="mpx/partial-column"],
-.mpx-columns [data-type="mpx/partial-column"],
-.mpx-columns-section .wp-block-mpx-partial-column,
-.mpx-columns .wp-block-mpx-partial-column {
+.spa-columns-section [data-type="spa/partial-column"],
+.spa-columns [data-type="spa/partial-column"],
+.spa-columns-section .wp-block-spa-partial-column,
+.spa-columns .wp-block-spa-partial-column {
   display: flex !important;
   flex-direction: column !important;
   align-self: stretch !important;
   min-height: 100% !important;
   height: auto !important;
-  justify-content: var(--mpx-col-justify, flex-start) !important;
+  justify-content: var(--spa-col-justify, flex-start) !important;
 }
 
-.mpx-columns-section [data-type="mpx/partial-column"] > .block-editor-inner-blocks,
-.mpx-columns [data-type="mpx/partial-column"] > .block-editor-inner-blocks,
-.mpx-columns-section .wp-block-mpx-partial-column > .block-editor-inner-blocks,
-.mpx-columns .wp-block-mpx-partial-column > .block-editor-inner-blocks,
-.mpx-columns-section [data-type="mpx/partial-column"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-columns [data-type="mpx/partial-column"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-columns-section .wp-block-mpx-partial-column > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-columns .wp-block-mpx-partial-column > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-columns-section [data-type="mpx/partial-column"] > .block-editor-block-list__layout,
-.mpx-columns [data-type="mpx/partial-column"] > .block-editor-block-list__layout {
+.spa-columns-section [data-type="spa/partial-column"] > .block-editor-inner-blocks,
+.spa-columns [data-type="spa/partial-column"] > .block-editor-inner-blocks,
+.spa-columns-section .wp-block-spa-partial-column > .block-editor-inner-blocks,
+.spa-columns .wp-block-spa-partial-column > .block-editor-inner-blocks,
+.spa-columns-section [data-type="spa/partial-column"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-columns [data-type="spa/partial-column"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-columns-section .wp-block-spa-partial-column > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-columns .wp-block-spa-partial-column > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-columns-section [data-type="spa/partial-column"] > .block-editor-block-list__layout,
+.spa-columns [data-type="spa/partial-column"] > .block-editor-block-list__layout {
   display: flex !important;
   flex-direction: column !important;
   flex: 1 1 auto !important;
   width: 100% !important;
   min-height: 100% !important;
   height: 100% !important;
-  justify-content: var(--mpx-col-justify, flex-start) !important;
+  justify-content: var(--spa-col-justify, flex-start) !important;
 }
 
 /**
- * mpx/column-cover — keep the content box usable in the canvas.
+ * spa/column-cover — keep the content box usable in the canvas.
  */
-.mpx-column-cover {
+.spa-column-cover {
   display: block !important;
   width: 100%;
   min-height: 28rem;
 }
 
-.mpx-column-cover__box > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-column-cover__box > .block-editor-block-list__layout {
+.spa-column-cover__box > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-column-cover__box > .block-editor-block-list__layout {
   display: flex !important;
   flex-direction: column;
   gap: 1.25rem;
@@ -594,25 +594,25 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
 }
 
 /**
- * mpx/hero — keep the left content column interactive in the canvas.
+ * spa/hero — keep the left content column interactive in the canvas.
  * Media breakout can overlap the content column visually; raise z-index
  * and disable pointer events on the media so InnerBlocks stay editable.
  */
-.mpx-hero {
+.spa-hero {
   position: relative !important;
 }
 
-.mpx-hero .mpx-hero__content {
+.spa-hero .spa-hero__content {
   position: relative !important;
   z-index: 2 !important;
   min-height: 12rem;
 }
 
-.mpx-hero .mpx-hero__content-inner,
-.mpx-hero .mpx-hero__content-inner > .block-editor-inner-blocks,
-.mpx-hero .mpx-hero__content-inner > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-hero .mpx-hero__content-inner > .block-editor-block-list__layout,
-.mpx-hero #blockstudio-replace-innerblocks {
+.spa-hero .spa-hero__content-inner,
+.spa-hero .spa-hero__content-inner > .block-editor-inner-blocks,
+.spa-hero .spa-hero__content-inner > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-hero .spa-hero__content-inner > .block-editor-block-list__layout,
+.spa-hero #blockstudio-replace-innerblocks {
   display: flex !important;
   flex-direction: column !important;
   gap: 1.25rem !important;
@@ -622,7 +622,7 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
   z-index: 2 !important;
 }
 
-.mpx-hero .mpx-hero__media {
+.spa-hero .spa-hero__media {
   pointer-events: none !important;
   z-index: 0 !important;
 }
@@ -630,11 +630,11 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
 /**
  * Keep Buttons partial horizontal even inside hero’s column layout.
  */
-.mpx-hero .mpx-buttons,
-.mpx-hero .mpx-buttons > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-hero .mpx-buttons > .block-editor-block-list__layout,
-.mpx-hero [data-type="mpx/partial-buttons"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-hero [data-type="mpx/partial-buttons"] > .block-editor-block-list__layout {
+.spa-hero .spa-buttons,
+.spa-hero .spa-buttons > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-hero .spa-buttons > .block-editor-block-list__layout,
+.spa-hero [data-type="spa/partial-buttons"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-hero [data-type="spa/partial-buttons"] > .block-editor-block-list__layout {
   flex-direction: row !important;
   flex-wrap: wrap !important;
   align-items: center !important;
@@ -642,25 +642,25 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
   min-height: 0 !important;
 }
 
-.mpx-hero .mpx-buttons .wp-block-button,
-.mpx-hero .mpx-buttons [data-type="core/button"],
-.mpx-hero [data-type="mpx/partial-buttons"] .wp-block-button,
-.mpx-hero [data-type="mpx/partial-buttons"] [data-type="core/button"] {
+.spa-hero .spa-buttons .wp-block-button,
+.spa-hero .spa-buttons [data-type="core/button"],
+.spa-hero [data-type="spa/partial-buttons"] .wp-block-button,
+.spa-hero [data-type="spa/partial-buttons"] [data-type="core/button"] {
   width: auto !important;
   flex: 0 0 auto !important;
 }
 
 /**
- * mpx/partial-cards editor grid.
+ * spa/partial-cards editor grid.
  * Slider mode is frontend-only — the editor always uses the wrapping grid.
  */
-.mpx-cards.grid-auto-cards {
+.spa-cards.grid-auto-cards {
   display: block !important;
   width: 100%;
 }
 
-.mpx-cards.mpx-cards--gradient .mpx-card,
-.mpx-cards.mpx-cards--gradient [data-type^="mpx/partial-card"] .mpx-card {
+.spa-cards.spa-cards--gradient .spa-card,
+.spa-cards.spa-cards--gradient [data-type^="spa/partial-card"] .spa-card {
   background-color: transparent !important;
   background-image: linear-gradient(
     90deg,
@@ -671,13 +671,13 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
   text-align: center;
 }
 
-.mpx-cards.mpx-cards--gradient .mpx-card--testimonial-simple,
-.mpx-cards.mpx-cards--gradient [data-type="mpx/partial-card-testimonial-simple"] .mpx-card {
+.spa-cards.spa-cards--gradient .spa-card--testimonial-simple,
+.spa-cards.spa-cards--gradient [data-type="spa/partial-card-testimonial-simple"] .spa-card {
   text-align: left !important;
   align-items: flex-start;
 }
 
-.mpx-cards.grid-auto-cards > .block-editor-block-list__layout {
+.spa-cards.grid-auto-cards > .block-editor-block-list__layout {
   --_min: var(--grid-min-desktop, 100%);
 
   display: flex !important;
@@ -688,12 +688,12 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
   column-gap: var(--grid-gap-col, 20px);
   row-gap: var(--grid-gap-row, 20px);
 
-  & > .mpx-card,
-  & > [data-type="mpx/partial-card"],
-  & > [data-type="mpx/partial-card-icon"],
-  & > [data-type="mpx/partial-card-image"],
-  & > [data-type="mpx/partial-card-testimonial-simple"],
-  & > [data-type="mpx/partial-button"] {
+  & > .spa-card,
+  & > [data-type="spa/partial-card"],
+  & > [data-type="spa/partial-card-icon"],
+  & > [data-type="spa/partial-card-image"],
+  & > [data-type="spa/partial-card-testimonial-simple"],
+  & > [data-type="spa/partial-button"] {
     flex: 0 1 var(
       --col-width-desktop,
       var(--col-width-tablet, var(--col-width-mobile, var(--_min)))
@@ -704,10 +704,10 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
     width: auto;
   }
 
-  & > [data-type="mpx/partial-button"] {
+  & > [data-type="spa/partial-button"] {
     display: flex;
 
-    & .mpx-partial-button,
+    & .spa-partial-button,
     & .wp-block-buttons,
     & .wp-block-button,
     & .wp-block-button__link {
@@ -720,13 +720,13 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
   }
 }
 
-.mpx-cards.grid-auto-cards.is-fill-row > .block-editor-block-list__layout {
-  & > .mpx-card,
-  & > [data-type="mpx/partial-card"],
-  & > [data-type="mpx/partial-card-icon"],
-  & > [data-type="mpx/partial-card-image"],
-  & > [data-type="mpx/partial-card-testimonial-simple"],
-  & > [data-type="mpx/partial-button"] {
+.spa-cards.grid-auto-cards.is-fill-row > .block-editor-block-list__layout {
+  & > .spa-card,
+  & > [data-type="spa/partial-card"],
+  & > [data-type="spa/partial-card-icon"],
+  & > [data-type="spa/partial-card-image"],
+  & > [data-type="spa/partial-card-testimonial-simple"],
+  & > [data-type="spa/partial-button"] {
     flex-grow: 1;
   }
 }
@@ -734,12 +734,12 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
 /**
  * Card inner stack (icon / heading / paragraph / button).
  */
-.mpx-card--icon > .block-editor-block-list__layout,
-.mpx-card--image > .block-editor-block-list__layout,
-.mpx-card--icon > .block-editor-inner-blocks > .block-editor-block-list__layout,
-.mpx-card--image > .block-editor-inner-blocks > .block-editor-block-list__layout,
-[data-type="mpx/partial-card-image"] > .block-editor-block-list__layout,
-[data-type="mpx/partial-card-image"] > .block-editor-inner-blocks > .block-editor-block-list__layout {
+.spa-card--icon > .block-editor-block-list__layout,
+.spa-card--image > .block-editor-block-list__layout,
+.spa-card--icon > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-card--image > .block-editor-inner-blocks > .block-editor-block-list__layout,
+[data-type="spa/partial-card-image"] > .block-editor-block-list__layout,
+[data-type="spa/partial-card-image"] > .block-editor-inner-blocks > .block-editor-block-list__layout {
   display: flex !important;
   flex-direction: column;
   gap: 1rem;
@@ -753,9 +753,9 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
  * Card (Image) — edge-to-edge via negative margins (same idea as frontend).
  * Keeps card padding for text; only the first image breaks out.
  */
-[data-type="mpx/partial-card-image"].is-bleed-image,
-[data-type="mpx/partial-card-image"] .mpx-card--image.is-bleed-image,
-.mpx-card--image.is-bleed-image {
+[data-type="spa/partial-card-image"].is-bleed-image,
+[data-type="spa/partial-card-image"] .spa-card--image.is-bleed-image,
+.spa-card--image.is-bleed-image {
   --_card-pad: var(--padding-surface);
   overflow: hidden !important;
   align-items: stretch !important;
@@ -766,12 +766,12 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
   }
 }
 
-[data-type="mpx/partial-card-image"].is-bleed-image > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
-[data-type="mpx/partial-card-image"].is-bleed-image > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
-[data-type="mpx/partial-card-image"] .is-bleed-image > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
-[data-type="mpx/partial-card-image"] .is-bleed-image > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
-.mpx-card--image.is-bleed-image > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
-.mpx-card--image.is-bleed-image > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) {
+[data-type="spa/partial-card-image"].is-bleed-image > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
+[data-type="spa/partial-card-image"].is-bleed-image > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
+[data-type="spa/partial-card-image"] .is-bleed-image > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
+[data-type="spa/partial-card-image"] .is-bleed-image > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
+.spa-card--image.is-bleed-image > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
+.spa-card--image.is-bleed-image > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) {
   width: calc(100% + (var(--_card-pad, var(--padding-surface)) * 2)) !important;
   max-width: none !important;
   margin-top: calc(var(--_card-pad, var(--padding-surface)) * -1) !important;
@@ -784,12 +784,12 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
   box-shadow: none !important;
 }
 
-[data-type="mpx/partial-card-image"].is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .wp-block-image,
-[data-type="mpx/partial-card-image"] .is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .wp-block-image,
-.mpx-card--image.is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .wp-block-image,
-[data-type="mpx/partial-card-image"].is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .components-resizable-box__container,
-[data-type="mpx/partial-card-image"] .is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .components-resizable-box__container,
-.mpx-card--image.is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .components-resizable-box__container {
+[data-type="spa/partial-card-image"].is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .wp-block-image,
+[data-type="spa/partial-card-image"] .is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .wp-block-image,
+.spa-card--image.is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .wp-block-image,
+[data-type="spa/partial-card-image"].is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .components-resizable-box__container,
+[data-type="spa/partial-card-image"] .is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .components-resizable-box__container,
+.spa-card--image.is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .components-resizable-box__container {
   width: 100% !important;
   max-width: 100% !important;
   margin: 0 !important;
@@ -798,9 +798,9 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
   border-radius: 0 !important;
 }
 
-[data-type="mpx/partial-card-image"].is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) img,
-[data-type="mpx/partial-card-image"] .is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) img,
-.mpx-card--image.is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) img {
+[data-type="spa/partial-card-image"].is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) img,
+[data-type="spa/partial-card-image"] .is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) img,
+.spa-card--image.is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) img {
   display: block !important;
   width: 100% !important;
   max-width: 100% !important;
@@ -813,9 +813,9 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
 /**
  * Testimonial card — quote grows; name / company sit at the bottom.
  */
-.mpx-card--testimonial-simple {
-  & > .mpx-card__body > .block-editor-inner-blocks,
-  & > .mpx-card__body > .block-editor-inner-blocks > .block-editor-block-list__layout {
+.spa-card--testimonial-simple {
+  & > .spa-card__body > .block-editor-inner-blocks,
+  & > .spa-card__body > .block-editor-inner-blocks > .block-editor-block-list__layout {
     display: flex !important;
     flex-direction: column;
     flex: 1 1 auto;
@@ -823,7 +823,7 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
     min-height: 0;
   }
 
-  & > .mpx-card__body > .block-editor-inner-blocks > .block-editor-block-list__layout {
+  & > .spa-card__body > .block-editor-inner-blocks > .block-editor-block-list__layout {
     & > *:first-child {
       flex: 1 1 auto;
       margin-bottom: 1.5rem !important;
@@ -842,7 +842,7 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
 /**
  * Icon-beside-content toggle — editor.
  */
-.mpx-card.mpx-card--icon.is-horizontal {
+.spa-card.spa-card--icon.is-horizontal {
   --_icon-size: 28px;
   --_icon-gap: 1rem;
 
@@ -855,8 +855,8 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
   }
 }
 
-.mpx-card--icon.is-horizontal > .block-editor-block-list__layout,
-.mpx-card--icon.is-horizontal > .block-editor-inner-blocks > .block-editor-block-list__layout {
+.spa-card--icon.is-horizontal > .block-editor-block-list__layout,
+.spa-card--icon.is-horizontal > .block-editor-inner-blocks > .block-editor-block-list__layout {
   position: relative !important;
   display: flex !important;
   flex-direction: column !important;
@@ -865,7 +865,7 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
   min-height: var(--_icon-size, 28px);
   padding-inline-start: calc(var(--_icon-size, 28px) + var(--_icon-gap, 1rem)) !important;
 
-  & > [data-type="mpx/partial-icon"] {
+  & > [data-type="spa/partial-icon"] {
     position: absolute !important;
     top: 0 !important;
     inset-inline-start: 0 !important;
@@ -881,7 +881,7 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
     }
   }
 
-  & > :not([data-type="mpx/partial-icon"]) {
+  & > :not([data-type="spa/partial-icon"]) {
     margin-inline-start: 0 !important;
     max-width: 100%;
   }
@@ -893,12 +893,12 @@ ul.mpx-list--tags:where(:not([class*="fs-"])),
 
 /**
  * Paragraph / one-column Limit Width? (`mw-1000`).
- * One-column can set `--mpx-content-max` (800px / 1000px / custom).
+ * One-column can set `--spa-content-max` (800px / 1000px / custom).
  * `.fs-*` text sizes come from theme/typography.css via theme.css import.
  */
 .mw-1000 {
   width: 100%;
-  max-width: var(--mpx-content-max, var(--width-content));
+  max-width: var(--spa-content-max, var(--width-content));
 }
 
 /**

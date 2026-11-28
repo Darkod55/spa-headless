@@ -15,7 +15,7 @@
 @section('content')
   <section class="p-clamp-xl bg-secondary text-white bs-block">
     <div class="container">
-      <div class="mpx-subheading text-white mb-4">
+      <div class="spa-subheading text-white mb-4">
         <p>{{ __('Search', 'sage') }}</p>
       </div>
       <h1 class="mb-0">

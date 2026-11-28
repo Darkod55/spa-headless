@@ -1,9 +1,10 @@
 ---
 description: Theme Customizer, menus, and theme.json
 globs:
-  - wordpress/themes/spa-headless/functions.php
-  - wordpress/themes/spa-headless/theme.json
-  - wordpress/themes/spa-headless/inc/**/*
+  - wordpress/themes/spa-sage/app/headless.php
+  - wordpress/themes/spa-sage/app/Classes/Customizer.php
+  - wordpress/themes/spa-sage/app/setup.php
+  - wordpress/themes/spa-sage/theme.json
   - wordpress/plugins/spa-headless-core/**/*
 alwaysApply: false
 ---

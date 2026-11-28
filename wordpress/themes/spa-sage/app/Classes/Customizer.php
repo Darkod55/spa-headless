@@ -104,47 +104,56 @@ if (!class_exists(__NAMESPACE__.'\Customizer')) {
          */
         private function customizerSiteLogoAlternative($wp_customize){
             // add selective refresh
-            $wp_customize->selective_refresh->add_partial( 'custom_logo_alt', ['selector' => $this->site_logo_container_class]);
+            $wp_customize->selective_refresh->add_partial('spa_alt_logo', ['selector' => $this->site_logo_container_class]);
 
-            // add setting
-            $wp_customize->add_setting('custom_logo_alt', [
+            $wp_customize->add_setting('spa_alt_logo', [
+                'default' => 0,
                 'type' => 'theme_mod',
                 'capability' => 'edit_theme_options',
-                'transport' => 'postMessage',
+                'transport' => 'refresh',
+                'sanitize_callback' => 'absint',
             ]);
 
-            // add control
-            $alt_logo_label = 'logo (alt)';
-            $custom_logo_args = get_theme_support('custom-logo');
             $wp_customize->add_control(
-                new \WP_Customize_Cropped_Image_Control(
+                new \WP_Customize_Media_Control(
                     $wp_customize,
-                    'alt_logo',
+                    'spa_alt_logo',
                     [
-                        'label'         => __('Alternative Logo (optional)', 'sage'),
-
-                        // the section we're adding the control to - we could add a new section instead
-                        'section'       => 'title_tagline',
-                        'settings'      => 'custom_logo_alt',
-                        'priority'      => 9,
-                        'height'        => $custom_logo_args[0]['height'] ?: null,
-                        'width'         => $custom_logo_args[0]['width'] ?: null,
-                        'flex_height'   => $custom_logo_args[0]['flex-height'] ?: null,
-                        'flex_width'    => $custom_logo_args[0]['flex-width'] ?: null,
-
-                        // optionally set button labels
-                        'button_labels'  => [
-                            'select'       => __("Select $alt_logo_label"),
-                            'change'       => __("Change $alt_logo_label"),
-                            'default'      => __('Default'),
-                            'remove'       => __('Remove'),
-                            'placeholder'  => __("No $alt_logo_label selected"),
-                            'frame_title'  => __("Select $alt_logo_label"),
-                            'frame_button' => __("Choose $alt_logo_label"),
+                        'label' => __('Alternative logo', 'sage'),
+                        'description' => __('A second wordmark, for example a white logo on the navy footer.', 'sage'),
+                        'section' => 'title_tagline',
+                        'mime_type' => 'image',
+                        'priority' => 9,
+                        'button_labels' => [
+                            'select' => __('Select logo', 'sage'),
+                            'change' => __('Change logo', 'sage'),
+                            'remove' => __('Remove', 'sage'),
+                            'default' => __('Default', 'sage'),
+                            'placeholder' => __('No logo selected', 'sage'),
+                            'frame_title' => __('Select logo', 'sage'),
+                            'frame_button' => __('Choose logo', 'sage'),
                         ],
                     ]
                 )
             );
+
+            $wp_customize->add_setting('spa_alt_logo_in_footer', [
+                'default' => false,
+                'type' => 'theme_mod',
+                'capability' => 'edit_theme_options',
+                'sanitize_callback' => static function ($value): bool {
+                    return rest_sanitize_boolean($value);
+                },
+            ]);
+            $wp_customize->add_control('spa_alt_logo_in_footer', [
+                'label' => __('Show in footer', 'sage'),
+                'section' => 'title_tagline',
+                'type' => 'checkbox',
+                'priority' => 10,
+                'active_callback' => static function (): bool {
+                    return (int) get_theme_mod('spa_alt_logo', 0) > 0;
+                },
+            ]);
         }
 
         /**

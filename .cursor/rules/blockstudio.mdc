@@ -1,9 +1,9 @@
 ---
 description: BlockStudio blocks, fields, and extensions
 globs:
+  - wordpress/themes/spa-sage/app/blocks/**/*
+  - wordpress/themes/spa-sage/resources/css/**/*
   - wordpress/themes/spa-headless/blockstudio/**/*
-  - wordpress/themes/spa-headless/inc/**/*
-  - wordpress/themes/spa-headless/assets/**/*
   - astro/src/components/blocks/**/*
   - astro/src/generated/**/*
   - scripts/generate-block-types.ts

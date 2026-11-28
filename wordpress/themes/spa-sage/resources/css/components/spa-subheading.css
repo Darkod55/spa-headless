@@ -1,17 +1,17 @@
 /**
- * mpx/partial-subheading — accent bar beside heading / paragraph content.
+ * spa/partial-subheading — accent bar beside heading / paragraph content.
  *
  * Kept outside resources/css/theme/ so bridgeTailwindConfig() (which globs
  * theme/*.css into Blockstudio's inline Tailwind) does not duplicate it.
  * Vite still loads this via theme.css → app.css / editor.css.
  *
- * Line colour: `--mpx-subheading-line`
- * Optional panel: `.mpx-subheading--panel` (padding + border + light overlay)
+ * Line colour: `--spa-subheading-line`
+ * Optional panel: `.spa-subheading--panel` (padding + border + light overlay)
  * Text colour / size / case: set on the inner heading / paragraph blocks.
  */
 
 @layer components {
-  .mpx-subheading {
+  .spa-subheading {
     --_subheading-pad: var(--padding-surface);
     --_subheading-gap: 16px;
 
@@ -20,7 +20,7 @@
     gap: 0.5rem;
     box-sizing: border-box;
     margin-bottom: 1.5rem;
-    border-left: 3px solid var(--mpx-subheading-line, currentColor);
+    border-left: 3px solid var(--spa-subheading-line, currentColor);
     padding-left: var(--_subheading-gap);
 
     @media (width >= theme(--breakpoint-lg)) {
@@ -51,7 +51,7 @@
    * Frosted panel — navy overlay look (padding + border + white/10).
    * Accent bar stays as the left border; panel chrome on the other sides.
    */
-  .mpx-subheading--panel {
+  .spa-subheading--panel {
     padding-block: var(--_subheading-pad);
     padding-inline-end: var(--_subheading-pad);
     padding-inline-start: calc(var(--_subheading-pad) + var(--_subheading-gap));

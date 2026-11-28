@@ -73,7 +73,7 @@ if (!class_exists('App\SetupPlus')) {
          */
         public function revisions($num, $post)
         {
-            if (in_array($post->post_type, ['post', 'page', 'podcast', 'event'], true)) {
+            if (in_array($post->post_type, ['post', 'page'], true)) {
                 $num = 3;
             }
 

@@ -1,6 +1,6 @@
 # Theme, Customizer, and menus
 
-The theme is `wordpress/themes/spa-headless`. Activate it. BlockStudio must be active or the blocks do not register.
+The theme is `wordpress/themes/spa-sage` (Square Peg Agency). `wordpress/themes/spa-headless` is deprecated and stays in the repo. Activate spa-sage. BlockStudio must be active or the blocks do not register. Theme mods are stored per theme, so menus, logos, and the announcement bar have to be set again after you switch.
 
 ## Menus
 

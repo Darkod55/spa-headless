@@ -13,17 +13,22 @@
 @theme static {
   --color-*: initial;
 
-  --color-primary: #3a31a7;
-  --color-secondary: #dd785C;
-  --color-tertiary: #fcf7eb;
-  --color-navy-light: #8498d3;
-  --color-coral-dark: #cd6E59;
-  --color-dark-blue: #1e2a45;
-  --color-light: #ede5d8;
-  --color-gold: #dec08a;
+  --color-navy: #031433;
+  --color-red: #c8102e;
+  --color-royal: #012169;
+  --color-black: #000;
   --color-white: #fff;
+  /* Aliases so existing utilities (text-primary, bg-dark-blue) stay on the brand. */
+  --color-primary: #031433;
+  --color-secondary: #c8102e;
+  --color-tertiary: #012169;
+  --color-dark-blue: #031433;
   --color-white-75: rgb(255 255 255 / 0.75);
-  --color-black: #848585;
+  /* Leftover utility names from the Sage starter, remapped onto the brand. */
+  --color-gold: #c8102e;
+  --color-navy-light: #012169;
+  --color-coral-dark: #c8102e;
+  --color-light: #f3f5f8;
 
   /**
    * Fluid section padding.
@@ -37,7 +42,7 @@
    * --width-container → `.container` + editor canvas mirrors
    * --width-content   → `.mw-1000` (one-column / paragraph limit)
    */
-  --width-container: 1200px;
+  --width-container: 1280px;
   --width-content: 1000px;
 
   /**

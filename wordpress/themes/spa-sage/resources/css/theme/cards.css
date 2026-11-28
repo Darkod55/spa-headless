@@ -1,9 +1,9 @@
 /**
- * Cards grid (mpx/partial-cards + card / card-icon / card-image /
+ * Cards grid (spa/partial-cards + card / card-icon / card-image /
  * card-testimonial-simple / icon).
  */
 
-.mpx-cards.grid-auto-cards {
+.spa-cards.grid-auto-cards {
   align-items: stretch;
 
   &:not(.is-fill-row) > * {
@@ -13,8 +13,8 @@
   /**
    * Buttons as grid children (e.g. three CTAs in a row): fill the cell.
    */
-  & > .mpx-partial-button,
-  & > .wp-block-mpx-partial-button {
+  & > .spa-partial-button,
+  & > .wp-block-spa-partial-button {
     display: flex;
     align-self: stretch;
     width: 100%;
@@ -29,7 +29,7 @@
 }
 
 @layer components {
-  .mpx-card {
+  .spa-card {
     display: flex;
     flex-direction: column;
     align-self: stretch;
@@ -37,7 +37,7 @@
     box-sizing: border-box;
     padding: var(--padding-surface);
     border-radius: var(--radius-surface);
-    background-color: var(--mpx-card-bg, var(--color-tertiary));
+    background-color: var(--spa-card-bg, var(--color-tertiary));
 
     @media (width >= theme(--breakpoint-lg)) {
       padding: var(--padding-surface-lg);
@@ -47,7 +47,7 @@
   /**
    * Brand gradient cards (Featured Media Coverage style).
    */
-  .mpx-cards--gradient .mpx-card {
+  .spa-cards--gradient .spa-card {
     background-color: transparent;
     background-image: linear-gradient(
       90deg,
@@ -62,7 +62,7 @@
       color: inherit;
     }
 
-    & .mpx-partial-button,
+    & .spa-partial-button,
     & .wp-block-buttons {
       width: 100%;
       justify-content: center;
@@ -73,18 +73,18 @@
    * Horizontal page carousel (Alpine `mpxCardsSlider`).
    * Slide width fills the track exactly for N slides — no peek of the next card.
    *
-   * `--mpx-slides` is set by Alpine from --mpx-slides-{mobile,tablet,desktop}
+   * `--spa-slides` is set by Alpine from --spa-slides-{mobile,tablet,desktop}
    * (Blockstudio’s Tailwind regroups @media blocks, so CSS breakpoints alone
    * are not reliable for this). Mobile value is the pre-JS fallback.
    */
-  .mpx-cards--slider {
-    --mpx-slides: var(--mpx-slides-mobile, 1);
-    --mpx-cards-slide-basis: calc(
-      (100% - (var(--mpx-slides) - 1) * var(--grid-gap-col, 20px)) / var(--mpx-slides)
+  .spa-cards--slider {
+    --spa-slides: var(--spa-slides-mobile, 1);
+    --spa-cards-slide-basis: calc(
+      (100% - (var(--spa-slides) - 1) * var(--grid-gap-col, 20px)) / var(--spa-slides)
     );
   }
 
-  .mpx-cards-slider {
+  .spa-cards-slider {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -92,7 +92,7 @@
     min-width: 0;
   }
 
-  .mpx-cards-slider__track {
+  .spa-cards-slider__track {
     display: flex;
     flex-wrap: nowrap;
     align-items: stretch;
@@ -110,8 +110,8 @@
     }
 
     & > * {
-      flex: 0 0 var(--mpx-cards-slide-basis);
-      width: var(--mpx-cards-slide-basis);
+      flex: 0 0 var(--spa-cards-slide-basis);
+      width: var(--spa-cards-slide-basis);
       max-width: 100%;
       scroll-snap-align: start;
       scroll-snap-stop: always;
@@ -119,7 +119,7 @@
     }
   }
 
-  .mpx-cards-slider__dots {
+  .spa-cards-slider__dots {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -127,7 +127,7 @@
     gap: 0.5rem;
   }
 
-  .mpx-cards-slider__dot {
+  .spa-cards-slider__dot {
     display: block;
     width: 0.5rem;
     height: 0.5rem;
@@ -158,8 +158,8 @@
     .bg-tertiary,
     .bg-black,
     .bg-img-midnight,
-    .mpx-columns-section--gradient
-  ) .mpx-cards-slider__dot {
+    .spa-columns-section--gradient
+  ) .spa-cards-slider__dot {
     background-color: color-mix(in srgb, var(--color-white) 40%, transparent);
 
     &:hover {
@@ -171,13 +171,13 @@
     }
   }
 
-  .mpx-card--check {
+  .spa-card--check {
     flex-direction: row;
     align-items: flex-start;
     gap: 1rem;
   }
 
-  .mpx-card__icon {
+  .spa-card__icon {
     display: grid;
     flex-shrink: 0;
     place-items: center;
@@ -194,7 +194,7 @@
     }
   }
 
-  .mpx-card__body {
+  .spa-card__body {
     flex: 1 1 auto;
     min-width: 0;
 
@@ -206,14 +206,14 @@
   /**
    * Plain text tile (icon off): centered content for label-style cards.
    */
-  .mpx-card--plain {
+  .spa-card--plain {
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     min-height: 5.5rem;
 
-    & .mpx-card__body {
+    & .spa-card__body {
       width: 100%;
     }
 
@@ -226,7 +226,7 @@
     }
   }
 
-  .mpx-card--icon {
+  .spa-card--icon {
     gap: 1rem;
     align-items: flex-start;
     text-align: left;
@@ -264,7 +264,7 @@
           var(--_card-pad) + var(--_icon-size) + var(--_icon-gap)
         );
 
-        & > .mpx-partial-icon {
+        & > .spa-partial-icon {
           position: absolute;
           top: var(--_card-pad);
           inset-inline-start: var(--_card-pad);
@@ -279,13 +279,13 @@
 
   /**
    * Icon partial inside Card (Icon): plain gold outline mark (no badge).
-   * Standalone `.mpx-partial-icon` (one-column quote etc.) stays plain —
-   * see resources/css/components/mpx-icon-divider.css.
+   * Standalone `.spa-partial-icon` (one-column quote etc.) stays plain —
+   * see resources/css/components/spa-icon-divider.css.
    */
-  .mpx-card--icon > .mpx-partial-icon,
-  .mpx-card--icon > .block-editor-inner-blocks > .block-editor-block-list__layout > .mpx-partial-icon,
-  .mpx-card--icon > .block-editor-block-list__layout > .mpx-partial-icon,
-  .mpx-card--icon [data-type="mpx/partial-icon"] .mpx-partial-icon {
+  .spa-card--icon > .spa-partial-icon,
+  .spa-card--icon > .block-editor-inner-blocks > .block-editor-block-list__layout > .spa-partial-icon,
+  .spa-card--icon > .block-editor-block-list__layout > .spa-partial-icon,
+  .spa-card--icon [data-type="spa/partial-icon"] .spa-partial-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -294,7 +294,7 @@
     padding: 0;
     border-radius: 0;
     background-color: transparent;
-    color: var(--mpx-icon-colour, var(--color-gold));
+    color: var(--spa-icon-colour, var(--color-gold));
     line-height: 0;
 
     & .icon {
@@ -309,12 +309,12 @@
   /**
    * Simple testimonial: quote mark + quote text, name / company pinned bottom.
    */
-  .mpx-card--testimonial-simple {
+  .spa-card--testimonial-simple {
     gap: 1.25rem;
     align-items: flex-start;
     text-align: left;
 
-    & .mpx-card__quote-mark {
+    & .spa-card__quote-mark {
       display: grid;
       flex-shrink: 0;
       place-items: center;
@@ -327,7 +327,7 @@
       }
     }
 
-    & .mpx-card__body {
+    & .spa-card__body {
       display: flex;
       flex-direction: column;
       flex: 1 1 auto;
@@ -338,7 +338,7 @@
     /**
      * Quote (first block) grows so the attribution stays at the bottom.
      */
-    & .mpx-card__body > :first-child {
+    & .spa-card__body > :first-child {
       flex: 1 1 auto;
       margin-bottom: 1.5rem;
       font-family: var(--font-sans);
@@ -346,7 +346,7 @@
       line-height: 1.55;
     }
 
-    & .mpx-card__body > :is(h1, h2, h3, h4, h5, h6) {
+    & .spa-card__body > :is(h1, h2, h3, h4, h5, h6) {
       margin: 0 0 0.25rem;
       font-family: var(--font-heading);
       font-size: 1.125rem;
@@ -354,9 +354,9 @@
       line-height: 1.3;
     }
 
-    & .mpx-card__body > :is(h1, h2, h3, h4, h5, h6) + p,
-    & .mpx-card__body > .mpx-card__company,
-    & .mpx-card__body > .wp-block-paragraph.mpx-card__company {
+    & .spa-card__body > :is(h1, h2, h3, h4, h5, h6) + p,
+    & .spa-card__body > .spa-card__company,
+    & .spa-card__body > .wp-block-paragraph.spa-card__company {
       margin: 0;
       font-family: var(--font-sans);
       font-size: var(--font-size-sm);
@@ -366,16 +366,16 @@
     }
   }
 
-  .mpx-cards--gradient .mpx-card--testimonial-simple {
+  .spa-cards--gradient .spa-card--testimonial-simple {
     text-align: left;
     align-items: flex-start;
 
-    & .mpx-card__quote-mark {
+    & .spa-card__quote-mark {
       color: var(--color-white);
     }
   }
 
-  .mpx-card--image {
+  .spa-card--image {
     gap: 1rem;
     /*align-items: flex-start;*/
 
@@ -401,7 +401,7 @@
       margin-bottom: 0;
     }
 
-    & .mpx-partial-button,
+    & .spa-partial-button,
     & .wp-block-buttons {
       margin-top: auto;
     }
@@ -437,7 +437,7 @@
         }
       }
 
-      & .mpx-partial-button,
+      & .spa-partial-button,
       & .wp-block-buttons {
         margin-top: auto;
         width: 100%;
@@ -450,7 +450,7 @@
    * Blog / archive / related post cards — Card (Image) bleed style:
    * edge-to-edge featured image, centered serif title, date (no excerpt).
    */
-  .mpx-post-card {
+  .spa-post-card {
     gap: 1rem;
     background-color: var(--color-primary);
     color: var(--color-white);
@@ -462,7 +462,7 @@
       color: inherit;
     }
 
-    & .mpx-post-card__media {
+    & .spa-post-card__media {
       line-height: 0;
 
       & a {
@@ -470,7 +470,7 @@
       }
     }
 
-    & .mpx-post-card__image {
+    & .spa-post-card__image {
       display: block;
       width: 100%;
       aspect-ratio: 16 / 10;
@@ -478,14 +478,14 @@
       border-radius: 0;
     }
 
-    & .mpx-post-card__placeholder {
+    & .spa-post-card__placeholder {
       display: block;
       width: 100%;
       aspect-ratio: 16 / 10;
       background: color-mix(in srgb, var(--color-primary) 70%, white);
     }
 
-    & .mpx-post-card__title {
+    & .spa-post-card__title {
       margin: 0;
       font-family: var(--font-heading);
       font-weight: 700;
@@ -500,7 +500,7 @@
       }
     }
 
-    & .mpx-post-card__date {
+    & .spa-post-card__date {
       display: block;
       margin: 0;
       font-family: var(--font-sans);
@@ -509,7 +509,7 @@
       opacity: 0.85;
     }
 
-    & .mpx-post-card__footer {
+    & .spa-post-card__footer {
       margin-top: auto;
       width: 100%;
 

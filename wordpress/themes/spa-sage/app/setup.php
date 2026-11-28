@@ -135,11 +135,15 @@ add_action('after_setup_theme', function () {
      *
      * @link https://developer.wordpress.org/reference/functions/register_nav_menus/
      */
+    /*
+     * Slugs match spa-headless-core and the Astro site: primary, footer,
+     * legal, footer-social. Do not rename them.
+     */
     register_nav_menus([
-        'primary_navigation' => __('Primary Navigation', 'sage'),
-        'footer_navigation' => __('Footer Navigation', 'sage'),
-        'legal_navigation' => __('Legal Navigation', 'sage'),
-        'social_navigation' => __('Social Navigation', 'sage'),
+        'primary' => __('Primary', 'sage'),
+        'footer' => __('Footer', 'sage'),
+        'legal' => __('Legal', 'sage'),
+        'footer-social' => __('Footer social', 'sage'),
     ]);
 
     /**
@@ -162,6 +166,15 @@ add_action('after_setup_theme', function () {
      * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
      */
     add_theme_support('post-thumbnails');
+
+    add_theme_support('custom-logo', [
+        'height' => 80,
+        'width' => 280,
+        'flex-height' => true,
+        'flex-width' => true,
+    ]);
+
+    add_theme_support('editor-styles');
 
     /**
      * Enable responsive embed support.

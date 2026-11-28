@@ -4,7 +4,7 @@ import test from "node:test";
 import { heroBackgroundClass, heroBackgrounds } from "../astro/src/lib/blocks/hero-banner.ts";
 
 const css = readFileSync(
-  new URL("../wordpress/themes/spa-headless/assets/hero-banner.css", import.meta.url),
+  new URL("../wordpress/themes/spa-sage/resources/css/components/spa-hero-banner.css", import.meta.url),
   "utf8",
 );
 
@@ -30,7 +30,7 @@ test("background values map to modifier classes", () => {
 
 test("the hero template keeps InnerBlocks unlocked and shapes click-through", () => {
   const template = readFileSync(
-    new URL("../wordpress/themes/spa-headless/blockstudio/sections/hero-banner/template.php", import.meta.url),
+    new URL("../wordpress/themes/spa-sage/app/blocks/hero-banner/template.php", import.meta.url),
     "utf8",
   );
   assert.match(template, /<InnerBlocks/);

@@ -1,46 +1,73 @@
 /**
- * Self-hosted webfonts (resources/fonts/)
- *
- * Relative urls so Vite fingerprints files into public/build/assets/.
- * Operetta 8 ships Light / Regular / Medium — Medium covers 500–700 so
- * existing font-semibold / font-bold heading utilities don’t faux-bold.
+ * Self-hosted Oswald (headings) and Montserrat (body).
+ * Files are the latin woff2 cuts from Fontsource, licensed under the OFL.
  */
-@font-face {
-  font-family: 'Operetta';
-  src: url('../../fonts/Operetta8-Light.woff2') format('woff2');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
 
 @font-face {
-  font-family: 'Operetta';
-  src: url('../../fonts/Operetta8-Regular.woff2') format('woff2');
+  font-family: 'Oswald';
+  font-style: normal;
   font-weight: 400;
-  font-style: normal;
   font-display: swap;
+  src: url('../../fonts/oswald-latin-400-normal.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: 'Operetta';
-  src: url('../../fonts/Operetta8-Medium.woff2') format('woff2');
-  font-weight: 500 700;
+  font-family: 'Oswald';
   font-style: normal;
+  font-weight: 500;
   font-display: swap;
+  src: url('../../fonts/oswald-latin-500-normal.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: 'Source Sans 3';
-  src: url('../../fonts/SourceSans3-VariableFont_wght.woff2') format('woff2');
-  font-weight: 200 1000;
+  font-family: 'Oswald';
   font-style: normal;
+  font-weight: 600;
   font-display: swap;
+  src: url('../../fonts/oswald-latin-600-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../fonts/oswald-latin-700-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../fonts/montserrat-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../fonts/montserrat-latin-500-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../../fonts/montserrat-latin-600-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../fonts/montserrat-latin-700-normal.woff2') format('woff2');
 }
 
 @theme {
-  /**
-   * Font families.
-   */
-  --font-sans: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
-  --font-heading: 'Operetta', ui-serif, Georgia, serif;
+  --font-sans: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Oswald', ui-sans-serif, system-ui, sans-serif;
 }

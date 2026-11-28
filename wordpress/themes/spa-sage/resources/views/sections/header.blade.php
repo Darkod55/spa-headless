@@ -1,11 +1,11 @@
 @include('components.header-icons')
 
-@if (has_nav_menu('preheader_navigation'))
+@if (has_nav_menu('primary'))
   <div class="preheader hidden lg:block bg-primary px-clamp text-white">
     <div class="container flex items-center justify-end py-3">
-      <nav class="preheader-nav" aria-label="{{ wp_get_nav_menu_name('preheader_navigation') }}">
+      <nav class="preheader-nav" aria-label="{{ wp_get_nav_menu_name('primary') }}">
         {!! wp_nav_menu([
-          'theme_location' => 'preheader_navigation',
+          'theme_location' => 'primary',
           'menu_class' => 'flex items-center gap-5',
           'container' => false,
           'depth' => 1,
@@ -25,10 +25,10 @@
       ]) !!}
     </div>
 
-    @if (has_nav_menu('primary_navigation'))
-      <nav class="primary-nav hidden items-center lg:flex" aria-label="{{ wp_get_nav_menu_name('primary_navigation') }}">
+    @if (has_nav_menu('primary'))
+      <nav class="primary-nav hidden items-center lg:flex" aria-label="{{ wp_get_nav_menu_name('primary') }}">
         {!! wp_nav_menu([
-          'theme_location' => 'primary_navigation',
+          'theme_location' => 'primary',
           'menu_class' => 'flex items-center gap-8 xl:gap-6',
           'container' => false,
           'echo' => false,
@@ -67,7 +67,7 @@
   ></div>
 
   {{-- Off-canvas menu panel, slides in from the right, covering the full viewport --}}
-  @if (has_nav_menu('primary_navigation'))
+  @if (has_nav_menu('primary'))
     <div
       x-show="mobileOpen"
       x-cloak
@@ -93,10 +93,10 @@
         <div class="size-7 shrink-0" aria-hidden="true"></div>
       </div>
 
-      @if (has_nav_menu('primary_navigation'))
-        <nav class="mt-8" aria-label="{{ wp_get_nav_menu_name('primary_navigation') }}">
+      @if (has_nav_menu('primary'))
+        <nav class="mt-8" aria-label="{{ wp_get_nav_menu_name('primary') }}">
           {!! wp_nav_menu([
-            'theme_location' => 'primary_navigation',
+            'theme_location' => 'primary',
             'menu_class' => 'flex flex-col divide-y divide-white/10 uppercase tracking-[1px] text-[14px]',
             'offcanvas' => true,
             'echo' => false,

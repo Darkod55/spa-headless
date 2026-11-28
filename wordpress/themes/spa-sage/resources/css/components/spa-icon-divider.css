@@ -1,0 +1,29 @@
+/**
+ * spa/partial-icon — sprite SVG; colour via `--spa-icon-colour`.
+ * Card badge chrome lives under `.spa-card--icon` in cards.css.
+ *
+ * spa/partial-divider — short rule; colour via `--spa-divider-colour`.
+ */
+
+@layer components {
+  .spa-partial-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--spa-icon-colour, currentColor);
+    line-height: 0;
+
+    & .icon {
+      display: block;
+      fill: currentColor;
+      color: inherit;
+    }
+  }
+
+  .spa-divider {
+    width: 4rem;
+    height: 1px;
+    margin-block: 0;
+    background-color: var(--spa-divider-colour, var(--color-tertiary));
+  }
+}

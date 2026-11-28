@@ -125,9 +125,9 @@ document.addEventListener('alpine:init', () => {
     readSlidesPerView() {
       const root = this.$el;
       const styles = getComputedStyle(root);
-      const desktop = parseInt(styles.getPropertyValue('--mpx-slides-desktop'), 10) || 4;
-      const tablet = parseInt(styles.getPropertyValue('--mpx-slides-tablet'), 10) || 2;
-      const mobile = parseInt(styles.getPropertyValue('--mpx-slides-mobile'), 10) || 1;
+      const desktop = parseInt(styles.getPropertyValue('--spa-slides-desktop'), 10) || 4;
+      const tablet = parseInt(styles.getPropertyValue('--spa-slides-tablet'), 10) || 2;
+      const mobile = parseInt(styles.getPropertyValue('--spa-slides-mobile'), 10) || 1;
 
       // lg ≥ 64rem → desktop; md ≥ 48rem (and below lg) → tablet; else mobile.
       if (this._mqlDesktop?.matches) {
@@ -140,7 +140,7 @@ document.addEventListener('alpine:init', () => {
 
       // Write the active count onto the element so card width calc updates.
       // Avoids Blockstudio CSS media-query reordering fighting the theme CSS.
-      root.style.setProperty('--mpx-slides', String(this.slidesPerView));
+      root.style.setProperty('--spa-slides', String(this.slidesPerView));
     },
 
     cards() {
@@ -207,7 +207,7 @@ document.addEventListener('alpine:init', () => {
 
       nav.hidden = false;
 
-      const existing = nav.querySelectorAll('.mpx-cards-slider__dot');
+      const existing = nav.querySelectorAll('.spa-cards-slider__dot');
       if (existing.length === this.pages) {
         existing.forEach((btn, i) => {
           const on = i === this.active;
@@ -226,7 +226,7 @@ document.addEventListener('alpine:init', () => {
       for (let i = 0; i < this.pages; i++) {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'mpx-cards-slider__dot' + (i === this.active ? ' is-active' : '');
+        btn.className = 'spa-cards-slider__dot' + (i === this.active ? ' is-active' : '');
         btn.setAttribute('aria-label', `Go to slide ${i + 1}`);
         if (i === this.active) {
           btn.setAttribute('aria-current', 'true');
@@ -273,8 +273,8 @@ function syncPartnersMarqueeShift() {
   const pxPerSecond = window.matchMedia('(max-width: 767px)').matches ? 55 : 45;
   const minTrackWidth = Math.max(window.innerWidth, document.documentElement.clientWidth) * 2;
 
-  document.querySelectorAll('.mpx-partners-slider .wp-block-gallery[data-mpx-marquee="true"]').forEach((gallery) => {
-    const groups = [...gallery.querySelectorAll(':scope > .mpx-partners-group')];
+  document.querySelectorAll('.spa-partners-slider .wp-block-gallery[data-spa-marquee="true"]').forEach((gallery) => {
+    const groups = [...gallery.querySelectorAll(':scope > .spa-partners-group')];
     const source = groups[0];
     if (!source) return;
 
@@ -297,8 +297,8 @@ function syncPartnersMarqueeShift() {
     const width = source.getBoundingClientRect().width;
     if (width <= 0) return;
 
-    gallery.style.setProperty('--mpx-partners-shift', `-${width}px`);
-    gallery.style.setProperty('--mpx-partners-duration', `${Math.max(width / pxPerSecond, 12)}s`);
+    gallery.style.setProperty('--spa-partners-shift', `-${width}px`);
+    gallery.style.setProperty('--spa-partners-duration', `${Math.max(width / pxPerSecond, 12)}s`);
   });
 }
 
@@ -308,7 +308,7 @@ function syncLayoutMetrics() {
 }
 
 function initTopicFilters() {
-  document.querySelectorAll('[data-mpx-topic-filter]').forEach((select) => {
+  document.querySelectorAll('[data-spa-topic-filter]').forEach((select) => {
     select.addEventListener('change', () => {
       const url = select.value;
 
@@ -349,10 +349,10 @@ async function copyText(text) {
 
 function initModuleCopy() {
   document.addEventListener('click', async (event) => {
-    const btn = event.target.closest('[data-mpx-copy]');
+    const btn = event.target.closest('[data-spa-copy]');
     if (!btn) return;
 
-    const payload = (btn.getAttribute('data-mpx-payload') || '').trim();
+    const payload = (btn.getAttribute('data-spa-payload') || '').trim();
     const markup = decodeModulePayload(payload);
     if (!markup) return;
 

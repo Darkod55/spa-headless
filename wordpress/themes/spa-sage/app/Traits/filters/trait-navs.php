@@ -145,7 +145,7 @@ trait navs
             $classes = ['nav-link'];
 
             $has_children = in_array('menu-item-has-children', $item->classes ?? [], true);
-            $is_social = 'social_navigation' === ($args->theme_location ?? '') || ($args->menu->slug ?? '') === 'footer-menu-socials';
+            $is_social = 'footer-social' === ($args->theme_location ?? '') || ($args->menu->slug ?? '') === 'footer-menu-socials';
 
             // Off-canvas links stack full-width, with the (optional) chevron pushed to the right.
             if (! empty($args->offcanvas)) {
@@ -256,7 +256,7 @@ trait navs
                 );
             }
 
-            if ('social_navigation' !== ($args->theme_location ?? '') && ($args->menu->slug ?? '') !== 'footer-menu-socials') {
+            if ('footer-social' !== ($args->theme_location ?? '') && ($args->menu->slug ?? '') !== 'footer-menu-socials') {
                 return $title;
             }
 

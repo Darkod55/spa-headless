@@ -138,7 +138,7 @@
   form.brand-form .ff-el-form-control,
   .bg-primary .fluentform .ff-el-form-control,
   .bg-secondary .fluentform .ff-el-form-control,
-  .mpx-columns-section--gradient .fluentform .ff-el-form-control {
+  .spa-columns-section--gradient .fluentform .ff-el-form-control {
     border-color: transparent !important;
   }
 
@@ -243,8 +243,8 @@
   .bg-primary .fluentform .ff-el-input--label label,
   .bg-secondary .fluentform .ff-el-input--label,
   .bg-secondary .fluentform .ff-el-input--label label,
-  .mpx-columns-section--gradient .fluentform .ff-el-input--label,
-  .mpx-columns-section--gradient .fluentform .ff-el-input--label label {
+  .spa-columns-section--gradient .fluentform .ff-el-input--label,
+  .spa-columns-section--gradient .fluentform .ff-el-input--label label {
     color: var(--color-white);
   }
 
@@ -258,8 +258,8 @@
   .bg-primary .fluentform .ff-custom_html,
   .bg-secondary .fluentform .ff-el-help,
   .bg-secondary .fluentform .ff-custom_html,
-  .mpx-columns-section--gradient .fluentform .ff-el-help,
-  .mpx-columns-section--gradient .fluentform .ff-custom_html {
+  .spa-columns-section--gradient .fluentform .ff-el-help,
+  .spa-columns-section--gradient .fluentform .ff-custom_html {
     color: color-mix(in srgb, var(--color-white) 75%, transparent);
   }
 
@@ -267,7 +267,7 @@
   .fluentform:has(form.brand-form) .ff-message-success,
   .bg-primary .fluentform .ff-message-success,
   .bg-secondary .fluentform .ff-message-success,
-  .mpx-columns-section--gradient .fluentform .ff-message-success {
+  .spa-columns-section--gradient .fluentform .ff-message-success {
     color: var(--color-white);
   }
 
@@ -276,7 +276,7 @@
   form.brand-form .text-danger,
   .bg-primary .fluentform .text-danger,
   .bg-secondary .fluentform .text-danger,
-  .mpx-columns-section--gradient .fluentform .text-danger {
+  .spa-columns-section--gradient .fluentform .text-danger {
     color: #ffb4b4;
   }
 }

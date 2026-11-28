@@ -4,7 +4,7 @@ BlockStudio 7.7.x. Patterns follow reusable fields plus a populate dataset, not 
 
 ## Dataset
 
-`wordpress/themes/spa-headless/inc/colors.php` hooks `blockstudio/blocks/attributes/populate` and registers `brandColours`. Each option is:
+`wordpress/themes/spa-sage/app/Traits/blocks/trait-blocks.php` hooks `blockstudio/blocks/attributes/populate` and registers `textColours`, `tagBgColours`, and `bgColours`. Each option is:
 
 ```php
 array(
@@ -20,8 +20,8 @@ Hex stays in CSS. See [design-tokens.md](design-tokens.md).
 
 | Field | File | Id | Notes |
 | --- | --- | --- | --- |
-| `custom/background-colour` | `blockstudio/fields/background-colour/field.json` | `background` | Colour picker, `brandColours`, `disableCustomColors`, `clearable: false` |
-| `custom/text-colour` | `blockstudio/fields/text-colour/field.json` | `text_colour` | Same picker. `set` adds `has-text-{attributes.text_colour.slug}` |
+| `custom/background-colour` | `spa-sage/app/blocks/fields/background-colour/field.json` | `bg_colour` | Dataset `bgColours`. Heroes override the id to `background` so the Astro contract stays `background`. |
+| `custom/text-colour` | `spa-sage/app/blocks/fields/text-colour/field.json` | `text_colour` | No `set`. Reading `.slug` when the value is empty blanks the editor canvas. Astro applies `has-text-{slug}`. |
 | `custom/section` | `blockstudio/fields/section/field.json` | `removeBottomPadding`, `accentBg` | Shared section toggles |
 
 Use one from a block:
@@ -30,7 +30,7 @@ Use one from a block:
 {
   "type": "custom/background-colour",
   "overrides": {
-    "background": { "default": "var(--color-navy)" }
+    "bg_colour": { "id": "background", "default": "var(--color-navy)" }
   }
 }
 ```

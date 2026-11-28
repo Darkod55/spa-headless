@@ -42,7 +42,7 @@ Symptoms:
 | `app/Classes/MpxBlocks.php` | Wires the two methods in the constructor |
 | `resources/css/theme.css` | Hub: imports design system + safelist + `@source inline(...)` for one-off post-content classes |
 | `resources/css/theme/editor-safelist.css` | **New** — `@source inline(...)` for editor spacing utilities |
-| `resources/css/components/mpx-subheading.css` | Example of Vite-only CSS **outside** `theme/` so the editor bridge does not re-emit it |
+| `resources/css/components/spa-subheading.css` | Example of Vite-only CSS **outside** `theme/` so the editor bridge does not re-emit it |
 | `blockstudio.json` | `tailwind.enabled: true` (unchanged — still needed for editor) |
 | `resources/css/app.css` | Vite entry — `@import "./theme.css"` + `@source` globs for Blade/PHP |
 
@@ -115,7 +115,7 @@ If the project already has `bridgeTailwindConfig()` feeding `resources/css/theme
  * CSS that must ship only via Vite (not re-emitted into Blockstudio's
  * inline <style id="blockstudio-tailwind-editor">) should live outside
  * theme/ and be @import'ed from theme.css — see
- * resources/css/components/mpx-subheading.css.
+ * resources/css/components/spa-subheading.css.
  *
  * @font-face rules are stripped: font files are fingerprinted into
  * public/build by Vite; relative font urls would 404 in Blockstudio's
@@ -209,7 +209,7 @@ Add new one-offs here when editors use Additional CSS class(es) for non-spacing 
 Rules that must **never** be re-emitted by Blockstudio’s editor bridge belong **outside** `resources/css/theme/` and are imported from `theme.css`:
 
 ```
-resources/css/components/mpx-subheading.css  →  @import in theme.css
+resources/css/components/spa-subheading.css  →  @import in theme.css
 ```
 
 The `bridgeTailwindConfig()` glob is `theme/*.css` only — files in `components/` are Vite-only.
@@ -263,7 +263,7 @@ Editor checks:
 - `BLOCKSTUDIO-7.md` — Tailwind bridge overview (update narrative if it still says frontend Blockstudio is the fallback)
 - `docs/design-tokens.md` — when adding colours, also update `theme.css` `@source inline`
 - `.cursor/rules/hrconsulting-design-system.mdc` — dual Tailwind note
-- `resources/css/components/mpx-subheading.css` — Vite-only component pattern
+- `resources/css/components/spa-subheading.css` — Vite-only component pattern
 
 ---
 

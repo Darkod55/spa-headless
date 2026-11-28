@@ -1,12 +1,12 @@
 # BlockStudio blocks
 
-`block.json` is the source of truth. BlockStudio registers every file under `wordpress/themes/spa-headless/blockstudio/` that has a `blockstudio` key. `blockstudio.json` lives in the theme. PHP templates render the editor and the WordPress preview. Astro renders the public site. Both must emit the same class names and share one CSS file.
+`block.json` is the source of truth. The active theme is `wordpress/themes/spa-sage`. BlockStudio registers every `block.json` under `app/blocks` (the `blockstudio/path` filter). Shared fields are `app/blocks/fields`. Core extensions are `app/blocks/extensions` and are not Astro blocks. `wordpress/themes/spa-headless` is deprecated: leave it in the repo, do not add blocks there. PHP templates render the editor. Astro renders the public site. Both must emit the same class names and share one CSS file.
 
 BlockStudio on this project is 7.7.x (Local WP is 7.7.15).
 
 ## Create a block
 
-1. Add `wordpress/themes/spa-headless/blockstudio/sections/<slug>/block.json`.
+1. Add `wordpress/themes/spa-sage/app/blocks/<slug>/block.json`.
    - `$schema`: `https://blockstudio.dev/schema/block`
    - `name`: `spa/<slug>` (one slash)
    - Fields live in `blockstudio.attributes` with `id` and `type`.
@@ -14,7 +14,7 @@ BlockStudio on this project is 7.7.x (Local WP is 7.7.15).
    - Reuse a field with `{ "type": "custom/<name>" }`. Overrides change the default. See [blockstudio-fields-and-extensions.md](blockstudio-fields-and-extensions.md).
    - `style` and `editorStyle` should point at the same CSS file the Astro component imports.
 2. Add `index.php` beside it. Attributes are `$a`. Escape output. One `<InnerBlocks />` per block. The public markup is not this file's job, but the class structure must match the Astro component.
-3. Put the CSS in the theme (`assets/`) so the editor can enqueue it, and import that same file from Astro.
+3. Put the CSS in `resources/css/components/` so the block `style` / `editorStyle` and the Astro import are the same file. `scripts/generate-block-types.ts` reads sage `app/blocks` for new blocks and still reads the deprecated theme for `spa/hero`, `spa/section`, and `spa/card-grid`. It skips `fields`, `extensions`, and the shared `hero-banner` template folder.
 4. Add `astro/src/components/blocks/spa/<PascalSlug>.astro` with a `<slot />`. Use the generated attribute type. The file must mention every field id.
 5. Add `astro/src/components/blocks/spa/<slug>.contract.ts`:
 

@@ -1,15 +1,19 @@
 <footer class="site-footer border-t border-white/20 bg-dark-blue text-white">
   <div class="px-clamp py-clamp-xl">
     <div class="container grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10 xl:gap-14">
-      {{-- Newsletter --}}
-      <div class="footer-signup mx-auto w-full max-w-sm lg:mx-0">
-        <div id="fd-form-6a888c4b092d2b69f165dfc1"></div>
-        <script>
-          window.fd('form', {
-            formId: '6a888c4b092d2b69f165dfc1',
-            containerEl: '#fd-form-6a888c4b092d2b69f165dfc1'
-          });
-        </script>
+      {{-- Legal --}}
+      <div class="footer-legal mx-auto w-full max-w-sm lg:mx-0">
+        @if (has_nav_menu('legal'))
+          <nav class="footer-legal-nav" aria-label="{{ wp_get_nav_menu_name('legal') }}">
+            {!! wp_nav_menu([
+              'theme_location' => 'legal',
+              'menu_class' => 'flex flex-col gap-2',
+              'container' => false,
+              'depth' => 1,
+              'echo' => false,
+            ]) !!}
+          </nav>
+        @endif
       </div>
 
       {{-- Logo + primary links --}}
@@ -22,10 +26,10 @@
           ]) !!}
         </div>
 
-        @if (has_nav_menu('footer_navigation'))
-          <nav class="footer-menu-nav" aria-label="{{ wp_get_nav_menu_name('footer_navigation') }}">
+        @if (has_nav_menu('footer'))
+          <nav class="footer-menu-nav" aria-label="{{ wp_get_nav_menu_name('footer') }}">
             {!! wp_nav_menu([
-              'theme_location' => 'footer_navigation',
+              'theme_location' => 'footer',
               'menu_class' => 'footer-menu flex flex-wrap items-center justify-center gap-x-5 gap-y-3',
               'container' => false,
               'depth' => 1,
@@ -36,12 +40,12 @@
       </div>
 
       {{-- Social --}}
-      @if (has_nav_menu('social_navigation'))
+      @if (has_nav_menu('footer-social'))
         <div class="flex flex-col items-center gap-4 lg:items-end">
-          <nav class="footer-nav" aria-label="{{ wp_get_nav_menu_name('social_navigation') }}">
-            <h3 class="footer-nav__title text-center lg:text-right">{{ __('Follow Edy', 'sage') }}</h3>
+          <nav class="footer-nav" aria-label="{{ wp_get_nav_menu_name('footer-social') }}">
+            <h3 class="footer-nav__title text-center lg:text-right">{{ __('Follow us', 'sage') }}</h3>
             {!! wp_nav_menu([
-              'theme_location' => 'social_navigation',
+              'theme_location' => 'footer-social',
               'menu_class' => 'footer-social flex flex-wrap items-center justify-center gap-2.5 lg:justify-end',
               'container' => false,
               'depth' => 1,
@@ -58,7 +62,7 @@
   <div class="footer-bar border-t border-white/20 px-clamp py-6 text-center text-sm text-white/55">
     <p class="m-0">
       {{ sprintf(
-        __('© %2$s Edy Nathan. All Rights Reserved.', 'sage'),
+        __('© %2$s The Square Peg Agency. All Rights Reserved.', 'sage'),
         '2025',
         date('Y')
       ) }}

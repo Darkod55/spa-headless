@@ -5,7 +5,7 @@
  * uncomment the import in theme.css.
  */
 
-.mpx-faqs-grid.grid-auto-cards {
+.spa-faqs-grid.grid-auto-cards {
   --grid-min-mobile: 100%;
   --grid-min-tablet: 100%;
   --grid-min-desktop: 100%;
@@ -14,7 +14,7 @@
   align-items: stretch;
 }
 
-.mpx-faqs-grid.grid-auto-cards.is-two-columns {
+.spa-faqs-grid.grid-auto-cards.is-two-columns {
   --grid-min-tablet: calc(50% - 20px * 0.5);
   --grid-min-desktop: calc(50% - 20px * 0.5);
 
@@ -24,12 +24,12 @@
   }
 }
 
-.mpx-faqs-grid.is-white-cards .mpx-faq-card {
+.spa-faqs-grid.is-white-cards .spa-faq-card {
   background-color: var(--color-white);
 }
 
 @layer components {
-  .mpx-faq-card {
+  .spa-faq-card {
     display: flex;
     flex-direction: column;
     align-self: stretch;
@@ -44,7 +44,7 @@
     }
   }
 
-  .mpx-faq-card__question {
+  .spa-faq-card__question {
     margin-bottom: 0.75rem;
     font-family: var(--font-heading);
     font-size: clamp(1.375rem, 1.0012rem + 0.7797vw, 1.625rem);
@@ -53,7 +53,7 @@
     color: var(--color-primary);
   }
 
-  .mpx-faq-card__answer {
+  .spa-faq-card__answer {
     flex: 1 1 auto;
     min-width: 0;
     font-size: var(--font-size-base);

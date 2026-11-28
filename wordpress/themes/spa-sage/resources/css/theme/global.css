@@ -150,9 +150,9 @@ body.scrolled #main-header {
 }
 
 /* Bleed / post cards: square image edges (card clips via overflow + radius). */
-.mpx-card--image .wp-block-image img,
-.mpx-post-card .wp-block-image img,
-.mpx-post-card__image {
+.spa-card--image .wp-block-image img,
+.spa-post-card .wp-block-image img,
+.spa-post-card__image {
   border-radius: 0;
 }
 
@@ -160,7 +160,7 @@ body.scrolled #main-header {
  * Partners slider logos — theme fallback so size wins even if the
  * Blockstudio block stylesheet loses the cascade to Preflight/img attrs.
  */
-.mpx-partners-slider .wp-block-gallery img {
+.spa-partners-slider .wp-block-gallery img {
   display: block !important;
   width: auto !important;
   max-width: 10rem !important;
@@ -170,7 +170,7 @@ body.scrolled #main-header {
 }
 
 @media (max-width: 767px) {
-  .mpx-partners-slider .wp-block-gallery img {
+  .spa-partners-slider .wp-block-gallery img {
     max-width: 8rem !important;
     height: 2.25rem !important;
     max-height: 2.25rem !important;

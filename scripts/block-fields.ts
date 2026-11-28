@@ -14,6 +14,7 @@ export interface FieldNode {
   multiple?: boolean;
   attributes?: FieldNode[];
   tabs?: Array<{ attributes?: FieldNode[] }>;
+  overrides?: Record<string, Partial<FieldNode>>;
 }
 
 export interface CollectedField {
@@ -24,6 +25,13 @@ export interface CollectedField {
 }
 
 const STRUCTURAL = new Set(["tabs", "group", "message"]);
+
+function applyFieldOverride(child: FieldNode, overrides?: Record<string, Partial<FieldNode>>): FieldNode {
+  if (!child.id || !overrides?.[child.id]) {
+    return child;
+  }
+  return { ...child, ...overrides[child.id] };
+}
 
 export function collectFields(
   nodes: FieldNode[],
@@ -52,7 +60,8 @@ export function collectFields(
       if (stack.includes(name)) {
         throw new Error(`Custom field cycle: ${[...stack, name].join(" -> ")}`);
       }
-      fields.push(...collectFields(resolveCustom(name), resolveCustom, prefix, [...stack, name]));
+      const resolved = resolveCustom(name).map((child) => applyFieldOverride(child, node.overrides));
+      fields.push(...collectFields(resolved, resolveCustom, prefix, [...stack, name]));
       continue;
     }
 

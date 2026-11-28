@@ -3,13 +3,16 @@
 WordPress authors the content. Astro renders the public site. Nothing in this repo deploys.
 
 ```
-wordpress/themes/spa-headless/          BlockStudio blocks, Customizer, menus
+wordpress/themes/spa-sage/             active Sage theme (blocks in app/blocks)
+wordpress/themes/spa-headless/          deprecated theme, kept in the repo
 wordpress/plugins/spa-headless-core/    REST, CORS, preview, meta, block normalizer
 astro/                                  public site
 scripts/generate-block-types.ts         block.json → astro/src/generated/blocks.ts
 ```
 
-Blocks live in the theme because BlockStudio only auto-registers `blockstudio/` on the active theme. The plugin does not register blocks. It turns `parse_blocks()` into the JSON Astro renders.
+The active theme is spa-sage. BlockStudio's scan root is `app/blocks` (`blockstudio/path` in `app/Traits/blocks/trait-blocks.php`). `spa/hero-banner-main` and `spa/hero-banner-default` live there. Older blocks (`spa/hero`, `spa/section`, `spa/card-grid`) still live in the deprecated spa-headless theme and are still generated so the Astro components keep typechecking. Do not add new blocks to spa-headless.
+
+The plugin does not register blocks. It turns `parse_blocks()` into the JSON Astro renders. It reads theme mods (`custom_logo`, `spa_alt_logo`, `spa_alt_logo_in_footer`, `spa_announcement_*`) and the menu locations `primary`, `footer`, `legal`, `footer-social` from whichever theme is active.
 
 ## Request flow
 

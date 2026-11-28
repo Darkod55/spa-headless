@@ -2,7 +2,7 @@
 
 WordPress runs in [Local WP](https://localwp.com/). Astro runs at http://localhost:4321 and reads `WP_URL` from `astro/.env`. Open this repo in PhpStorm, not a copy inside Local, so edits hit the symlinks.
 
-You need PHP 8.2+, WordPress 6.5+, Node 22+, and pnpm 10. BlockStudio on the Local site is 7.7.x (7.7.15 is the known-good version).
+You need PHP 8.3+ (Sage), WordPress 6.6+, Node 22+, and pnpm 10. BlockStudio on the Local site is 7.7.x (7.7.15 is the known-good version). The theme also needs Composer and npm inside `wordpress/themes/spa-sage`. `vendor/`, `node_modules/`, and `public/build/` stay gitignored.
 
 ## Plugins
 
@@ -20,11 +20,24 @@ REPO="$HOME/code/spa-headless"
 ln -s "$REPO/wordpress/plugins/spa-headless-core" \
   "$LOCAL_WP/wp-content/plugins/spa-headless-core"
 
-ln -s "$REPO/wordpress/themes/spa-headless" \
-  "$LOCAL_WP/wp-content/themes/spa-headless"
+ln -sfn "$REPO/wordpress/themes/spa-sage" \
+  "$LOCAL_WP/wp-content/themes/spa-sage"
 ```
 
-Then in wp-admin: activate **Square Peg Headless Core** and the **Square Peg Headless** theme. Settings → Permalinks → **Post name**. Create a page with slug `blog` and set it as the posts page so posts are `/blog/{slug}`.
+Inside the theme, once per machine:
+
+```bash
+cd "$REPO/wordpress/themes/spa-sage"
+composer install
+npm install
+npm run build
+```
+
+`npm run dev` is the Vite watcher while you edit theme CSS. The Astro site does not use that build. Hero and brand CSS are imported from `resources/css` directly.
+
+Then in wp-admin: activate **Square Peg Headless Core** and the **Square Peg Agency** theme (spa-sage). The old Square Peg Headless theme is deprecated; leave it inactive. Settings → Permalinks → **Post name**. Create a page with slug `blog` and set it as the posts page so posts are `/blog/{slug}`.
+
+Switching themes does not copy theme mods. Re-assign Primary, Footer, Legal, and Footer social, upload the logo and the alternative logo, tick Show in footer, and set the announcement bar again.
 
 Paste `wordpress/wp-config.snippet.php` into the site's `wp-config.php` and set a long random `SPA_PREVIEW_TOKEN`. Do not commit that value.
 

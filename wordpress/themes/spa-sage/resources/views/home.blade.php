@@ -31,7 +31,7 @@
         </p>
       @else
         <div
-          class="blog-posts-list mpx-cards grid-auto-cards grid-auto-cards-gap"
+          class="blog-posts-list spa-cards grid-auto-cards grid-auto-cards-gap"
           style="{!! esc_attr($gridStyle) !!}"
         >
           @while (have_posts())

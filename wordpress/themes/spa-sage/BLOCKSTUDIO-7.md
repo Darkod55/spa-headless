@@ -1,5 +1,7 @@
 # Blockstudio 7
 
+Client examples in this note (Edy Nathan sections, Operetta, Flodesk) are retired. The active palette, menus, and blocks are in [docs/blocks.md](docs/blocks.md) and the repo [AGENTS.md](../../../AGENTS.md). The scan root below is still correct.
+
 This theme uses **Blockstudio 7** (currently **7.6.6**) to build custom blocks. The plugin is installed and activated directly in `wp-content/plugins/blockstudio` (there is no root-level `composer.json` managing it in this project; plugins are gitignored — see repo `AGENTS.md`).
 
 ## Theme configuration (already done)
@@ -8,8 +10,8 @@ This theme uses **Blockstudio 7** (currently **7.6.6**) to build custom blocks. 
 - **User access**: only users with the **administrator** role can use the Blockstudio editor, configured via `blockstudio.json`'s `users.roles`.
 - **Populate options**: colours, padding, button types, sprite icons, etc. are provided via the `blockstudio/blocks/attributes/populate` filter (plain single-array signature). Values are aligned with the theme design tokens in `resources/css/theme/` (CSS variables + `btn-*` / `py-clamp*` class names).
 - **Build cache disabled** (`blockstudio.json` → `cache.enabled: false`): Blockstudio has a file-backed "block discovery" cache (`Blockstudio\Build_Cache`, on by default upstream) that caches the *expanded* attribute schema for every block — including `populate`-resolved options for `select`/`color`/etc fields (e.g. `populateTextColours()` in `trait-blocks.php`). Its cache key only fingerprints files under the blocks/fields scan roots (`app/blocks/**`) plus a handful of WP lifecycle hooks — it has no way to know that an arbitrary theme PHP file like `trait-blocks.php` changed, so editing a `populate*()` function silently serves stale data until something else busts the cache. Disabled here so populate changes always show up immediately; re-enable for production only with a bust plan (touch a file under `app/blocks/**` after changing populate PHP).
-- **Inner blocks**: `mpxRemoveInnerBlocksWrapper()` turns off the frontend InnerBlocks wrapper for all current `mpx/*` section and partial blocks (hero, columns, one-column, partners-slider, and every `mpx/partial-*`). When adding a new `mpx/*` block, add its name to that allowlist. The installed plugin fires both the legacy `blockstudio/blocks/components/innerblocks/frontend/wrap` hook and the newer `inner_blocks` one — either works.
-- **Tailwind bridge**: `blockstudio.json` has `tailwind.enabled: true`, which runs Blockstudio's own server-side Tailwind compiler (TailwindPHP) for the block editor preview and as a frontend safety net for dynamically-built class names. `bridgeTailwindConfig()` hooks `blockstudio/tailwind/css` and globs `resources/css/theme/*.css` (not the `@import` hub `theme.css`), stripping `@font-face` so Vite-fingerprinted fonts aren't double-registered / 404 in Blockstudio's CSS context. Rules that must not be re-emitted into the inline `<style id="blockstudio-tailwind">` live outside `theme/` and are imported from `theme.css` (e.g. `resources/css/components/mpx-subheading.css`).
+- **Inner blocks**: `mpxRemoveInnerBlocksWrapper()` turns off the frontend InnerBlocks wrapper for all current `spa/*` section and partial blocks (hero, columns, one-column, partners-slider, and every `spa/partial-*`). When adding a new `spa/*` block, add its name to that allowlist. The installed plugin fires both the legacy `blockstudio/blocks/components/innerblocks/frontend/wrap` hook and the newer `inner_blocks` one — either works.
+- **Tailwind bridge**: `blockstudio.json` has `tailwind.enabled: true`, which runs Blockstudio's own server-side Tailwind compiler (TailwindPHP) for the block editor preview and as a frontend safety net for dynamically-built class names. `bridgeTailwindConfig()` hooks `blockstudio/tailwind/css` and globs `resources/css/theme/*.css` (not the `@import` hub `theme.css`), stripping `@font-face` so Vite-fingerprinted fonts aren't double-registered / 404 in Blockstudio's CSS context. Rules that must not be re-emitted into the inline `<style id="blockstudio-tailwind">` live outside `theme/` and are imported from `theme.css` (e.g. `resources/css/components/spa-subheading.css`).
 
 ## Block JSON schema
 
@@ -63,7 +65,7 @@ The default/simplest option — an `index.php` that echoes HTML directly, with t
 ## Registering blocks & attributes
 
 - Block discovery root: `app/blocks` (set in `mpxBlockstudioPath()`). A block is a folder containing `block.json` + one template file (`index.php` / `index.blade.php` / `index.twig`) + optional `style.css`/`script.js`/etc, auto-enqueued only when the block is used on the page. Blocks, overrides, and extensions (`blockstudio.extend: true` JSON files, e.g. `app/blocks/extensions/heading.json`) can live **anywhere** under this root, at any nesting depth — Blockstudio reads the block/extend name from the JSON content itself, not the folder path, and discovery recurses fully (see `app/blocks/hero`, `app/blocks/partial/partial-column`).
-- **Custom fields are the one exception to that**: `field.json` reusable-field discovery (`custom/{name}` references, e.g. `custom/typography`) is *not* recursive — it only ever looks at a hard-coded `{scan root}/fields/` path (`Build::discover_local_custom_fields()`: `$fields_path = $path . '/fields'`). Fields **must** live directly at `app/blocks/fields/{name}/field.json`; nesting them any deeper (e.g. under a namespace subfolder) means they're silently never found, with no warning. (This bit us once already — fields originally lived at `app/blocks/mpx/fields/`, one level too deep, and `custom/typography` resolved to nothing until they were moved to `app/blocks/fields/`.)
+- **Custom fields are the one exception to that**: `field.json` reusable-field discovery (`custom/{name}` references, e.g. `custom/typography`) is *not* recursive — it only ever looks at a hard-coded `{scan root}/fields/` path (`Build::discover_local_custom_fields()`: `$fields_path = $path . '/fields'`). Fields **must** live directly at `app/blocks/fields/{name}/field.json`; nesting them any deeper (e.g. under a namespace subfolder) means they're silently never found, with no warning. (This bit us once already — fields originally lived at `app/blocks/spa/fields/`, one level too deep, and `custom/typography` resolved to nothing until they were moved to `app/blocks/fields/`.)
 - Attributes live under `blockstudio.attributes` in `block.json`. Field type enum (installed schema, `wp-content/plugins/blockstudio/schemas/block.json`): `attributes, block, checkbox, classes, code, color, date, datetime, files, gradient, html-tag, icon, link, message, number, radio, range, select, tabs, text, textarea, toggle, repeater, richtext, unit, wysiwyg`. There is **no dedicated `image` type** — image/media pickers use `files` with `allowedTypes: ["image"]`, `multiple: false`, `returnFormat: "object"` (returns `['ID', 'title', 'alt', 'caption', 'description', 'href', 'url', 'sizes']`, verified against `Block::get_attachment_data()`).
 - `populate` on `checkbox`/`radio`/`select` fields can source options from a WP query, an arbitrary function, an external fetch, or a `blockstudio/blocks/attributes/populate` custom dataset (`{"populate": {"type": "custom", "custom": "myKey"}}` ↔ `$options['myKey'] = [...]` in the filter — pattern behind `populateButtonTypes()`, `populateTextColours()`, `populateSpriteIcons()`, etc. in `trait-blocks.php`).
   - Populate datasets are reconciled with the design system: colours use `var(--color-*)` / `bg-*` slugs, buttons use `btn-primary` / `btn-secondary` / `btn-primary-alt` / `btn-white`, section padding uses `py-clamp*` utilities, icons come from `footer-icons.blade.php` symbol ids. Prefer reusable fields under `app/blocks/fields/` (`custom/section_padding`, `custom/background`, `custom/grid_controls`, …) over duplicating inline selects.
@@ -76,7 +78,7 @@ The default/simplest option — an `index.php` that echoes HTML directly, with t
 - **Islands**: split a block into a cache-safe placeholder + a client-hydrated/fetched fragment (`"island": {"mode": "dynamic"|"hydrate", "cache": ...}`). For content that must be crawlable/SEO-relevant, do not use a dynamic island — it renders after the initial HTML. Reserve islands for genuinely personalized/deferred content (cart state, account UI).
 - **RPC**: an `rpc.php` returning named PHP functions, called from the client via the auto-injected `bs.fn(name, params)` helper — a lightweight alternative to hand-rolling REST routes for simple block-scoped server actions (form submissions, small AJAX lookups).
 
-None of these are used by current `mpx/*` blocks, but they're the right tool once we build anything with genuine client-side state (e.g. a filterable listing, a like button, a multi-step form beyond what Fluent Forms already covers).
+None of these are used by current `spa/*` blocks, but they're the right tool once we build anything with genuine client-side state (e.g. a filterable listing, a like button, a multi-step form beyond what Fluent Forms already covers).
 
 ## Pages, Patterns, and Site Templates — what applies here
 
@@ -107,22 +109,22 @@ Not configured yet beyond the discovery-cache override (site is still in early l
 
 One-line inventory + parent→child matrix: [`docs/blocks.md`](docs/blocks.md).
 
-### `mpx/hero`
+### `spa/hero`
 
-[`app/blocks/hero/`](app/blocks/hero) — full-width hero with optional background image + fixed `hero-overlay`, wrapping `<InnerBlocks>` pre-templated with two [`mpx/partial-column`](app/blocks/partial/partial-column) children: left = `core/heading` / `core/paragraph` / `mpx/partial-button`; right = Fluent Forms (`fluentfom/guten-block` — typo in the Fluent Forms plugin itself, confirmed in its Gutenberg block registration).
+[`app/blocks/hero/`](app/blocks/hero) — full-width hero with optional background image + fixed `hero-overlay`, wrapping `<InnerBlocks>` pre-templated with two [`spa/partial-column`](app/blocks/partial/partial-column) children: left = `core/heading` / `core/paragraph` / `spa/partial-button`; right = Fluent Forms (`fluentfom/guten-block` — typo in the Fluent Forms plugin itself, confirmed in its Gutenberg block registration).
 
 Notable decisions:
 
 - `.blade.php` via the Acorn bridge; section attrs come from reusable fields (`custom/section_padding`, `custom/background`, `custom/grid_controls`) plus a `flip_columns` toggle.
 - Background image uses `wp_get_attachment_image()` (not `bs_media_image()`), eager + high fetch priority for LCP.
 - Overlay is a fixed gradient (`hero-overlay` in `resources/css/theme/sections.css`) — not an editor field.
-- Content is InnerBlocks of native / partial blocks, not custom richtext/button attributes. Top-level `allowedBlocks` is `["mpx/partial-column"]`; **no `templateLock`** (locks cascade and would block free editing inside columns).
+- Content is InnerBlocks of native / partial blocks, not custom richtext/button attributes. Top-level `allowedBlocks` is `["spa/partial-column"]`; **no `templateLock`** (locks cascade and would block free editing inside columns).
 - Layout uses the flex utility `grid-auto-cards` (+ `grid-auto-cards-gap` / `grid-auto-cards-nowrap`) with CSS vars from Grid Controls (`cols_*`, gaps) resolved via `\App\helpers()->resolveGridTrackMin()` — not CSS `auto-fill`/`minmax` and not `cardMinDesktop`/`cardMinMobile` attributes.
 
-### `mpx/partial-column`
+### `spa/partial-column`
 
 [`app/blocks/partial/partial-column/`](app/blocks/partial/partial-column) — grid cell: `useBlockProps` + `<InnerBlocks />`, frontend wrap removed. Attributes:
 
 - `allowedBlocks` (hidden text) — comma-separated names set from the parent template, not edited by content editors.
 
-Used by `mpx/columns` (two columns; **widths live on the parent** via `custom/column_widths` → `--col-1-*` / `--col-2-*` on the section). Mobile is always full width in CSS. Cards keep per-item `custom/grid_item_width` + parent `custom/grid_controls`.
+Used by `spa/columns` (two columns; **widths live on the parent** via `custom/column_widths` → `--col-1-*` / `--col-2-*` on the section). Mobile is always full width in CSS. Cards keep per-item `custom/grid_item_width` + parent `custom/grid_controls`.

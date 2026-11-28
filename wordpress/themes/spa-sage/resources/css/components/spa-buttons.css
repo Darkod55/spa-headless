@@ -1,5 +1,5 @@
 /**
- * mpx/partial-buttons — inline row of theme CTAs.
+ * spa/partial-buttons — inline row of theme CTAs.
  *
  * Kept outside resources/css/theme/ so bridgeTailwindConfig() does not
  * re-emit it into Blockstudio's inline Tailwind. Vite loads via theme.css.
@@ -10,11 +10,11 @@
  */
 
 @layer components {
-  .mpx-buttons,
-  .mpx-buttons > .block-editor-inner-blocks > .block-editor-block-list__layout,
-  .mpx-buttons > .block-editor-block-list__layout,
-  .mpx-buttons.block-editor-block-list__layout,
-  #blockstudio-replace-innerblocks.mpx-buttons {
+  .spa-buttons,
+  .spa-buttons > .block-editor-inner-blocks > .block-editor-block-list__layout,
+  .spa-buttons > .block-editor-block-list__layout,
+  .spa-buttons.block-editor-block-list__layout,
+  #blockstudio-replace-innerblocks.spa-buttons {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: wrap;
@@ -23,10 +23,10 @@
     width: 100%;
   }
 
-  .mpx-buttons .wp-block-button,
-  .mpx-buttons [data-type="core/button"],
-  .mpx-buttons .wp-block-button.w-full,
-  .mpx-buttons .wp-block-button.flex {
+  .spa-buttons .wp-block-button,
+  .spa-buttons [data-type="core/button"],
+  .spa-buttons .wp-block-button.w-full,
+  .spa-buttons .wp-block-button.flex {
     display: block;
     width: auto !important;
     max-width: 100%;
@@ -34,8 +34,8 @@
     flex: 0 0 auto;
   }
 
-  .mpx-buttons .wp-block-button > .wp-block-button__link,
-  .mpx-buttons .wp-block-button > a.btn {
+  .spa-buttons .wp-block-button > .wp-block-button__link,
+  .spa-buttons .wp-block-button > a.btn {
     width: auto !important;
   }
 }

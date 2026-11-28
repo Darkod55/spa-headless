@@ -3,7 +3,7 @@
  */
 
 @layer components {
-  .mpx-event-hero__nav {
+  .spa-event-hero__nav {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -14,7 +14,7 @@
     border-bottom: 1px solid color-mix(in srgb, var(--color-white) 18%, transparent);
   }
 
-  .mpx-event-hero__nav-link {
+  .spa-event-hero__nav-link {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
@@ -39,7 +39,7 @@
     }
   }
 
-  .mpx-event-hero__layout {
+  .spa-event-hero__layout {
     display: grid;
     gap: 1.5rem;
     align-items: start;
@@ -56,14 +56,14 @@
     }
   }
 
-  .mpx-event-hero__media {
+  .spa-event-hero__media {
     position: relative;
     width: 100%;
     max-width: 22rem;
   }
 
-  .mpx-event-hero__image,
-  .mpx-event-hero__placeholder {
+  .spa-event-hero__image,
+  .spa-event-hero__placeholder {
     display: block;
     overflow: hidden;
     width: 100%;
@@ -72,11 +72,11 @@
     object-fit: cover;
   }
 
-  .mpx-event-hero__placeholder {
+  .spa-event-hero__placeholder {
     background-color: color-mix(in srgb, var(--color-white) 10%, transparent);
   }
 
-  .mpx-event-hero__badge {
+  .spa-event-hero__badge {
     position: absolute;
     top: 0.75rem;
     right: 0.75rem;
@@ -93,15 +93,15 @@
     line-height: 1.2;
   }
 
-  .mpx-event-hero__badge--online {
+  .spa-event-hero__badge--online {
     background-color: var(--color-navy-light);
   }
 
-  .mpx-event-hero__badge--person {
+  .spa-event-hero__badge--person {
     background-color: var(--color-secondary);
   }
 
-  .mpx-event-hero__body {
+  .spa-event-hero__body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -109,14 +109,14 @@
     min-width: 0;
   }
 
-  .mpx-event-hero__title {
+  .spa-event-hero__title {
     color: var(--color-white);
     font-family: var(--font-heading);
     font-weight: 400;
     line-height: 1.15;
   }
 
-  .mpx-event-hero__host {
+  .spa-event-hero__host {
     color: color-mix(in srgb, var(--color-white) 62%, transparent);
     font-family: var(--font-sans);
     font-size: var(--font-size-sm);
@@ -124,7 +124,7 @@
     line-height: 1.4;
   }
 
-  .mpx-event-hero__date {
+  .spa-event-hero__date {
     color: color-mix(in srgb, var(--color-white) 72%, transparent);
     font-family: var(--font-sans);
     font-size: var(--font-size-sm);
@@ -133,11 +133,11 @@
     line-height: 1.4;
   }
 
-  .mpx-event-hero__register {
+  .spa-event-hero__register {
     margin-top: 0.25rem;
   }
 
-  .mpx-event-body__layout {
+  .spa-event-body__layout {
     display: grid;
     gap: 2.5rem;
     align-items: start;
@@ -148,7 +148,7 @@
     }
   }
 
-  .mpx-event-body__main {
+  .spa-event-body__main {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -156,8 +156,8 @@
     min-width: 0;
   }
 
-  .mpx-event-body__label {
-    --mpx-subheading-line: var(--color-secondary);
+  .spa-event-body__label {
+    --spa-subheading-line: var(--color-secondary);
     margin-bottom: 0;
     color: var(--color-secondary);
     font-size: var(--font-size-sm);
@@ -165,14 +165,14 @@
     text-transform: uppercase;
   }
 
-  .mpx-event-details {
+  .spa-event-details {
     display: grid;
     gap: 0;
     width: 100%;
     margin: 0;
   }
 
-  .mpx-event-details__row {
+  .spa-event-details__row {
     display: grid;
     gap: 0.35rem;
     padding-block: 1rem;
@@ -194,7 +194,7 @@
     }
   }
 
-  .mpx-event-details__label {
+  .spa-event-details__label {
     color: color-mix(in srgb, var(--color-primary) 45%, transparent);
     font-family: var(--font-sans);
     font-size: var(--font-size-xs);
@@ -203,7 +203,7 @@
     text-transform: uppercase;
   }
 
-  .mpx-event-details__value {
+  .spa-event-details__value {
     color: var(--color-primary);
     font-family: var(--font-heading);
     font-size: var(--font-size-base);
@@ -211,7 +211,7 @@
     line-height: 1.45;
   }
 
-  .mpx-event-body__actions {
+  .spa-event-body__actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -219,13 +219,13 @@
     width: 100%;
   }
 
-  .mpx-event-body__actions--after {
+  .spa-event-body__actions--after {
     margin-top: 0.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid color-mix(in srgb, var(--color-primary) 12%, transparent);
   }
 
-  .mpx-event-body__back {
+  .spa-event-body__back {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
@@ -249,14 +249,14 @@
     }
   }
 
-  .mpx-event-aside {
+  .spa-event-aside {
     display: flex;
     flex-direction: column;
     gap: 0;
     min-width: 0;
   }
 
-  .mpx-event-aside__panel {
+  .spa-event-aside__panel {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -266,7 +266,7 @@
     background-color: var(--color-light);
   }
 
-  .mpx-event-aside__eyebrow {
+  .spa-event-aside__eyebrow {
     color: var(--color-secondary);
     font-family: var(--font-sans);
     font-size: var(--font-size-sm);
@@ -275,7 +275,7 @@
     text-transform: uppercase;
   }
 
-  .mpx-event-aside__copy {
+  .spa-event-aside__copy {
     color: color-mix(in srgb, var(--color-primary) 72%, transparent);
     font-family: var(--font-heading);
     font-size: var(--font-size-base);
@@ -284,7 +284,7 @@
     line-height: 1.55;
   }
 
-  .mpx-event-aside__link {
+  .spa-event-aside__link {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;

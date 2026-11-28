@@ -7,7 +7,8 @@ Agents start at [AGENTS.md](AGENTS.md). The recipes are in [docs/](docs/): [arch
 Nothing here deploys. Hosting (WordPress on a `cms.` subdomain, Astro on the public host, a rebuild webhook) comes later.
 
 ```
-wordpress/themes/spa-headless/     BlockStudio blocks (active theme)
+wordpress/themes/spa-sage/        active Sage theme (Square Peg Agency)
+wordpress/themes/spa-headless/     deprecated theme, kept in the repo
 wordpress/plugins/spa-headless-core/   REST, CORS, preview, meta
 astro/                             public site
 scripts/generate-block-types.ts    block.json → TypeScript
@@ -15,7 +16,7 @@ scripts/generate-block-types.ts    block.json → TypeScript
 
 ## Why the blocks are in the theme
 
-BlockStudio registers every `block.json` that contains a `blockstudio` key under the active theme's `blockstudio/` directory. `blockstudio.json` also lives in the theme. That is the documented layout ([registration](https://blockstudio.dev/docs/blocks/registration/), [block library](https://blockstudio.dev/guides/block-library/)).
+spa-sage points BlockStudio at `app/blocks` with the `blockstudio/path` filter. `blockstudio.json` lives in the theme. That is the documented layout ([registration](https://blockstudio.dev/docs/blocks/registration/), [block library](https://blockstudio.dev/guides/block-library/)). The older `spa-headless` theme is deprecated.
 
 The `blockstudio/path` filter replaces that scan with a single directory, so putting the blocks only in a plugin would drop the theme convention. The plugin is still symlinked: it serves `parse_blocks()` to Astro, and it keeps working if the theme file is only there for the editor.
 
@@ -45,13 +46,15 @@ REPO="$HOME/code/spa-headless"   # wherever you cloned this repo
 ln -s "$REPO/wordpress/plugins/spa-headless-core" \
   "$LOCAL_WP/wp-content/plugins/spa-headless-core"
 
-ln -s "$REPO/wordpress/themes/spa-headless" \
-  "$LOCAL_WP/wp-content/themes/spa-headless"
+ln -sfn "$REPO/wordpress/themes/spa-sage" \
+  "$LOCAL_WP/wp-content/themes/spa-sage"
 ```
+
+Then `composer install`, `npm install`, and `npm run build` inside `wordpress/themes/spa-sage`. Do not commit `vendor/`, `node_modules/`, or `public/build/`.
 
 In wp-admin:
 
-1. Activate **Square Peg Headless Core** and the **Square Peg Headless** theme.
+1. Activate **Square Peg Headless Core** and the **Square Peg Agency** theme (spa-sage). Re-assign menus, logos, and the announcement bar. Theme mods do not copy across themes.
 2. Settings → Permalinks → **Post name**.
 3. Create a page with slug `blog`. Settings → Reading → a static homepage, and that page as the posts page. Posts are then `/blog/{slug}/`, which is the live site's shape. Pages stay at `/{slug}`.
 4. Rank Math → switch to Advanced mode if you need to, then General Settings → Others → **Headless CMS Support**. Without it, `rankmath/v1/getHead` returns "no route".
