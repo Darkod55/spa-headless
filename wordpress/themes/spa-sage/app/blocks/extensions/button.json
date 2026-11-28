@@ -1,0 +1,96 @@
+{
+  "$schema": "https://blockstudio.dev/schema/extend",
+  "name": "core/button",
+  "blockstudio": {
+    "extend": true,
+    "attributes": [
+      {
+        "id": "button_type",
+        "type": "select",
+        "label": "Button Types",
+        "default": "btn-primary",
+        "returnFormat": "both",
+        "options": [
+          { "value": "btn-primary", "label": "Primary" },
+          { "value": "btn-secondary", "label": "Secondary" },
+          { "value": "btn-secondary-inverse", "label": "Secondary inverse" },
+          { "value": "btn-secondary-outline", "label": "Secondary outline" },
+          { "value": "btn-tertiary", "label": "Tertiary" },
+          { "value": "btn-dark-blue", "label": "Dark blue" },
+          { "value": "btn-white", "label": "White" },
+          { "value": "btn-white-inverse", "label": "White inverse" },
+          { "value": "btn-gradient", "label": "Gradient" }
+        ],
+        "set": [
+          {
+            "attribute": "class",
+            "value": "btn {attributes.button_type.value}"
+          }
+        ]
+      },
+      {
+        "id": "full_width",
+        "type": "toggle",
+        "label": "Full Width?",
+        "set": [
+          {
+            "attribute": "class",
+            "value": "btn-full"
+          }
+        ]
+      },
+      {
+        "id": "include_icon",
+        "type": "toggle",
+        "label": "Include icon",
+        "set": [
+          {
+            "attribute": "class",
+            "value": "btn-has-icon"
+          }
+        ]
+      },
+      {
+        "id": "button_align",
+        "type": "toggle",
+        "label": "Button Align?"
+      },
+      {
+        "id": "button_position",
+        "type": "select",
+        "label": "Button Position",
+        "default": "",
+        "returnFormat": "both",
+        "options": [
+          {
+            "value": "",
+            "label": "Start"
+          },
+          {
+            "value": "justify-center",
+            "label": "Center"
+          },
+          {
+            "value": "md:justify-end",
+            "label": "End"
+          }
+        ],
+        "conditions": [
+          [
+            {
+              "id": "button_align",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        ],
+        "set": [
+          {
+            "attribute": "class",
+            "value": "w-full flex {attributes.button_position.value}"
+          }
+        ]
+      }
+    ]
+  }
+}

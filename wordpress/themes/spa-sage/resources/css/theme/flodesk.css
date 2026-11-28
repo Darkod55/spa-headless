@@ -1,0 +1,325 @@
+/**
+ * Flodesk inline forms — same skin as Fluent Forms (forms.css).
+ *
+ * Flodesk injects a per-form <style> after the theme CSS, with its own
+ * classes (ff-{id}__control, floating .fd-form-label, pill radius, etc.).
+ * These rules use !important so every form dropped in a Custom HTML block
+ * picks up the brand skin. Placeholders stay hidden: Flodesk fills them
+ * with honeypot tokens, and the real name lives in the label.
+ *
+ * Do not set display on .fd-form-group. Hidden honeypot fields use inline
+ * display:none, and forcing flex/block would reveal them.
+ */
+
+@layer components {
+  [data-ff-el="root"][data-ff-type="inline"],
+  [data-ff-el="root"][data-ff-type="inline"] > div:not([data-ff-el="config"]) {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="form"] {
+    color: var(--color-primary) !important;
+    font-family: var(--font-sans) !important;
+    font-size: var(--font-size-base) !important;
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+    line-height: 1.5 !important;
+    text-transform: none !important;
+    padding: 0 !important;
+  }
+
+  /**
+   * Empty titles still ship a nested spacer (min-height: 1em), so :empty
+   * never matches. Hide the block only when Flodesk has not written a
+   * paragraph or media into it. The class is ff-{formId}__title.
+   */
+  [data-ff-el="root"][data-ff-type="inline"] [class$="__title"]:not(:has([data-paragraph], img, picture, svg, video, iframe)) {
+    display: none !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] [class$="__subtitle"],
+  [data-ff-el="root"][data-ff-type="inline"] [class$="__subtitle"] * {
+    font-size: 30px !important;
+    font-family: var(--font-heading) !important;
+  }
+
+  /**
+   * Floating label sits on top of the input. Pull it above the field so
+   * the stack matches Fluent (uppercase label, then the control).
+   */
+  [data-ff-el="root"][data-ff-type="inline"] .fd-form-group:has(> .fd-form-label) {
+    margin-top: 2rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] .fd-form-label {
+    position: absolute !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: calc(100% + 0.5rem) !important;
+    left: 0 !important;
+    display: block !important;
+    width: 100%;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--color-primary) !important;
+    font-family: var(--font-sans) !important;
+    font-size: var(--font-size-sm) !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.3 !important;
+    text-align: left !important;
+    text-overflow: unset !important;
+    text-transform: uppercase !important;
+    white-space: normal !important;
+    opacity: 1 !important;
+    pointer-events: none;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] .fd-form-control:not(:placeholder-shown) + .fd-form-label {
+    opacity: 1 !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] .fd-form-control {
+    width: 100% !important;
+    min-height: 3.25rem !important;
+    height: auto !important;
+    padding: 15px 20px !important;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 12%, var(--color-light)) !important;
+    border-radius: 0 !important;
+    background: var(--color-white) !important;
+    background-color: var(--color-white) !important;
+    box-shadow: none !important;
+    color: var(--color-primary) !important;
+    font-family: var(--font-sans) !important;
+    font-size: var(--font-size-base) !important;
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+    line-height: 1.4 !important;
+    text-align: left !important;
+    text-transform: none !important;
+    outline: none !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] .fd-form-control:focus,
+  [data-ff-el="root"][data-ff-type="inline"] .fd-form-control.fd-focus-visible {
+    border-color: var(--color-secondary) !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] .fd-form-control::placeholder {
+    color: transparent !important;
+    opacity: 0 !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] textarea.fd-form-control {
+    min-height: 140px !important;
+    resize: vertical;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] select.fd-form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%231e2a45' d='M1.4.6 6 5.2 10.6.6 12 2 6 8 0 2z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 1rem center !important;
+    background-size: 12px 8px !important;
+    padding-right: 2.5rem !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] .fd-form-description,
+  [data-ff-el="root"][data-ff-type="inline"] .fd-form-feedback {
+    margin-top: 0.35rem !important;
+    color: color-mix(in srgb, var(--color-primary) 42%, var(--color-tertiary)) !important;
+    font-family: var(--font-sans) !important;
+    font-size: var(--font-size-sm) !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.02em !important;
+    line-height: 1.5 !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] .fd-form-group.fd-has-error .fd-form-control {
+    border-color: #c44 !important;
+    color: var(--color-primary) !important;
+    box-shadow: none !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] .fd-form-group.fd-has-error .fd-form-feedback,
+  [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="error"] {
+    color: #c44 !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="footer"] {
+    margin-top: 0.5rem !important;
+    text-align: left !important;
+  }
+
+  /**
+   * Submit — same treatment as `.btn.btn-secondary`.
+   */
+  [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="submit"] {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: auto !important;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0 !important;
+    padding: var(--padding-btn-y) var(--padding-btn-x) !important;
+    border: 1px solid var(--color-secondary) !important;
+    border-radius: var(--radius-surface) !important;
+    background: var(--color-secondary) !important;
+    background-color: var(--color-secondary) !important;
+    box-shadow: none !important;
+    color: var(--color-white) !important;
+    font-family: var(--font-sans) !important;
+    font-size: var(--font-size-sm) !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    text-shadow: none !important;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="submit"]:hover {
+    border-color: var(--color-gold) !important;
+    background: var(--color-gold) !important;
+    background-color: var(--color-gold) !important;
+    color: var(--color-primary) !important;
+    opacity: 1 !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="submit"].fd-focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"],
+  [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"] * {
+    color: var(--color-primary) !important;
+    font-family: var(--font-sans) !important;
+    font-size: var(--font-size-base) !important;
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+    line-height: 1.5 !important;
+    text-align: center !important;
+    text-transform: none !important;
+  }
+
+  /**
+   * Dark / glass contexts — same triggers as `.fluentform.brand-form`.
+   * Add `brand-form` on the Custom HTML block for the glass panel on a
+   * light section. Primary, secondary, and gradient sections pick it up.
+   */
+  .brand-form [data-ff-el="root"][data-ff-type="inline"] > div:not([data-ff-el="config"]),
+  .bg-primary [data-ff-el="root"][data-ff-type="inline"] > div:not([data-ff-el="config"]),
+  .bg-secondary [data-ff-el="root"][data-ff-type="inline"] > div:not([data-ff-el="config"]),
+  .mpx-columns-section--gradient [data-ff-el="root"][data-ff-type="inline"] > div:not([data-ff-el="config"]) {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 724px !important;
+    margin-inline: auto !important;
+    padding: 1.25rem !important;
+    border: 1px solid color-mix(in srgb, var(--color-white) 20%, transparent) !important;
+    border-radius: var(--radius-surface) !important;
+    background-color: color-mix(in srgb, var(--color-white) 10%, transparent) !important;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  @media (width >= 782px) {
+    .brand-form [data-ff-el="root"][data-ff-type="inline"] > div:not([data-ff-el="config"]),
+    .bg-primary [data-ff-el="root"][data-ff-type="inline"] > div:not([data-ff-el="config"]),
+    .bg-secondary [data-ff-el="root"][data-ff-type="inline"] > div:not([data-ff-el="config"]),
+    .mpx-columns-section--gradient [data-ff-el="root"][data-ff-type="inline"] > div:not([data-ff-el="config"]) {
+      padding: 2rem !important;
+    }
+  }
+
+  .brand-form [data-ff-el="root"][data-ff-type="inline"] .fd-form-control,
+  .bg-primary [data-ff-el="root"][data-ff-type="inline"] .fd-form-control,
+  .bg-secondary [data-ff-el="root"][data-ff-type="inline"] .fd-form-control,
+  .mpx-columns-section--gradient [data-ff-el="root"][data-ff-type="inline"] .fd-form-control {
+    border-color: transparent !important;
+  }
+
+  .brand-form [data-ff-el="root"][data-ff-type="inline"] .fd-form-label,
+  .bg-primary [data-ff-el="root"][data-ff-type="inline"] .fd-form-label,
+  .bg-secondary [data-ff-el="root"][data-ff-type="inline"] .fd-form-label,
+  .mpx-columns-section--gradient [data-ff-el="root"][data-ff-type="inline"] .fd-form-label,
+  .bg-dark-blue [data-ff-el="root"][data-ff-type="inline"] .fd-form-label,
+  .site-footer [data-ff-el="root"][data-ff-type="inline"] .fd-form-label,
+  .brand-form [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="form"],
+  .bg-primary [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="form"],
+  .bg-secondary [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="form"],
+  .mpx-columns-section--gradient [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="form"],
+  .bg-dark-blue [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="form"],
+  .bg-dark-blue [data-ff-el="root"][data-ff-type="inline"] [class$="__subtitle"],
+  .bg-dark-blue [data-ff-el="root"][data-ff-type="inline"] [class$="__subtitle"] *,
+  .site-footer [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="form"],
+  .site-footer [data-ff-el="root"][data-ff-type="inline"] [class$="__subtitle"],
+  .site-footer [data-ff-el="root"][data-ff-type="inline"] [class$="__subtitle"] *,
+  .brand-form [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"],
+  .brand-form [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"] *,
+  .bg-primary [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"],
+  .bg-primary [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"] *,
+  .bg-secondary [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"],
+  .bg-secondary [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"] *,
+  .mpx-columns-section--gradient [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"],
+  .mpx-columns-section--gradient [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"] *,
+  .bg-dark-blue [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"],
+  .bg-dark-blue [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"] *,
+  .site-footer [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"],
+  .site-footer [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="success"] * {
+    color: var(--color-white) !important;
+  }
+
+  .brand-form [data-ff-el="root"][data-ff-type="inline"] .fd-form-description,
+  .brand-form [data-ff-el="root"][data-ff-type="inline"] .fd-form-feedback,
+  .bg-primary [data-ff-el="root"][data-ff-type="inline"] .fd-form-description,
+  .bg-primary [data-ff-el="root"][data-ff-type="inline"] .fd-form-feedback,
+  .bg-secondary [data-ff-el="root"][data-ff-type="inline"] .fd-form-description,
+  .bg-secondary [data-ff-el="root"][data-ff-type="inline"] .fd-form-feedback,
+  .mpx-columns-section--gradient [data-ff-el="root"][data-ff-type="inline"] .fd-form-description,
+  .mpx-columns-section--gradient [data-ff-el="root"][data-ff-type="inline"] .fd-form-feedback,
+  .bg-dark-blue [data-ff-el="root"][data-ff-type="inline"] .fd-form-description,
+  .bg-dark-blue [data-ff-el="root"][data-ff-type="inline"] .fd-form-feedback,
+  .site-footer [data-ff-el="root"][data-ff-type="inline"] .fd-form-description,
+  .site-footer [data-ff-el="root"][data-ff-type="inline"] .fd-form-feedback {
+    color: color-mix(in srgb, var(--color-white) 75%, transparent) !important;
+  }
+
+  .brand-form [data-ff-el="root"][data-ff-type="inline"] .fd-form-group.fd-has-error .fd-form-feedback,
+  .brand-form [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="error"],
+  .bg-primary [data-ff-el="root"][data-ff-type="inline"] .fd-form-group.fd-has-error .fd-form-feedback,
+  .bg-primary [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="error"],
+  .bg-secondary [data-ff-el="root"][data-ff-type="inline"] .fd-form-group.fd-has-error .fd-form-feedback,
+  .bg-secondary [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="error"],
+  .mpx-columns-section--gradient [data-ff-el="root"][data-ff-type="inline"] .fd-form-group.fd-has-error .fd-form-feedback,
+  .mpx-columns-section--gradient [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="error"],
+  .bg-dark-blue [data-ff-el="root"][data-ff-type="inline"] .fd-form-group.fd-has-error .fd-form-feedback,
+  .bg-dark-blue [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="error"],
+  .site-footer [data-ff-el="root"][data-ff-type="inline"] .fd-form-group.fd-has-error .fd-form-feedback,
+  .site-footer [data-ff-el="root"][data-ff-type="inline"] [data-ff-el="error"] {
+    color: #ffb4b4 !important;
+  }
+}

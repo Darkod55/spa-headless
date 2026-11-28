@@ -1,0 +1,23 @@
+{
+  "$schema": "https://blockstudio.dev/schema/extend",
+  "name": "rank-math/faq-block",
+  "blockstudio": {
+    "extend": true,
+    "attributes": [
+      {
+        "id": "two_columns",
+        "type": "toggle",
+        "label": "Two Columns",
+        "help": "Show FAQ cards in two columns from tablet up. Off keeps one card per row.",
+        "default": false
+      },
+      {
+        "id": "white_cards",
+        "type": "toggle",
+        "label": "White card background",
+        "help": "Off uses tertiary (default). On switches FAQ cards to white — useful on tinted or image section backgrounds.",
+        "default": false
+      }
+    ]
+  }
+}

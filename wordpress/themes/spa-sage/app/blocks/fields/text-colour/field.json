@@ -1,0 +1,22 @@
+{
+  "name": "text_colour",
+  "attributes": [
+    {
+      "id": "text_colour",
+      "type": "color",
+      "label": "Text Colour",
+      "clearable": false,
+      "disableCustomColors": true,
+      "populate": {
+        "type": "custom",
+        "custom": "textColours"
+      },
+      "set": [
+        {
+          "attribute": "class",
+          "value": "text-{attributes.text_colour.slug}"
+        }
+      ]
+    }
+  ]
+}

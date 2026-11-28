@@ -1,0 +1,39 @@
+{
+  "name": "grid_item_width",
+  "attributes": [
+    {
+      "id": "width_desktop",
+      "type": "unit",
+      "label": "Width (desktop)",
+      "description": "Override parent width for this item. Clear to inherit. Use auto to fill leftover space beside a fixed column.",
+      "default": "",
+      "units": [
+        { "value": "%", "label": "%", "default": 50 },
+        { "value": "px", "label": "px", "default": 300 },
+        { "value": "auto", "label": "auto", "default": 0 }
+      ]
+    },
+    {
+      "id": "width_tablet",
+      "type": "unit",
+      "label": "Width (tablet)",
+      "default": "",
+      "units": [
+        { "value": "%", "label": "%", "default": 50 },
+        { "value": "px", "label": "px", "default": 300 },
+        { "value": "auto", "label": "auto", "default": 0 }
+      ]
+    },
+    {
+      "id": "width_mobile",
+      "type": "unit",
+      "label": "Width (mobile)",
+      "default": "",
+      "units": [
+        { "value": "%", "label": "%", "default": 100 },
+        { "value": "px", "label": "px", "default": 300 },
+        { "value": "auto", "label": "auto", "default": 0 }
+      ]
+    }
+  ]
+}

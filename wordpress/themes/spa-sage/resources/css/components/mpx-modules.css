@@ -1,0 +1,126 @@
+/**
+ * Website Modules library — auto copy chrome around top-level blocks.
+ */
+
+@layer components {
+  .mpx-modules-page {
+    background-color: var(--color-tertiary);
+  }
+
+  .mpx-modules-header__eyebrow {
+    color: color-mix(in srgb, var(--color-white) 62%, transparent);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-xs);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .mpx-modules-header__title {
+    color: var(--color-white);
+    font-family: var(--font-heading);
+    font-weight: 400;
+    line-height: 1.15;
+  }
+
+  .mpx-modules-header__intro {
+    margin-top: 0.75rem;
+    max-width: 40rem;
+    color: color-mix(in srgb, var(--color-white) 72%, transparent);
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+  }
+
+  .mpx-modules-empty {
+    color: color-mix(in srgb, var(--color-primary) 55%, transparent);
+  }
+
+  .mpx-modules-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .mpx-module {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .mpx-module__meta {
+    display: flex;
+    align-items: center;
+    padding: 0.65rem clamp(1rem, 4vw, 2rem);
+    background-color: var(--color-light);
+    border: none;
+  }
+
+  .mpx-module__label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.55rem;
+    min-width: 0;
+    color: var(--color-secondary);
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  .mpx-module__dot {
+    display: inline-block;
+    width: 0.4rem;
+    height: 0.4rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
+
+  .mpx-module__sep {
+    opacity: 0.85;
+  }
+
+  .mpx-module__index,
+  .mpx-module__kind,
+  .mpx-module__title,
+  .mpx-module__name {
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+  }
+
+  .mpx-module__name {
+    opacity: 0.72;
+    font-weight: 600;
+  }
+
+  .mpx-module__preview {
+    position: relative;
+  }
+
+  .mpx-module__actions {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  .mpx-module__copy {
+    pointer-events: auto;
+    box-shadow: 0 2px 10px color-mix(in srgb, var(--color-primary) 35%, transparent);
+  }
+
+  .mpx-module__copy.is-copied {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+  }
+
+  .mpx-module__copy.is-failed {
+    background-color: var(--color-coral-dark, #8b3a2f);
+    border-color: var(--color-coral-dark, #8b3a2f);
+  }
+}

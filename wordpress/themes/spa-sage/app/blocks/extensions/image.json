@@ -1,0 +1,22 @@
+{
+  "$schema": "https://blockstudio.dev/schema/extend",
+  "name": "core/image",
+  "blockstudio": {
+    "extend": true,
+    "attributes": [
+      {
+        "id": "is_portrait",
+        "type": "toggle",
+        "label": "Circular portrait",
+        "help": "Full round crop with a 2px gold border.",
+        "default": false,
+        "set": [
+          {
+            "attribute": "class",
+            "value": "is-portrait"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "line_colour",
+  "attributes": [
+    {
+      "id": "line_colour",
+      "type": "color",
+      "label": "Line Colour",
+      "help": "Accent bar beside the subheading label.",
+      "clearable": false,
+      "disableCustomColors": true,
+      "default": {
+        "value": "var(--color-secondary)",
+        "name": "Secondary",
+        "slug": "secondary"
+      },
+      "populate": {
+        "type": "custom",
+        "custom": "textColours"
+      }
+    }
+  ]
+}

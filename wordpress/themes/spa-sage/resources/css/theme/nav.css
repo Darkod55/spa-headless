@@ -1,0 +1,88 @@
+@layer components {
+  /**
+   * Nav menus
+   */
+  nav ul,
+  .nav-dropdown {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+
+  /**
+   * Preheader utility links (dark bar, right-aligned).
+   */
+  .preheader-nav {
+    @apply font-heading font-semibold uppercase tracking-[1px] text-white;
+  }
+
+  .preheader-nav .nav-link {
+    @apply text-white transition-colors hover:text-white/80;
+  }
+
+  /**
+   * Primary header nav — Source Sans uppercase, secondary active underline.
+   */
+  .primary-nav {
+    @apply font-sans uppercase text-primary/75;
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.06em;
+  }
+
+  .primary-nav .nav-link:not(.btn) {
+    @apply border-b border-transparent pb-0.5 transition-colors hover:text-secondary;
+  }
+
+  .primary-nav .menu-item.active > .nav-link:not(.btn) {
+    @apply border-secondary text-secondary;
+  }
+
+  .nav-dropdown {
+    @apply absolute left-0 top-8 z-20 min-w-56 p-2 shadow-xl;
+    @apply bg-tertiary text-primary normal-case tracking-normal;
+  }
+
+  .nav-dropdown .nav-link {
+    @apply block border-0 px-4 py-2.5 font-sans text-sm font-medium capitalize transition hover:bg-primary/10 hover:text-secondary;
+  }
+
+  .footer-nav__title {
+    @apply mb-4 font-sans text-sm font-normal uppercase tracking-[0.06em] text-white/75;
+  }
+
+  .footer-links .nav-link {
+    @apply font-heading text-sm text-white! transition-colors;
+
+    &:hover {
+      @apply text-white/80!;
+    }
+  }
+
+  .footer-menu .nav-link {
+    @apply font-sans text-sm font-normal uppercase tracking-[0.06em] text-white/80 transition-colors hover:text-gold;
+  }
+
+  .footer-social .nav-link {
+    @apply inline-flex size-10 items-center justify-center rounded-surface border border-white/30 bg-transparent text-white transition-colors hover:border-gold hover:text-gold;
+  }
+
+  .footer-social .nav-link .icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  #menu-menu-primary { margin-bottom: 0; }
+  #menu-menu-primary .btn {
+    font-weight: 400 !important;
+    line-height: 22px !important;
+    padding-inline: 18.6px !important;
+    padding-block: 8px !important;
+  }
+
+  /**
+   * Mobile/tablet off-canvas.
+   */
+  .offcanvas-nav .nav-link {
+    @apply text-white transition-colors hover:text-white/80;
+  }
+}

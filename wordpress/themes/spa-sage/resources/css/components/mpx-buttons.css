@@ -1,0 +1,41 @@
+/**
+ * mpx/partial-buttons — inline row of theme CTAs.
+ *
+ * Kept outside resources/css/theme/ so bridgeTailwindConfig() does not
+ * re-emit it into Blockstudio's inline Tailwind. Vite loads via theme.css.
+ *
+ * Core/button “Button Align?” adds `w-full flex` on the wrapper; that must
+ * not stretch each CTA to full width inside this row. Hero content-inner
+ * also forces nested `.block-editor-block-list__layout` to column — override.
+ */
+
+@layer components {
+  .mpx-buttons,
+  .mpx-buttons > .block-editor-inner-blocks > .block-editor-block-list__layout,
+  .mpx-buttons > .block-editor-block-list__layout,
+  .mpx-buttons.block-editor-block-list__layout,
+  #blockstudio-replace-innerblocks.mpx-buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .mpx-buttons .wp-block-button,
+  .mpx-buttons [data-type="core/button"],
+  .mpx-buttons .wp-block-button.w-full,
+  .mpx-buttons .wp-block-button.flex {
+    display: block;
+    width: auto !important;
+    max-width: 100%;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+
+  .mpx-buttons .wp-block-button > .wp-block-button__link,
+  .mpx-buttons .wp-block-button > a.btn {
+    width: auto !important;
+  }
+}

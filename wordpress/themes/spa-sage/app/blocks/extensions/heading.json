@@ -1,0 +1,29 @@
+{
+  "$schema": "https://blockstudio.dev/schema/extend",
+  "name": "core/heading",
+  "blockstudio": {
+    "extend": true,
+    "attributes": [
+      {
+        "type": "custom/typography"
+      },
+      {
+        "id": "margin_bottom",
+        "type": "select",
+        "label": "Margin Bottom",
+        "default": "",
+        "options": [
+          { "value": "", "label": "Default" },
+          { "value": "mb-0", "label": "None" },
+          { "value": "mb-2", "label": "Small" }
+        ],
+        "set": [
+          {
+            "attribute": "class",
+            "value": "{attributes.margin_bottom}"
+          }
+        ]
+      }
+    ]
+  }
+}

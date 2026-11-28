@@ -1,0 +1,57 @@
+{
+  "name": "column_widths",
+  "attributes": [
+    {
+      "type": "group",
+      "title": "Column widths",
+      "attributes": [
+        {
+          "id": "col_1_width_desktop",
+          "type": "unit",
+          "label": "Column 1 (desktop)",
+          "description": "Width of the first column in the HTML (left by default). Flip only changes visual order — this still targets column 1. Use auto to fill leftover space beside a fixed px column.",
+          "default": "50%",
+          "units": [
+            { "value": "%", "label": "%", "default": 50 },
+            { "value": "px", "label": "px", "default": 300 },
+            { "value": "auto", "label": "auto", "default": 0 }
+          ]
+        },
+        {
+          "id": "col_2_width_desktop",
+          "type": "unit",
+          "label": "Column 2 (desktop)",
+          "description": "Width of the second column in the HTML (right by default).",
+          "default": "50%",
+          "units": [
+            { "value": "%", "label": "%", "default": 50 },
+            { "value": "px", "label": "px", "default": 300 },
+            { "value": "auto", "label": "auto", "default": 0 }
+          ]
+        },
+        {
+          "id": "col_1_width_tablet",
+          "type": "unit",
+          "label": "Column 1 (tablet)",
+          "default": "50%",
+          "units": [
+            { "value": "%", "label": "%", "default": 50 },
+            { "value": "px", "label": "px", "default": 300 },
+            { "value": "auto", "label": "auto", "default": 0 }
+          ]
+        },
+        {
+          "id": "col_2_width_tablet",
+          "type": "unit",
+          "label": "Column 2 (tablet)",
+          "default": "50%",
+          "units": [
+            { "value": "%", "label": "%", "default": 50 },
+            { "value": "px", "label": "px", "default": 300 },
+            { "value": "auto", "label": "auto", "default": 0 }
+          ]
+        }
+      ]
+    }
+  ]
+}

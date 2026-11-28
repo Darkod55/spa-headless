@@ -1,0 +1,73 @@
+/**
+ * Theme design tokens — colours, spacing, layout, radii, type.
+ *
+ * Human edits: docs/design-tokens.md (§ Active brand tokens / type scale).
+ * This file is the runtime CSS the agent writes from that playbook.
+ *
+ * `@theme static` + `--color-*: initial` keeps only these brand colours in
+ * the generated theme.json palette (and as Tailwind utilities).
+ *
+ * Consume via var(--…).
+ */
+
+@theme static {
+  --color-*: initial;
+
+  --color-primary: #3a31a7;
+  --color-secondary: #dd785C;
+  --color-tertiary: #fcf7eb;
+  --color-navy-light: #8498d3;
+  --color-coral-dark: #cd6E59;
+  --color-dark-blue: #1e2a45;
+  --color-light: #ede5d8;
+  --color-gold: #dec08a;
+  --color-white: #fff;
+  --color-white-75: rgb(255 255 255 / 0.75);
+  --color-black: #848585;
+
+  /**
+   * Fluid section padding.
+   */
+  --spacing-clamp-inline: 24px;
+  --spacing-clamp-block: 48px;
+  --spacing-clamp-block-xl: 90px;
+
+  /**
+   * Layout widths.
+   * --width-container → `.container` + editor canvas mirrors
+   * --width-content   → `.mw-1000` (one-column / paragraph limit)
+   */
+  --width-container: 1200px;
+  --width-content: 1000px;
+
+  /**
+   * Shared corner radius (buttons, inputs, cards, images, panels…).
+   * Tailwind: `rounded-surface`.
+   */
+  --radius-surface: 2px;
+
+  /**
+   * Surface padding (cards, FAQ cards, column cells, bleed calc).
+   * Use --padding-surface-lg from `lg` up.
+   */
+  --padding-surface: 20px;
+  --padding-surface-lg: 30px;
+
+  /**
+   * Button metrics.
+   */
+  --padding-btn-y: 15px;
+  --padding-btn-x: 40px;
+  --padding-btn-sm-y: 10px;
+  --padding-btn-sm-x: 20px;
+  --font-size-btn: 14px;
+
+  /**
+   * Body text scale (`.fs-*` field classes).
+   * Type-scale Active overrides brand-token values for these keys.
+   */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lead: 20px;
+}

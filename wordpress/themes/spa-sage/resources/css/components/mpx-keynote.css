@@ -1,0 +1,60 @@
+/**
+ * mpx/keynote — sticky brand mark + content column.
+ *
+ * Kept outside resources/css/theme/ so bridgeTailwindConfig() does not
+ * duplicate it. Vite loads via theme.css.
+ */
+
+@layer components {
+  .mpx-keynote__inner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: clamp(1.25rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  /**
+   * Sticky on all breakpoints — clears the site chrome (preheader + header).
+   */
+  .mpx-keynote__mark {
+    position: sticky;
+    top: calc(var(--admin-bar-offset, 0px) + var(--site-chrome-height, 5.5rem) + 1rem);
+    z-index: 1;
+    width: 3.5rem;
+    margin: 0;
+    user-select: none;
+  }
+
+  .mpx-keynote__mark-image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .mpx-keynote__content,
+  .mpx-keynote__content > .block-editor-inner-blocks > .block-editor-block-list__layout,
+  .mpx-keynote__content > .block-editor-block-list__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .mpx-keynote__content > :is(h1, h2, h3, h4, h5, h6, p, ul, ol),
+  .mpx-keynote__content > .block-editor-inner-blocks > .block-editor-block-list__layout > *,
+  .mpx-keynote__content > .block-editor-block-list__layout > * {
+    margin-block: 0;
+  }
+
+  .mpx-keynote__content .mpx-subheading {
+    margin-bottom: 0;
+  }
+
+  /**
+   * Tighten “Ideal for” label → tags (paragraph with mb-2 + tag list).
+   */
+  .mpx-keynote__content > p.mb-2 + ul.mpx-list--tags,
+  .mpx-keynote__content > p.mb-2 + .mpx-list--tags {
+    margin-top: -0.75rem;
+  }
+}

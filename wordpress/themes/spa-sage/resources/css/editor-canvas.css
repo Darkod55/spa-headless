@@ -1,0 +1,53 @@
+/**
+ * Block editor "chrome" overrides.
+ */
+:root {
+  --color-primary: #3a31a7;
+  --color-secondary: #dd785C;
+  --color-tertiary: #fcf7eb;
+  --color-navy-light: #8498d3;
+  --color-coral-dark: #cd6E59;
+  --color-dark-blue: #1e2a45;
+  --color-light: #ede5d8;
+  --color-gold: #dec08a;
+  --color-black: #848585;
+  --color-white: #fff;
+  --color-white-75: rgb(255 255 255 / 0.75);
+}
+
+/**
+ * By default WP wraps the canvas in a padded, grey-backed frame so it
+ * reads as a "sheet of paper" floating in the admin UI. For a theme like
+ * this one - built almost entirely from `align: full` sections - that
+ * padding makes every full-width block look artificially inset and
+ * breaks the illusion of editing the real page. Removing it lets the
+ * iframe fill the available canvas edge-to-edge, so what you see while
+ * editing matches the live page far more closely.
+ */
+.block-editor-page .editor-visual-editor.has-padding {
+  padding: 0;
+}
+
+.block-editor-page .editor-visual-editor {
+  --wp-editor-canvas-background: var(--color-white);
+}
+
+/**
+ * Hide core/button's native Width panel (25/50/75/100).
+ */
+body.ecoa--core-button-selected
+  .block-editor-block-inspector
+  .components-tools-panel:has(.components-toggle-group-control) {
+  display: none;
+}
+
+/**
+ * Hide core/image Width & Height unit fields in Dimensions.
+ */
+body.ecoa--core-image-selected
+  .block-editor-block-inspector
+  .components-tools-panel-item:has(.components-unit-control):not(
+    :has(.components-focal-point-picker-control)
+  ) {
+  display: none;
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://blockstudio.dev/schema/blockstudio",
+  "users": {
+    "ids": [],
+    "roles": ["administrator"]
+  },
+  "assets": {
+    "enqueue": true,
+    "minify": {
+      "css": true,
+      "js": true
+    },
+    "process": {
+      "scss": true
+    }
+  },
+  "tailwind": {
+    "enabled": true
+  },
+  "ai": {
+    "enableContextGeneration": true
+  },
+  "editor": {
+    "formatOnSave": false,
+    "assets": [],
+    "markup": false
+  },
+  "blockEditor": {
+    "disableLoading": false,
+    "cssClasses": [],
+    "cssVariables": []
+  },  
+  "cache": {
+    "enabled": false
+  }
+}

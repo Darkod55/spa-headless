@@ -1,0 +1,165 @@
+/**
+ * Button components
+ *
+ * Variants (default → hover):
+ * 1. btn-primary            — primary fill / white text → secondary fill / white text
+ * 2. btn-secondary          — secondary fill / white text → gold fill / primary text
+ * 3. btn-secondary-inverse  — transparent + secondary border / white text → secondary fill / white text
+ * 4. btn-secondary-outline  — transparent + secondary border / secondary text → secondary fill / white text
+ * 5. btn-tertiary           — tertiary fill / white text → primary fill / white text
+ * 6. btn-dark-blue          — dark-blue fill / white text → secondary fill / white text
+ * 7. btn-white              — white fill / primary text → transparent + white border / white text
+ * 8. btn-white-inverse      — transparent + white border / white text → white fill / primary text
+ * 9. btn-gradient           — primary→tertiary gradient / white text → tertiary→primary (flipped)
+ *
+ * Legacy: btn-primary-alt → btn-primary; btn-outline-primary → btn-white.
+ */
+
+@layer components {
+  :is(
+    a.btn,
+    button.btn,
+    .wp-block-button.btn > .wp-block-button__link,
+    .wp-block-button[class*='btn-'] > .wp-block-button__link
+  ) {
+    @apply inline-flex! items-center justify-center gap-2 font-sans font-normal uppercase no-underline! shadow-none! transition-colors disabled:cursor-not-allowed disabled:opacity-50 rounded-surface text-center! border border-transparent;
+    padding: var(--padding-btn-y) var(--padding-btn-x) !important;
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  :is(
+    a.btn-primary,
+    button.btn-primary,
+    .wp-block-button.btn-primary > .wp-block-button__link,
+    /* Legacy alias of primary. */
+    a.btn-primary-alt,
+    button.btn-primary-alt,
+    .wp-block-button.btn-primary-alt > .wp-block-button__link
+  ) {
+    @apply border-primary bg-primary text-white hover:border-secondary hover:bg-secondary hover:text-white;
+  }
+
+  :is(
+    a.btn-secondary,
+    button.btn-secondary,
+    .wp-block-button.btn-secondary > .wp-block-button__link
+  ) {
+    @apply border-secondary bg-secondary text-white hover:border-gold hover:bg-gold hover:text-primary;
+  }
+
+  :is(
+    a.btn-secondary-inverse,
+    button.btn-secondary-inverse,
+    .wp-block-button.btn-secondary-inverse > .wp-block-button__link
+  ) {
+    @apply border-secondary bg-transparent text-white hover:border-secondary hover:bg-secondary hover:text-white;
+  }
+
+  :is(
+    a.btn-secondary-outline,
+    button.btn-secondary-outline,
+    .wp-block-button.btn-secondary-outline > .wp-block-button__link
+  ) {
+    @apply border-secondary bg-transparent text-secondary hover:border-secondary hover:bg-secondary hover:text-white;
+  }
+
+  :is(
+    a.btn-tertiary,
+    button.btn-tertiary,
+    .wp-block-button.btn-tertiary > .wp-block-button__link
+  ) {
+    @apply border-tertiary bg-tertiary text-white hover:border-primary hover:bg-primary hover:text-white;
+  }
+
+  :is(
+    a.btn-dark-blue,
+    button.btn-dark-blue,
+    .wp-block-button.btn-dark-blue > .wp-block-button__link
+  ) {
+    @apply border-dark-blue bg-dark-blue text-white hover:border-secondary hover:bg-secondary hover:text-white;
+  }
+
+  :is(
+    a.btn-white,
+    button.btn-white,
+    .wp-block-button.btn-white > .wp-block-button__link,
+    /* Legacy alias — previously an outline style. */
+    a.btn-outline-primary,
+    button.btn-outline-primary,
+    .wp-block-button.btn-outline-primary > .wp-block-button__link
+  ) {
+    @apply border-white bg-white text-primary hover:bg-transparent hover:text-white;
+  }
+
+  :is(
+    a.btn-white-inverse,
+    button.btn-white-inverse,
+    .wp-block-button.btn-white-inverse > .wp-block-button__link
+  ) {
+    @apply border-white bg-transparent text-white hover:border-white hover:bg-white hover:text-primary;
+  }
+
+  :is(
+    a.btn-gradient,
+    button.btn-gradient,
+    .wp-block-button.btn-gradient > .wp-block-button__link
+  ) {
+    border-color: transparent;
+    color: var(--color-white);
+    background-color: var(--color-primary);
+    background-image: linear-gradient(
+      90deg,
+      var(--color-primary) 0%,
+      var(--color-tertiary) 100%
+    );
+
+    @media (hover: hover) {
+      &:hover {
+        border-color: transparent;
+        background-color: var(--color-tertiary);
+        background-image: linear-gradient(
+          90deg,
+          var(--color-tertiary) 0%,
+          var(--color-primary) 100%
+        );
+        color: var(--color-white);
+      }
+    }
+  }
+
+  /**
+   * Size modifier - combine with a colour variant
+   */
+  :is(
+    a.btn-sm,
+    button.btn-sm,
+    .wp-block-button.btn-sm > .wp-block-button__link
+  ) {
+    @apply font-normal;
+    padding: var(--padding-btn-sm-y) var(--padding-btn-sm-x) !important;
+    font-size: var(--font-size-sm);
+  }
+
+  /**
+   * Full-width (Blockstudio "Full Width?" toggle).
+   */
+  :is(
+    .btn-full,
+    .wp-block-button.btn-full > .wp-block-button__link,
+    .wp-block-button.btn-full > a
+  ) {
+    @apply w-full;
+  }
+
+  /**
+   * Include icon (Blockstudio toggle) — arrow-insert from footer-icons sprite, injected after the link text in moveCoreButtonClassesToLink().
+   */
+  :is(
+    a.btn-has-icon > .icon,
+    button.btn-has-icon > .icon
+  ) {
+    flex-shrink: 0;
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "name": "typography",
+  "attributes": [
+    {
+      "id": "text_colour",
+      "type": "color",
+      "label": "Text Colour",
+      "clearable": false,
+      "disableCustomColors": true,
+      "populate": {
+        "type": "custom",
+        "custom": "textColours"
+      },
+      "set": [
+        {
+          "attribute": "class",
+          "value": "text-{attributes.text_colour.slug}"
+        }
+      ]
+    },
+    {
+      "id": "text_size",
+      "type": "select",
+      "label": "Font Size",
+      "default": "",
+      "options": [
+        { "value": "", "label": "Default" },
+        { "value": "fs-xs", "label": "Extra Small" },
+        { "value": "fs-sm", "label": "Small" },
+        { "value": "fs-base", "label": "Regular" },
+        { "value": "fs-lead", "label": "Lead" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ],
+      "set": [
+        {
+          "attribute": "class",
+          "value": "{attributes.text_size}"
+        }
+      ]
+    },
+    {
+      "id": "text_weight",
+      "type": "select",
+      "label": "Font Weight",
+      "default": "",
+      "options": [
+        { "value": "", "label": "Default" },
+        { "value": "font-light", "label": "Light" },
+        { "value": "font-normal", "label": "Regular" },
+        { "value": "font-semibold", "label": "Semibold" },
+        { "value": "font-bold", "label": "Bold" }
+      ],
+      "set": [
+        {
+          "attribute": "class",
+          "value": "{attributes.text_weight}"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+/**
+ * mpx/partial-row — space-between row (subheading + tags/badges).
+ *
+ * Kept outside resources/css/theme/ so bridgeTailwindConfig() does not
+ * duplicate it. Vite loads via theme.css.
+ */
+
+@layer components {
+  .mpx-row,
+  .mpx-row > .block-editor-inner-blocks > .block-editor-block-list__layout,
+  .mpx-row > .block-editor-block-list__layout,
+  .mpx-row.block-editor-block-list__layout,
+  #blockstudio-replace-innerblocks.mpx-row {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    width: 100%;
+  }
+
+  .mpx-row > *,
+  .mpx-row > .block-editor-inner-blocks > .block-editor-block-list__layout > *,
+  .mpx-row > .block-editor-block-list__layout > * {
+    margin-block: 0 !important;
+    flex: 0 1 auto;
+    max-width: 100%;
+  }
+
+  .mpx-row .mpx-subheading {
+    margin-bottom: 0;
+  }
+
+  /**
+   * Tag list sits as a compact cluster on the trailing edge.
+   */
+  .mpx-row .mpx-list--tags {
+    justify-content: flex-end;
+  }
+}

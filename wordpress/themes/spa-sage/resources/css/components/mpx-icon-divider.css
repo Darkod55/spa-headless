@@ -1,0 +1,29 @@
+/**
+ * mpx/partial-icon — sprite SVG; colour via `--mpx-icon-colour`.
+ * Card badge chrome lives under `.mpx-card--icon` in cards.css.
+ *
+ * mpx/partial-divider — short rule; colour via `--mpx-divider-colour`.
+ */
+
+@layer components {
+  .mpx-partial-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mpx-icon-colour, currentColor);
+    line-height: 0;
+
+    & .icon {
+      display: block;
+      fill: currentColor;
+      color: inherit;
+    }
+  }
+
+  .mpx-divider {
+    width: 4rem;
+    height: 1px;
+    margin-block: 0;
+    background-color: var(--mpx-divider-colour, var(--color-tertiary));
+  }
+}
