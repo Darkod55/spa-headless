@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import { colorSlug } from "../astro/src/lib/blocks/color.ts";
 import { addClassToRoot } from "../astro/src/lib/blocks/markup.ts";
@@ -12,6 +13,20 @@ test("colorSlug reads a slug, a CSS variable, and a colour object", () => {
   assert.equal(colorSlug(null), null);
   assert.equal(colorSlug("lime"), null);
   assert.equal(colorSlug({ slug: "nope" }), null);
+});
+
+test("admin chrome defines the brand variables the sidebar swatches resolve", () => {
+  const css = readFileSync(
+    new URL("../wordpress/themes/spa-sage/resources/css/editor-canvas.css", import.meta.url),
+    "utf8",
+  );
+  assert.match(css, /--color-primary:\s*#031433/);
+  assert.match(css, /--color-secondary:\s*#c8102e/);
+  assert.match(css, /--color-tertiary:\s*#012169/);
+  assert.match(css, /--color-secondary-on-primary:\s*#e8324c/);
+  assert.match(css, /--color-secondary-deep:\s*#970c23/);
+  assert.match(css, /--color-gray:\s*#f4f5f7/);
+  assert.doesNotMatch(css, /#3a31a7|#dd785c|#fcf7eb|#848585/i);
 });
 
 test("addClassToRoot adds a class without disturbing other attributes", () => {

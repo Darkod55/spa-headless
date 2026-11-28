@@ -59,7 +59,7 @@ Component alphas (white at 6–30%, navy at 5%, red at 50% on the hero squares) 
 
 ## Checklist
 
-- The new variable exists in the theme tokens, not only in Astro.
+- The new variable exists in the theme tokens and in `resources/css/editor-canvas.css`. Swatches render in the wp-admin document, not the editor iframe.
 - The dataset `value` is a `var(--color-…)`, not a hex string.
 - `colorSlug()` accepts the slug, the `var(--color-…)` string, and `{ slug }`, including hyphenated slugs.
 
