@@ -7,16 +7,17 @@ import type { WpContent } from "../lib/wp/types";
 interface Props {
   content: WpContent;
   head: string | null;
+  fixtureNotice?: string | null;
 }
 
-const { content, head } = Astro.props;
+const { content, head, fixtureNotice = null } = Astro.props;
 const hasHero = content.blocks.some((block) =>
   ["spa/hero", "spa/hero-banner-main", "spa/hero-banner-default"].includes(block.blockName ?? ""),
 );
 const showTitle = !content.meta.spa_hide_title && !hasHero;
 ---
 
-<Base title={content.title} path={content.path} head={head}>
+<Base title={content.title} path={content.path} head={head} fixtureNotice={fixtureNotice}>
   {
     content.status !== "publish" && (
       <p class="draft-banner">Preview of a {content.status} {content.type}.</p>

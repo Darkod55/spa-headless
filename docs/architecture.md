@@ -53,6 +53,10 @@ CORS allows `http://localhost:4321` and `http://127.0.0.1:4321`, plus origins in
 
 `/preview/:id` never uses fixtures.
 
+An empty WordPress page is not replaced with the fixture hero. If localhost:4321 is showing sample content, a grey bar at the top says so. No bar means the HTML came from the published WordPress page.
+
+The block editor does not load that published copy when a newer autosave or browser backup exists. An empty canvas with “Type / to choose a block” means the editor opened that other copy. Do not press Update until `post_content` has been read. See [local-setup.md](local-setup.md).
+
 ## Checklist
 
 - New public data goes through `spa/v1` or the `blocks` field, not a one-off fetch in a component.

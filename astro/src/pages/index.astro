@@ -1,12 +1,13 @@
 ---
 import PageView from "../components/PageView.astro";
-import { getContent, getRankMathHead } from "../lib/wp/client";
+import { fixtureNotice, getContent, getRankMathHead } from "../lib/wp/client";
 
 const content = await getContent("/");
+const notice = fixtureNotice();
 if (!content) {
   throw new Error("No front page. Set a static front page in WordPress, or use fixtures.");
 }
 const head = await getRankMathHead("/");
 ---
 
-<PageView content={content} head={head} />
+<PageView content={content} head={head} fixtureNotice={notice} />

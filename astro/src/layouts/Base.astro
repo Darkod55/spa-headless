@@ -12,9 +12,10 @@ interface Props {
   title: string;
   path: string;
   head?: string | null;
+  fixtureNotice?: string | null;
 }
 
-const { title, path, head = null } = Astro.props;
+const { title, path, head = null, fixtureNotice = null } = Astro.props;
 const gaId = gaMeasurementId();
 const [site, menu, footerMenu, legalMenu, socialMenu] = await Promise.all([
   getSite(),
@@ -51,6 +52,7 @@ const seoHead = head && iconTags.length > 0 ? stripHeadIconTags(head) : head;
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
+    {fixtureNotice && <p class="draft-banner">{fixtureNotice}</p>}
     <SiteHeader site={site} items={menu.items} path={path} />
     <main id="content">
       <slot />

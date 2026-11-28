@@ -24,14 +24,39 @@ export function wpOrigin(): string | undefined {
 }
 
 export function usingFixtures(): boolean {
+  return fixtureSource() !== null;
+}
+
+/** Why the last read used fixtures, or null when it came from WordPress. */
+export function fixtureSource(): "force" | "no-wp-url" | "unreachable" | null {
   const mode = fixturesMode();
-  if (mode === "force") {
-    return true;
-  }
   if (mode === "off") {
-    return false;
+    return null;
   }
-  return fixtureFallback || !wpOrigin();
+  if (mode === "force") {
+    return "force";
+  }
+  if (!wpOrigin()) {
+    return "no-wp-url";
+  }
+  if (fixtureFallback) {
+    return "unreachable";
+  }
+  return null;
+}
+
+/** Sentence for the on-page banner. Null when the page came from WordPress. */
+export function fixtureNotice(): string | null {
+  switch (fixtureSource()) {
+    case "force":
+      return "Fixture content, because WP_FIXTURES is forcing it. This is not the page open in WordPress.";
+    case "no-wp-url":
+      return "Fixture content, because WP_URL is not set. This is not the page open in WordPress.";
+    case "unreachable":
+      return "Fixture content, because WordPress did not answer. This is not the page open in WordPress.";
+    default:
+      return null;
+  }
 }
 
 function rememberUnreachable(reason: unknown): void {
