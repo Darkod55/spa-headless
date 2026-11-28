@@ -2,7 +2,9 @@
  * Font size and weight classes for the heading and paragraph extensions.
  * Size does not set colour, so a text-colour choice still wins.
  * Loaded by the theme (editor iframe) and by Astro.
+ * Tokens come from color-tokens.css so this file still works on its own.
  */
+@import "../theme/color-tokens.css";
 
 .fs-display,
 .fs-h1-page,

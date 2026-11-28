@@ -9,6 +9,7 @@
 /* Fonts (self-hosted via Fontsource; font-display: swap in each @font-face) */
 /* -------------------------------------------------------------------------- */
 
+@import "../../../wordpress/themes/spa-sage/resources/css/theme/color-tokens.css";
 @import "@fontsource/oswald/400.css";
 @import "@fontsource/oswald/500.css";
 @import "@fontsource/oswald/600.css";
@@ -28,26 +29,8 @@
 	--font-body: "Montserrat", system-ui, sans-serif;
 
 	/*
-	  Brand surfaces (CMS / utility classes):
-	  primary = dark blue, secondary = red, tertiary = royal blue,
-	  plus white / gray / black.
-	*/
-	--color-primary: #031433;
-	--color-secondary: #c8102e;
-	--color-secondary-deep: #970c23;
-	--color-tertiary: #012169;
-	--color-white: #ffffff;
-	--color-gray: #f4f5f7;
-	--color-black: #000000;
-
-	/* Accessible secondary tints — use INSTEAD of brand red for text on dark */
-	--color-secondary-on-primary: #e8324c;
-	--color-secondary-on-tertiary: #ff8a9a;
-
-	/*
-	  WordPress Highlight stores
-	  color: var(--wp--preset--color--{slug}) and class has-{slug}-color.
-	  Only the theme.json palette slugs. Aliases stay as --color-* only.
+	  Colour hex lives in color-tokens.css. Highlight uses these preset
+	  variables: color: var(--wp--preset--color--{slug}).
 	*/
 	--wp--preset--color--primary: var(--color-primary);
 	--wp--preset--color--secondary: var(--color-secondary);
@@ -59,38 +42,7 @@
 	--wp--preset--color--white: var(--color-white);
 	--wp--preset--color--black: var(--color-black);
 
-	/* Legacy aliases (prefer primary / secondary / tertiary in new code) */
-	--color-navy: var(--color-primary);
-	--color-royal: var(--color-tertiary);
-	--color-red: var(--color-secondary);
-	--color-red-deep: var(--color-secondary-deep);
-	--color-red-on-navy: var(--color-secondary-on-primary);
-	--color-red-on-royal: var(--color-secondary-on-tertiary);
-
-	/* Neutrals (scale; `--color-gray` is the section surface) */
-	--color-grey-50: var(--color-gray);
-	--color-grey-100: #e8ebf0;
-	--color-grey-200: #e3e6ec;
-	--color-grey-400: #9aa3b5;
-
-	/* Text */
-	--color-text: var(--color-primary);
-	--color-text-body: #3a4560;
-	--color-text-on-dark: #d2d8e3;
-	--color-text-on-royal: #d6dce8;
-	--color-text-on-tertiary: var(--color-text-on-royal);
-	--color-text-muted-dark: #aeb7c7;
-	--color-text-on-red: #fbe7ea;
-	--color-text-on-secondary: var(--color-text-on-red);
-
-	/* Component states. Not brand swatches. */
-	--color-success: #0f5132;
-	--color-success-bg: #e8f5ec;
-	--color-danger-bg: #fde8ec;
-	--color-team-name: #31394a;
-	--color-team-rule: #c9cfda;
-
-	/* Typography — headings (Oswald, uppercase) */
+	/* Typography — headings (Oswald, uppercase). Values are in color-tokens.css. */
 	--fs-display: clamp(3.5rem, 6.4vw, 6rem);
 	--fs-h1-page: clamp(3rem, 5.6vw, 5.25rem);
 	--fs-cta: clamp(3rem, 5.6vw, 5.5rem);

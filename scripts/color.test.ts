@@ -46,18 +46,21 @@ test("the WordPress palette is only the curated brand colours", () => {
   assert.doesNotMatch(astro, /--wp--preset--color--grey-100:/);
 });
 
-test("admin chrome defines the brand variables the sidebar swatches resolve", () => {
-  const css = readFileSync(
+test("admin chrome imports the shared colour tokens", () => {
+  const canvas = readFileSync(
     new URL("../wordpress/themes/spa-sage/resources/css/editor-canvas.css", import.meta.url),
     "utf8",
   );
-  assert.match(css, /--color-primary:\s*#031433/);
-  assert.match(css, /--color-secondary:\s*#c8102e/);
-  assert.match(css, /--color-tertiary:\s*#012169/);
-  assert.match(css, /--color-secondary-on-primary:\s*#e8324c/);
-  assert.match(css, /--color-secondary-deep:\s*#970c23/);
-  assert.match(css, /--color-gray:\s*#f4f5f7/);
-  assert.doesNotMatch(css, /#3a31a7|#dd785c|#fcf7eb|#848585/i);
+  const tokens = readFileSync(
+    new URL("../wordpress/themes/spa-sage/resources/css/theme/color-tokens.css", import.meta.url),
+    "utf8",
+  );
+  assert.match(canvas, /@import\s+"\.\/theme\/color-tokens\.css"/);
+  assert.match(tokens, /:root,\s*\n\.editor-styles-wrapper/);
+  assert.match(tokens, /--color-primary:\s*#031433/);
+  assert.match(tokens, /--color-secondary:\s*#c8102e/);
+  assert.match(tokens, /--color-secondary-on-primary:\s*#e8324c/);
+  assert.doesNotMatch(tokens, /#3a31a7|#dd785c|#fcf7eb|#848585/i);
 });
 
 test("addClassToRoot adds a class without disturbing other attributes", () => {

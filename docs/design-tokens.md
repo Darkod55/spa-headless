@@ -2,7 +2,7 @@
 
 The public stylesheet is `astro/src/styles/global.css`, ported from [Darkod55/spa](https://github.com/Darkod55/spa) `src/styles/global.css`. That site does not use Tailwind. `DESIGN.md` in that repo names this file as the brand source. `tokens.css` and `theme.css` there are an older EmDash template and are not the live palette.
 
-The theme copy is `wordpress/themes/spa-sage/resources/css/theme/variables.css`. Hex lives in those two files. The BlockStudio picker stores `var(--color-…)` plus a slug. Astro and the editor turn the slug into `.has-text-*` / `.has-bg-*`.
+The theme copy is `wordpress/themes/spa-sage/resources/css/theme/variables.css`. Hex for every `--color-*` token lives in `wordpress/themes/spa-sage/resources/css/theme/color-tokens.css`, on `:root` and `.editor-styles-wrapper`. Astro, the editor iframe, and the wp-admin sidebar all import that file. It is plain CSS, not a Tailwind `@theme` block, so unused variables are still emitted. The BlockStudio picker stores `var(--color-…)` plus a slug. Astro and the editor turn the slug into `.has-text-*` / `.has-bg-*`.
 
 Oswald and Montserrat (weights 400–700) are self-hosted woff2 files in `wordpress/themes/spa-sage/resources/fonts` (OFL). Astro still loads `@fontsource` for the public site.
 

@@ -1,9 +1,8 @@
 /*
-  Classes for the brand colour dataset. Hex lives in global.css and editor.css
-  (--color-navy, --color-red, --color-royal, --color-black, --color-white).
-  Loaded in the editor and imported by Astro. .hero__copy rules win over the
-  hero's inherited heading colour when an editor sets a text colour.
+  Classes for the brand colour dataset. The variables are defined in
+  theme/color-tokens.css, imported here so this file never ships alone.
 */
+@import "../theme/color-tokens.css";
 
 .has-text-navy,
 .hero__copy .has-text-navy,

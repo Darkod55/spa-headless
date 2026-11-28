@@ -1,31 +1,9 @@
 /**
- * Block editor chrome. This file loads in the wp-admin document, not in
- * the editor iframe. BlockStudio draws colour swatches in the sidebar
- * from the option `value` (`var(--color-…)`), so these variables have to
- * exist on this document's :root. The iframe gets the same hex from
- * resources/css/theme/variables.css. Keep the two lists in step.
+ * Block editor chrome. This file loads in the wp-admin document.
+ * Colour tokens come from color-tokens.css, the same file the iframe
+ * and the Astro site import.
  */
-:root {
-  --color-primary: #031433;
-  --color-secondary: #c8102e;
-  --color-secondary-deep: #970c23;
-  --color-tertiary: #012169;
-  --color-white: #ffffff;
-  --color-gray: #f4f5f7;
-  --color-black: #000000;
-  --color-secondary-on-primary: #e8324c;
-  --color-secondary-on-tertiary: #ff8a9a;
-
-  --color-navy: var(--color-primary);
-  --color-royal: var(--color-tertiary);
-  --color-red: var(--color-secondary);
-  --color-red-deep: var(--color-secondary-deep);
-  --color-red-on-navy: var(--color-secondary-on-primary);
-  --color-red-on-royal: var(--color-secondary-on-tertiary);
-  --color-grey: var(--color-gray);
-  --color-grey-50: var(--color-gray);
-  --color-light: var(--color-gray);
-}
+@import "./theme/color-tokens.css";
 
 /**
  * By default WP wraps the canvas in a padded, grey-backed frame so it
