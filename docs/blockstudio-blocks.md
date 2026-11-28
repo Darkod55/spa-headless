@@ -48,7 +48,11 @@ Two blocks, not a variant field. The height is the block.
 | `spa/hero-banner-main` | `100vh`, then `100svh`, then `100dvh`, minus `--header-height` |
 | `spa/hero-banner-default` | `540px` on desktop, the live inner-page hero |
 
-They share `blockstudio/sections/hero-banner/template.php` and `assets/hero-banner.css`. Background is `custom/background-colour` (default `var(--color-navy)`). Shapes follow `hero--bg-{slug}`. A saved string `"navy"` still renders. The image field is a single BlockStudio `files` field. REST returns `{ id, url, alt, width, height }`. Inner blocks are only `core/heading` and `core/paragraph`, starting as one H1 and one paragraph.
+They share `app/blocks/hero-banner/template.php` and `resources/css/components/spa-hero-banner.css`. Background is `custom/background-colour` (default `var(--color-navy)`). Shapes follow `hero--bg-{slug}`. A saved string `"navy"` still renders. The image field is a single BlockStudio `files` field. REST returns `{ id, url, alt, width, height }`. Inner blocks are `spa/badge`, `core/heading`, and `core/paragraph`. A new hero starts badge, then H1, then paragraph. A hero that already has inner blocks is left as saved. The space between those blocks is `--hero-copy-gap` (`22px`, `18px` on a tablet) on `.hero__copy` and on the editor's inner block list.
+
+## Badge
+
+`spa/badge` is the live eyebrow (`Label.astro`, default size). It is a parallelogram from `clip-path`, slant `12px`, padding `8px 26px`, Oswald `1rem` / weight `500`, letter-spacing `0.12em`, uppercase. Default background is secondary (`#c8102e`) and default text is white. White text on a white or gray background becomes navy. Text is a RichText field. Background and text colour reuse `custom/background-colour` and `custom/text-colour`. The text-colour `set` is cleared on this block so the classes in `spa-badge.css` own the colour in both the editor and Astro. The block is not limited to the hero.
 
 `spa/hero` is the old scaffold. `inserter` is false. Leave it registered so existing content still renders.
 
@@ -65,5 +69,5 @@ They share `blockstudio/sections/hero-banner/template.php` and `assets/hero-bann
 - A second stylesheet that drifts from the editor.
 - Nesting two `<InnerBlocks />`. WordPress allows one.
 - Assuming `set` classes are in `innerHTML`. Apply them from `attrs`.
-- Putting `display: flex` on `.block-editor-block-list__layout`, or leaving `.hero { overflow: hidden }` to clip the editor toolbar. Shapes need `pointer-events: none`. Editor heading colour must be `var(--hero-text)` at a higher specificity than `.editor-styles-wrapper h1`, or the type disappears on navy.
+- Putting `display: flex` on `.block-editor-block-list__layout` except the hero copy list, which uses that flex gap on purpose. Shapes need `pointer-events: none`. In the editor the inner heading inherits the block wrapper's colour, because BlockStudio's `set` lands on the wrapper. A badge sets its own colour so that inheritance does not turn it white.
 - Putting blocks in the plugin. BlockStudio will not register them.

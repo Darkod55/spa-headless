@@ -40,18 +40,36 @@ const heroPhoto = {
   height: 800,
 };
 
+function eyebrow(
+  text = "Different by design",
+  background: { value: string; name: string; slug: string } = {
+    value: "var(--color-secondary)",
+    name: "Secondary",
+    slug: "secondary",
+  },
+  textColour: { value: string; name: string; slug: string } = {
+    value: "var(--color-white)",
+    name: "White",
+    slug: "white",
+  },
+): WpBlock {
+  return block("spa/badge", { text, bg_colour: background, text_colour: textColour });
+}
+
 function heroBanner(
   name: "spa/hero-banner-main" | "spa/hero-banner-default",
   background: string | { value: string; name: string; slug: string },
   title: string,
   text: string,
   textColour?: { value: string; name: string; slug: string },
+  label?: string,
 ): WpBlock {
   const titleBlock = heading(1, title);
   if (textColour) {
     titleBlock.attrs.text_colour = textColour;
   }
-  return block(name, { background, image: heroPhoto }, [titleBlock, paragraph(text)]);
+  const children = label ? [eyebrow(label), titleBlock, paragraph(text)] : [titleBlock, paragraph(text)];
+  return block(name, { background, image: heroPhoto }, children);
 }
 
 function page(options: {
@@ -104,6 +122,8 @@ const home = page({
       "navy",
       "Why fit in when you can stand out?",
       "Strategic marketing for organisations in the addiction, mental health, behavioural health and wellness sectors.",
+      undefined,
+      "Different by design",
     ),
     block(
       "spa/section",
@@ -334,6 +354,11 @@ const textColour = page({
       "spa/hero-banner-main",
       { background: "navy", image: heroPhoto },
       [
+        block("spa/badge", {
+          text: "Different by design",
+          bg_colour: { value: "var(--color-secondary)", slug: "secondary", name: "Secondary" },
+          text_colour: { value: "var(--color-white)", slug: "white", name: "White" },
+        }),
         block(
           "core/heading",
           {
@@ -357,6 +382,11 @@ const textColour = page({
         ),
       ],
     ),
+    block("spa/badge", {
+      text: "On a light ground",
+      bg_colour: { value: "var(--color-gray)", slug: "gray", name: "Gray" },
+      text_colour: { value: "var(--color-white)", slug: "white", name: "White" },
+    }),
     block(
       "core/heading",
       {

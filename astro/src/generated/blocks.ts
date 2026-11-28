@@ -33,6 +33,13 @@ export interface SpaFileValue {
   title?: string;
 }
 
+/** Badge — spa/badge (wordpress/themes/spa-sage/app/blocks/badge/block.json) */
+export interface SpaBadgeAttributes {
+  text?: string;
+  bg_colour?: string | SpaColorValue;
+  text_colour?: string | SpaColorValue;
+}
+
 /** Card grid — spa/card-grid (wordpress/themes/spa-headless/blockstudio/sections/card-grid/block.json) */
 export interface SpaCardGridAttributes {
   heading?: string;
@@ -78,6 +85,12 @@ export interface SpaSectionAttributes {
   accentBg?: boolean;
 }
 
+export interface SpaBadgeFieldMap {
+  text: true;
+  bg_colour: true;
+  text_colour: true;
+}
+
 export interface SpaCardGridFieldMap {
   heading: true;
   intro: true;
@@ -119,6 +132,7 @@ export interface SpaSectionFieldMap {
 }
 
 export const spaBlockNames = [
+  "spa/badge",
   "spa/card-grid",
   "spa/hero",
   "spa/hero-banner-default",
@@ -129,6 +143,7 @@ export const spaBlockNames = [
 export type SpaBlockName = (typeof spaBlockNames)[number];
 
 export interface SpaBlockAttributesByName {
+  "spa/badge": SpaBadgeAttributes;
   "spa/card-grid": SpaCardGridAttributes;
   "spa/hero": SpaHeroAttributes;
   "spa/hero-banner-default": SpaHeroBannerDefaultAttributes;

@@ -12,6 +12,7 @@ import BlockRenderer from "./BlockRenderer.astro";
 import Hero from "./spa/Hero.astro";
 import HeroBannerMain from "./spa/HeroBannerMain.astro";
 import HeroBannerDefault from "./spa/HeroBannerDefault.astro";
+import Badge from "./spa/Badge.astro";
 import Section from "./spa/Section.astro";
 import CardGrid from "./spa/CardGrid.astro";
 import Paragraph from "./core/Paragraph.astro";
@@ -36,6 +37,7 @@ const mapped = new Set([
   "spa/hero",
   "spa/hero-banner-main",
   "spa/hero-banner-default",
+  "spa/badge",
   "spa/section",
   "spa/card-grid",
   "core/paragraph",
@@ -68,6 +70,9 @@ const mapped = new Set([
       ))}
     </HeroBannerMain>
   )
+}
+{
+  name === "spa/badge" && <Badge block={block} />
 }
 {
   name === "spa/hero-banner-default" && (

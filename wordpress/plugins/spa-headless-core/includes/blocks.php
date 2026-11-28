@@ -334,7 +334,7 @@ function spa_headless_flatten_blockstudio_attributes( array &$attrs ): void {
 		}
 	}
 
-	foreach ( array( 'text_colour', 'background' ) as $key ) {
+	foreach ( array( 'text_colour', 'background', 'bg_colour' ) as $key ) {
 		if ( ! array_key_exists( $key, $attrs ) ) {
 			continue;
 		}

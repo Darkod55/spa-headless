@@ -8,7 +8,7 @@
   },
   "scripts": {
     "generate": "tsx scripts/generate-block-types.ts",
-    "test": "tsx --test scripts/block-fields.test.ts scripts/menu.test.ts scripts/icons.test.ts scripts/social.test.ts scripts/logo.test.ts scripts/hero-banner.test.ts scripts/color.test.ts scripts/typography.test.ts scripts/css-tokens.test.ts scripts/text-colour.playwright.test.ts && php scripts/blocks-normalize-test.php && php scripts/nav-test.php && php scripts/hero-banner-test.php",
+    "test": "tsx --test scripts/block-fields.test.ts scripts/menu.test.ts scripts/icons.test.ts scripts/social.test.ts scripts/logo.test.ts scripts/hero-banner.test.ts scripts/color.test.ts scripts/typography.test.ts scripts/badge.test.ts scripts/css-tokens.test.ts scripts/text-colour.playwright.test.ts && php scripts/blocks-normalize-test.php && php scripts/nav-test.php && php scripts/hero-banner-test.php",
     "check": "pnpm generate && pnpm --filter @spa/astro check",
     "build": "pnpm generate && pnpm --filter @spa/astro build",
     "dev": "pnpm generate && pnpm --filter @spa/astro dev"

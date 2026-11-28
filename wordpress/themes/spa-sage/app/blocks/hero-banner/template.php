@@ -63,6 +63,7 @@ $image = function_exists('spa_headless_prepare_hero_image')
 $classes = 'hero ' . $variant_class . ' ' . $modifier;
 
 $template = [
+    ['spa/badge', []],
     [
         'core/heading',
         [
@@ -115,7 +116,7 @@ $template = [
 			<div class="container hero__inner">
 				<div class="hero__copy">
 					<InnerBlocks
-						allowedBlocks="<?php echo spa_sage_json_attr(['core/heading', 'core/paragraph']); ?>"
+						allowedBlocks="<?php echo spa_sage_json_attr(['spa/badge', 'core/heading', 'core/paragraph']); ?>"
 						template="<?php echo spa_sage_json_attr($template); ?>"
 						templateLock="false"
 					/>

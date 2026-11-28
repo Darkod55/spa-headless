@@ -1,0 +1,38 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "spa/badge",
+  "title": "Badge",
+  "category": "spa",
+  "icon": "tag",
+  "description": "Slanted eyebrow label. Red parallelogram, white uppercase Oswald, by default.",
+  "supports": {
+    "html": false
+  },
+  "style": "file:../../resources/css/components/spa-badge.css",
+  "editorStyle": "file:../../resources/css/components/spa-badge.css",
+  "blockstudio": {
+    "attributes": [
+      {
+        "id": "text",
+        "type": "richtext",
+        "label": "Text",
+        "default": "Different by design"
+      },
+      {
+        "type": "custom/background-colour",
+        "overrides": {
+          "bg_colour": { "default": "var(--color-secondary)" }
+        }
+      },
+      {
+        "type": "custom/text-colour",
+        "overrides": {
+          "text_colour": {
+            "default": "var(--color-white)",
+            "set": []
+          }
+        }
+      }
+    ]
+  }
+}

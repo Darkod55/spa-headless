@@ -1,0 +1,19 @@
+---
+import type { SpaBadgeAttributes } from "../../../generated/blocks";
+import { badgeClasses } from "../../../lib/blocks/badge";
+import { badgeFields } from "./badge.contract";
+import "../../../../../wordpress/themes/spa-sage/resources/css/components/spa-badge.css";
+
+interface Props {
+  block: { attrs: SpaBadgeAttributes };
+}
+
+const { block } = Astro.props;
+void badgeFields;
+const text = typeof block.attrs.text === "string" ? block.attrs.text : "";
+const classes = badgeClasses(block.attrs.bg_colour, block.attrs.text_colour);
+---
+
+<span class:list={classes}>
+  <span class="badge__text" set:html={text} />
+</span>

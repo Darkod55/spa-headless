@@ -238,6 +238,31 @@ spa_assert( 44 === $saved[0]['attrs']['image']['id'], 'A saved image must not be
 spa_assert( 'white' === $saved[0]['innerBlocks'][0]['attrs']['text_colour']['slug'], 'An empty text_colour must lose to the nested colour object.' );
 spa_assert( ! array_key_exists( 'text_colour', $saved[0]['innerBlocks'][1]['attrs'] ), 'An empty text_colour with no nested colour is removed.' );
 
+$badge = spa_headless_normalize_blocks(
+	array(
+		array(
+			'blockName'    => 'spa/badge',
+			'attrs'        => array(
+				'blockstudio' => array(
+					'attributes' => array(
+						'bg_colour'   => 'var(--color-secondary)',
+						'text_colour' => array(
+							'value' => 'var(--color-white)',
+							'slug'  => 'white',
+							'name'  => 'White',
+						),
+					),
+				),
+			),
+			'innerBlocks'  => array(),
+			'innerHTML'    => '',
+			'innerContent' => array(),
+		),
+	)
+);
+spa_assert( 'secondary' === $badge[0]['attrs']['bg_colour']['slug'], 'A badge background variable becomes a colour object.' );
+spa_assert( 'white' === $badge[0]['attrs']['text_colour']['slug'], 'A badge text colour object is kept.' );
+
 $legacy = spa_headless_colour_object( 'navy' );
 spa_assert( is_array( $legacy ) && 'navy' === $legacy['slug'] && 'var(--color-navy)' === $legacy['value'], 'A legacy slug string becomes a colour object.' );
 spa_assert( null === spa_headless_colour_object( '' ), 'An empty string is not a colour.' );

@@ -10,6 +10,24 @@ import { chromium, type Page } from "playwright";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const astroUrl = "http://127.0.0.1:4321/text-colour";
 
+type AstroBadge = {
+  hero: { background: string; color: string; size: string; weight: string; spacing: string; padding: string; transform: string; clip: string };
+  light: { background: string; color: string };
+  gap: string;
+};
+
+type EditorBadge = {
+  background: string;
+  color: string;
+  size: string;
+  weight: string;
+  spacing: string;
+  padding: string;
+  transform: string;
+  clip: string;
+  gap: string;
+};
+
 type EditorColours = {
   heading: string;
   mark: string;
@@ -39,6 +57,13 @@ function hex(color: string): string {
 async function colorOf(page: Page, selector: string): Promise<string> {
   const value = await page.locator(selector).evaluate((el) => getComputedStyle(el).color);
   return hex(value);
+}
+
+function badgeCss(): string {
+  return readFileSync(
+    join(root, "wordpress/themes/spa-sage/resources/css/components/spa-badge.css"),
+    "utf8",
+  ).replace(/@import[^;]+;\s*/, "");
 }
 
 function builtEditorCss(): string {
@@ -131,8 +156,46 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
     assert.equal(await colorOf(page, ".hero__copy p"), "#c8102e");
     assert.equal(await colorOf(page, "article h2"), "#c8102e");
     assert.equal(await colorOf(page, ".hero"), "#ffffff");
+    const astroBadge = await page.evaluate<AstroBadge | null>(`(() => {
+      const paint = (el) => {
+        const style = getComputedStyle(el);
+        const match = style.backgroundColor.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+        const color = style.color.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+        const hex = (parts) => parts ? "#" + parts.slice(1, 4).map((part) => Number(part).toString(16).padStart(2, "0")).join("") : "";
+        return {
+          background: hex(match),
+          color: hex(color),
+          size: style.fontSize,
+          weight: style.fontWeight,
+          spacing: style.letterSpacing,
+          padding: style.padding,
+          transform: style.textTransform,
+          clip: style.clipPath,
+        };
+      };
+      const hero = document.querySelector(".hero__copy .badge");
+      const light = document.querySelector(".badge--bg-gray");
+      const copy = document.querySelector(".hero__copy");
+      if (!hero || !light || !copy) return null;
+      return { hero: paint(hero), light: paint(light), gap: getComputedStyle(copy).rowGap };
+    })()`);
+    if (!astroBadge) {
+      throw new Error("the fixture page is missing a badge");
+    }
+    assert.equal(astroBadge.hero.background, "#c8102e");
+    assert.equal(astroBadge.hero.color, "#ffffff");
+    assert.equal(astroBadge.hero.size, "16px");
+    assert.equal(astroBadge.hero.weight, "500");
+    assert.equal(astroBadge.hero.spacing, "1.92px");
+    assert.equal(astroBadge.hero.padding, "8px 26px");
+    assert.equal(astroBadge.hero.transform, "uppercase");
+    assert.notEqual(astroBadge.hero.clip, "none");
+    assert.equal(astroBadge.gap, "22px");
+    assert.equal(astroBadge.light.background, "#f4f5f7");
+    assert.equal(astroBadge.light.color, "#031433");
 
     const editorCss = builtEditorCss();
+    const badgeSource = badgeCss();
     /*
       BlockStudio 7.7.15 editor.BlockListBlock (extensions.tsx): style set
       rules become a stylesheet on [data-block], and class set rules become
@@ -140,12 +203,16 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
     */
     const editorHtml = `<!doctype html>
       <style>${editorCss}</style>
+      <style>${badgeSource}</style>
       <style>.editor-styles-wrapper [data-block="heading-1"] { color: var(--color-secondary-on-tertiary) }</style>
       <style>.editor-styles-wrapper [data-block="para-1"] { color: var(--color-secondary) }</style>
       <div class="editor-styles-wrapper">
         <section class="hero hero--main hero--bg-navy">
           <div class="hero__copy">
             <div class="block-editor-block-list__layout">
+              <div class="wp-block" data-block="badge-1" data-type="spa/badge">
+                <span class="badge badge--bg-secondary badge--text-white"><span class="badge__text">Different by design</span></span>
+              </div>
               <div class="wp-block has-text-secondary-on-tertiary fs-h2 fw-700" data-block="heading-1" data-type="core/heading">
                 <h1 class="wp-block-heading block-editor-rich-text__editable">Why fit in when you can <mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-secondary-on-primary-color">stand out?</mark></h1>
               </div>
@@ -210,6 +277,39 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
       assert.equal(editorColours.headingSize, editorColours.wrapSize);
       assert.equal(editorColours.headingWeight, editorColours.wrapWeight);
       assert.notEqual(editorColours.plainSize, editorColours.plainWrapSize);
+      const editorBadge = await page.evaluate<EditorBadge | null>(`(() => {
+        const hex = (value) => {
+          const match = value.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+          return match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : value;
+        };
+        const badge = document.querySelector("[data-block='badge-1'] .badge");
+        const list = document.querySelector(".hero__copy .block-editor-block-list__layout");
+        if (!badge || !list) return null;
+        const style = getComputedStyle(badge);
+        return {
+          background: hex(style.backgroundColor),
+          color: hex(style.color),
+          size: style.fontSize,
+          weight: style.fontWeight,
+          spacing: style.letterSpacing,
+          padding: style.padding,
+          transform: style.textTransform,
+          clip: style.clipPath,
+          gap: getComputedStyle(list).rowGap,
+        };
+      })()`);
+      if (!editorBadge) {
+        throw new Error("the editor fixture is missing a badge");
+      }
+      assert.equal(editorBadge.background, "#c8102e");
+      assert.equal(editorBadge.color, "#ffffff");
+      assert.equal(editorBadge.size, "16px");
+      assert.equal(editorBadge.weight, "500");
+      assert.equal(editorBadge.spacing, "1.92px");
+      assert.equal(editorBadge.padding, "8px 26px");
+      assert.equal(editorBadge.transform, "uppercase");
+      assert.notEqual(editorBadge.clip, "none");
+      assert.equal(editorBadge.gap, "22px");
     } finally {
       server.close();
     }
