@@ -16,7 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 add_action( 'after_setup_theme', 'spa_theme_setup' );
+add_action( 'customize_register', 'spa_theme_customize_identity' );
 add_action( 'customize_register', 'spa_theme_customize_announcement' );
+add_action( 'customize_controls_enqueue_scripts', 'spa_theme_customize_controls' );
 add_action( 'wp_enqueue_scripts', 'spa_theme_assets' );
 add_action( 'wp_head', 'spa_theme_noindex', 0 );
 add_filter( 'block_categories_all', 'spa_theme_block_category' );
@@ -243,6 +245,85 @@ function spa_link_values( $link ): array {
 		'url'     => $url,
 		'title'   => $title,
 		'new_tab' => ! empty( $link['opensInNewTab'] ),
+	);
+}
+
+/**
+ * Alternative logo in Site Identity, directly under the core Logo control.
+ *
+ * Core registers `custom_logo` at priority 8. This control stores an
+ * attachment ID (WP_Customize_Media_Control), not a URL. "Show in footer"
+ * is hidden until that attachment is set; customize-controls.js updates
+ * that live, and the active_callback covers the first paint.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function spa_theme_customize_identity( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_setting(
+		'spa_alt_logo',
+		array(
+			'default'           => 0,
+			'sanitize_callback' => 'absint',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		new WP_Customize_Media_Control(
+			$wp_customize,
+			'spa_alt_logo',
+			array(
+				'label'       => __( 'Alternative logo', 'spa-headless' ),
+				'description' => __( 'A second wordmark, for example a white logo on the navy footer.', 'spa-headless' ),
+				'section'     => 'title_tagline',
+				'mime_type'   => 'image',
+				'priority'    => 9,
+				'button_labels' => array(
+					'select'       => __( 'Select logo', 'spa-headless' ),
+					'change'       => __( 'Change logo', 'spa-headless' ),
+					'remove'       => __( 'Remove', 'spa-headless' ),
+					'default'      => __( 'Default', 'spa-headless' ),
+					'placeholder'  => __( 'No logo selected', 'spa-headless' ),
+					'frame_title'  => __( 'Select logo', 'spa-headless' ),
+					'frame_button' => __( 'Choose logo', 'spa-headless' ),
+				),
+			)
+		)
+	);
+
+	$wp_customize->add_setting(
+		'spa_alt_logo_in_footer',
+		array(
+			'default'           => false,
+			'sanitize_callback' => static function ( $value ): bool {
+				return rest_sanitize_boolean( $value );
+			},
+		)
+	);
+	$wp_customize->add_control(
+		'spa_alt_logo_in_footer',
+		array(
+			'label'           => __( 'Show in footer', 'spa-headless' ),
+			'section'         => 'title_tagline',
+			'type'            => 'checkbox',
+			'priority'        => 10,
+			'active_callback' => static function (): bool {
+				return (int) get_theme_mod( 'spa_alt_logo', 0 ) > 0;
+			},
+		)
+	);
+}
+
+/**
+ * Show "Show in footer" as soon as an alternative logo is chosen, and hide
+ * it again when that image is removed, before the change is published.
+ */
+function spa_theme_customize_controls(): void {
+	wp_enqueue_script(
+		'spa-customize-controls',
+		get_stylesheet_directory_uri() . '/assets/customize-controls.js',
+		array( 'customize-controls' ),
+		wp_get_theme()->get( 'Version' ),
+		true
 	);
 }
 

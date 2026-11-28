@@ -124,4 +124,22 @@ $closed = spa_headless_format_announcement( array( 'enabled' => false, 'target' 
 spa_nav_assert( false === $closed['enabled'], 'The toggle should be able to hide the bar.' );
 spa_nav_assert( '' === $closed['target'], 'Only _blank is a valid link target.' );
 
+$alt  = array( 'url' => 'https://squarepeg-cms.local/alt.svg', 'alt' => 'Alt' );
+$main = array( 'url' => 'https://squarepeg-cms.local/main.svg', 'alt' => 'Main' );
+
+$chosen = spa_headless_resolve_footer_logo( $alt, true, $main );
+spa_nav_assert( 'https://squarepeg-cms.local/alt.svg' === $chosen['url'], 'A ticked alternative logo should be the footer logo.' );
+
+$unticked = spa_headless_resolve_footer_logo( $alt, false, $main );
+spa_nav_assert( 'https://squarepeg-cms.local/main.svg' === $unticked['url'], 'An unticked alternative logo should leave the main logo in the footer.' );
+
+$missing = spa_headless_resolve_footer_logo( null, true, $main );
+spa_nav_assert( 'https://squarepeg-cms.local/main.svg' === $missing['url'], 'A ticked but missing alternative logo should fall back to the main logo.' );
+
+$empty = spa_headless_resolve_footer_logo( array( 'url' => '' ), true, $main );
+spa_nav_assert( 'https://squarepeg-cms.local/main.svg' === $empty['url'], 'An alternative logo without a URL should not win.' );
+
+$none = spa_headless_resolve_footer_logo( null, false, null );
+spa_nav_assert( null === $none, 'No logos should resolve to null so Astro can use the bundled wordmark.' );
+
 fwrite( STDOUT, "nav ok\n" );

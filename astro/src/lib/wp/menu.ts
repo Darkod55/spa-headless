@@ -39,6 +39,10 @@ export interface WpSite {
   description: string;
   url: string;
   logo: SiteLogo | null;
+  /** Alternative logo, present even when "Show in footer" is off. */
+  altLogo?: SiteLogo | null;
+  /** Alt logo when set and ticked, otherwise the main logo. Null when neither exists. */
+  footerLogo?: SiteLogo | null;
   siteIcon?: SiteIcon | null;
   announcement?: Announcement | null;
 }

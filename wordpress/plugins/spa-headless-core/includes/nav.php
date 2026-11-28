@@ -270,7 +270,27 @@ function spa_headless_rest_menu( WP_REST_Request $request ) {
 }
 
 /**
- * Custom logo plus the site title, which is the alt text when the logo has none.
+ * Footer logo: the alternative logo when it is set and "Show in footer" is
+ * ticked, otherwise the main custom logo. Null when neither has a URL.
+ *
+ * @param array<string, mixed>|null $alt
+ * @param bool                      $in_footer
+ * @param array<string, mixed>|null $logo
+ * @return array<string, mixed>|null
+ */
+function spa_headless_resolve_footer_logo( ?array $alt, bool $in_footer, ?array $logo ): ?array {
+	if ( $in_footer && isset( $alt['url'] ) && is_string( $alt['url'] ) && '' !== $alt['url'] ) {
+		return $alt;
+	}
+	if ( isset( $logo['url'] ) && is_string( $logo['url'] ) && '' !== $logo['url'] ) {
+		return $logo;
+	}
+
+	return null;
+}
+
+/**
+ * Attachment as the logo object shared by logo, altLogo, and footerLogo.
  *
  * SVG files often have no pixel metadata. The viewBox supplies width and height
  * so the header can keep the wordmark's aspect ratio. The URL stays on the
@@ -278,8 +298,7 @@ function spa_headless_rest_menu( WP_REST_Request $request ) {
  *
  * @return array<string, mixed>|null
  */
-function spa_headless_site_logo(): ?array {
-	$attachment_id = (int) get_theme_mod( 'custom_logo' );
+function spa_headless_logo_from_attachment( int $attachment_id ): ?array {
 	if ( $attachment_id <= 0 ) {
 		return null;
 	}
@@ -319,6 +338,41 @@ function spa_headless_site_logo(): ?array {
 		'height' => $height > 0 ? $height : null,
 		'alt'    => $alt,
 		'mime'   => $mime,
+	);
+}
+
+/**
+ * Site Identity → Logo (`custom_logo`).
+ *
+ * @return array<string, mixed>|null
+ */
+function spa_headless_site_logo(): ?array {
+	return spa_headless_logo_from_attachment( (int) get_theme_mod( 'custom_logo' ) );
+}
+
+/**
+ * Site Identity → Alternative logo (`spa_alt_logo`), whether or not the
+ * footer checkbox is ticked.
+ *
+ * @return array<string, mixed>|null
+ */
+function spa_headless_alt_logo(): ?array {
+	return spa_headless_logo_from_attachment( (int) get_theme_mod( 'spa_alt_logo', 0 ) );
+}
+
+/**
+ * The logo the footer should render. Astro substitutes the bundled white
+ * wordmark when this is null.
+ *
+ * @return array<string, mixed>|null
+ */
+function spa_headless_footer_logo(): ?array {
+	$in_footer = (bool) get_theme_mod( 'spa_alt_logo_in_footer', false );
+
+	return spa_headless_resolve_footer_logo(
+		spa_headless_alt_logo(),
+		$in_footer,
+		spa_headless_site_logo()
 	);
 }
 
@@ -428,6 +482,8 @@ function spa_headless_rest_site(): WP_REST_Response {
 			'description'  => get_bloginfo( 'description' ),
 			'url'          => home_url( '/' ),
 			'logo'         => spa_headless_site_logo(),
+			'altLogo'      => spa_headless_alt_logo(),
+			'footerLogo'   => spa_headless_footer_logo(),
 			'siteIcon'     => spa_headless_site_icon(),
 			'announcement' => spa_headless_announcement(),
 		)

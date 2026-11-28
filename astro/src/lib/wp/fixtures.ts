@@ -457,6 +457,8 @@ export function fixtureSite(): WpSite {
       alt: "The Square Peg Agency",
       mime: "image/svg+xml",
     },
+    altLogo: null,
+    footerLogo: null,
     siteIcon: fixtureSiteIcon(),
     announcement: {
       enabled: true,

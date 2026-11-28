@@ -1,8 +1,10 @@
 ---
 import "../../styles/footer.css";
 import SocialIcon from "./SocialIcon.astro";
+import { resolveFooterLogo } from "../../lib/wp/logo";
 import { withCurrent, type MenuItem, type WpSite } from "../../lib/wp/menu";
 import { socialAriaLabel, socialPlatformFromUrl } from "../../lib/wp/social";
+import { usingFixtures } from "../../lib/wp/client";
 
 interface Props {
   site: WpSite;
@@ -17,17 +19,18 @@ const footerItems = withCurrent(footer, path);
 const legalItems = withCurrent(legal, path);
 const year = new Date().getFullYear();
 const homeLabel = `${site.title || "The Square Peg Agency"} – home`;
+const logo = resolveFooterLogo(site.footerLogo, { fixtures: usingFixtures(), title: site.title });
 ---
 
 <footer class="site-footer">
   <div class="container site-footer__main">
     <a class="site-footer__logo" href="/" aria-label={homeLabel}>
       <img
-        src="/fixtures/logo-white.svg"
-        alt={site.title || "The Square Peg Agency"}
+        src={logo.url}
+        alt={logo.alt}
         class="site-footer__logo-img"
-        width="232"
-        height="60"
+        width={logo.width ?? 232}
+        height={logo.height ?? 60}
         decoding="async"
       />
     </a>
