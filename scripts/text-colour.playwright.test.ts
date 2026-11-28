@@ -406,6 +406,43 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
     assert.equal(lightHover.background, "#f4f5f7");
     assert.equal(lightHover.color, "#031433");
 
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.locator('a.cta--primary[href="/contact"]').scrollIntoViewIfNeeded();
+    const mobileFront = await page.evaluate<{
+      direction: string;
+      gap: string;
+      justify: string;
+      link: number;
+      row: number;
+      copy: number;
+      stacked: boolean;
+    }>(`(() => {
+      const row = document.querySelector(".hero__copy .wp-block-buttons");
+      const link = document.querySelector('a.cta--primary[href="/contact"]');
+      const next = document.querySelector("a.cta--light");
+      const copy = document.querySelector(".hero__copy");
+      const rowStyle = getComputedStyle(row);
+      const linkStyle = getComputedStyle(link);
+      const a = link.getBoundingClientRect();
+      const b = next.getBoundingClientRect();
+      return {
+        direction: rowStyle.flexDirection,
+        gap: rowStyle.gap,
+        justify: linkStyle.justifyContent,
+        link: Math.round(a.width),
+        row: Math.round(row.getBoundingClientRect().width),
+        copy: Math.round(copy.getBoundingClientRect().width),
+        stacked: b.top >= a.bottom - 2,
+      };
+    })()`);
+    assert.equal(mobileFront.direction, "column");
+    assert.equal(mobileFront.gap, "14px");
+    assert.equal(mobileFront.justify, "center");
+    assert.equal(mobileFront.stacked, true);
+    assert.equal(mobileFront.link, mobileFront.row);
+    assert.ok(Math.abs(mobileFront.row - mobileFront.copy) <= 2);
+    await page.setViewportSize({ width: 1280, height: 800 });
+
     const editorCss = builtEditorCss();
     const badgeSource = badgeCss();
     /*
@@ -732,6 +769,37 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
         return { x: left, y: top, width: Math.min(window.innerWidth, a.right + 24) - left, height: a.bottom + 16 - top };
       })()`);
       await page.screenshot({ path: "/opt/cursor/artifacts/buttons-editor-hover.png", clip: editorHoverShot });
+      await page.setViewportSize({ width: 375, height: 800 });
+      const mobileEditor = await page.evaluate<{
+        direction: string;
+        gap: string;
+        justify: string;
+        link: number;
+        row: number;
+        stacked: boolean;
+      }>(`(() => {
+        const row = document.querySelector('[data-type="core/buttons"] .block-editor-block-list__layout');
+        const link = document.querySelector('[data-button="primary"] .wp-block-button__link');
+        const next = document.querySelector('[data-button="light-off"]');
+        const rowStyle = getComputedStyle(row);
+        const linkStyle = getComputedStyle(link);
+        const a = link.getBoundingClientRect();
+        const b = next.getBoundingClientRect();
+        return {
+          direction: rowStyle.flexDirection,
+          gap: rowStyle.gap,
+          justify: linkStyle.justifyContent,
+          link: Math.round(a.width),
+          row: Math.round(row.getBoundingClientRect().width),
+          stacked: b.top >= a.bottom - 2,
+        };
+      })()`);
+      assert.equal(mobileEditor.direction, "column");
+      assert.equal(mobileEditor.gap, "14px");
+      assert.equal(mobileEditor.justify, "center");
+      assert.equal(mobileEditor.stacked, true);
+      assert.equal(mobileEditor.link, mobileEditor.row);
+      assert.ok(mobileEditor.row > 300);
     } finally {
       server.close();
     }
