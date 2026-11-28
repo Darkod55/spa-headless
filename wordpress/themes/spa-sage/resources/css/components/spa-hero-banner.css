@@ -426,6 +426,13 @@
   line-height: 1.5;
 }
 
+/*
+  BlockStudio applies an extension `set` to the block wrapper, not the
+  inner RichText element. Style becomes a stylesheet rule on
+  `[data-block]`; class becomes the wrapper's className. The heading
+  inherits that colour. With no choice, the wrapper still inherits
+  --hero-text from .hero. Size and weight classes work the same way.
+*/
 .editor-styles-wrapper .hero__copy :is(
   h1,
   h2,
@@ -437,26 +444,52 @@
   .wp-block-heading,
   .wp-block-paragraph,
   .block-editor-rich-text__editable
-):not(
-  .has-text-navy,
-  .has-text-red,
-  .has-text-royal,
-  .has-text-black,
-  .has-text-white,
-  .has-text-primary,
-  .has-text-secondary,
-  .has-text-tertiary,
-  .has-text-gray,
-  .has-text-grey,
-  .has-text-secondary-deep,
-  .has-text-secondary-on-primary,
-  .has-text-secondary-on-tertiary,
-  .has-text-red-deep,
-  .has-text-red-on-navy,
-  .has-text-red-on-royal
 ) {
-  color: var(--hero-text, #ffffff);
-  caret-color: var(--hero-text, #ffffff);
+  color: inherit;
+  caret-color: currentColor;
+}
+
+.editor-styles-wrapper .hero--main .hero__copy [class*="fs-"] :is(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  .wp-block-heading,
+  .wp-block-paragraph,
+  .block-editor-rich-text__editable
+),
+.editor-styles-wrapper .hero--default .hero__copy [class*="fs-"] :is(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  .wp-block-heading,
+  .wp-block-paragraph,
+  .block-editor-rich-text__editable
+) {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.editor-styles-wrapper .hero__copy :is([class*="fs-"], [class*="fw-"]) :is(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  .wp-block-heading,
+  .wp-block-paragraph,
+  .block-editor-rich-text__editable
+) {
+  font-weight: inherit;
 }
 
 .editor-styles-wrapper .hero :is(

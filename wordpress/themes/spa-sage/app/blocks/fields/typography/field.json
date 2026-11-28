@@ -13,6 +13,10 @@
       },
       "set": [
         {
+          "attribute": "class",
+          "value": "has-text-{attributes.text_colour.slug}"
+        },
+        {
           "attribute": "style",
           "value": "color: {attributes.text_colour.value}"
         }

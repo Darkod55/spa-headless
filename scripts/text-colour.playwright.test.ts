@@ -10,6 +10,19 @@ import { chromium, type Page } from "playwright";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const astroUrl = "http://127.0.0.1:4321/text-colour";
 
+type EditorColours = {
+  heading: string;
+  mark: string;
+  paragraph: string;
+  plain: string;
+  headingSize: string;
+  wrapSize: string;
+  headingWeight: string;
+  wrapWeight: string;
+  plainSize: string;
+  plainWrapSize: string;
+};
+
 function hex(color: string): string {
   const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
   if (!match) {
@@ -120,19 +133,31 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
     assert.equal(await colorOf(page, ".hero"), "#ffffff");
 
     const editorCss = builtEditorCss();
+    /*
+      BlockStudio 7.7.15 editor.BlockListBlock (extensions.tsx): style set
+      rules become a stylesheet on [data-block], and class set rules become
+      the wrapper className. The inner RichText h1 receives neither.
+    */
     const editorHtml = `<!doctype html>
       <style>${editorCss}</style>
+      <style>.editor-styles-wrapper [data-block="heading-1"] { color: var(--color-secondary-on-tertiary) }</style>
+      <style>.editor-styles-wrapper [data-block="para-1"] { color: var(--color-secondary) }</style>
       <div class="editor-styles-wrapper">
         <section class="hero hero--main hero--bg-navy">
           <div class="hero__copy">
             <div class="block-editor-block-list__layout">
-              <h1 class="wp-block-heading block-editor-rich-text__editable" style="color: var(--color-secondary-on-tertiary);">Why fit in when you can <mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-secondary-on-primary-color">stand out?</mark></h1>
-              <p class="wp-block-paragraph has-text-secondary">A paragraph with text colour secondary.</p>
-              <h2 class="wp-block-heading block-editor-rich-text__editable">Uncoloured hero heading</h2>
+              <div class="wp-block has-text-secondary-on-tertiary fs-h2 fw-700" data-block="heading-1" data-type="core/heading">
+                <h1 class="wp-block-heading block-editor-rich-text__editable">Why fit in when you can <mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-secondary-on-primary-color">stand out?</mark></h1>
+              </div>
+              <div class="wp-block has-text-secondary" data-block="para-1" data-type="core/paragraph">
+                <p class="wp-block-paragraph block-editor-rich-text__editable">A paragraph with text colour secondary.</p>
+              </div>
+              <div class="wp-block" data-block="heading-2" data-type="core/heading">
+                <h2 class="wp-block-heading block-editor-rich-text__editable">Uncoloured hero heading</h2>
+              </div>
             </div>
           </div>
         </section>
-        <h2 class="wp-block-heading has-text-secondary">Heading outside the hero</h2>
       </div>`;
     const server = createServer((_req, res) => {
       res.setHeader("content-type", "text/html; charset=utf-8");
@@ -141,14 +166,50 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
     const port = await listen(server);
     try {
       await page.goto(`http://127.0.0.1:${port}/`);
-      assert.equal(
-        await colorOf(page, ".editor-styles-wrapper > .hero.hero--bg-navy .hero__copy .block-editor-block-list__layout > h1"),
-        "#ff8a9a",
-      );
-      assert.equal(await colorOf(page, ".editor-styles-wrapper h1 mark"), "#e8324c");
-      assert.equal(await colorOf(page, ".editor-styles-wrapper .hero__copy p"), "#c8102e");
-      assert.equal(await colorOf(page, ".editor-styles-wrapper .hero__copy h2"), "#ffffff");
-      assert.equal(await colorOf(page, ".editor-styles-wrapper > h2"), "#c8102e");
+      const editorColours = await page.evaluate<EditorColours | null>(`(() => {
+        const read = (el) => {
+          const style = getComputedStyle(el);
+          const match = style.color.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+          const color = match
+            ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("")
+            : style.color;
+          return { color, size: style.fontSize, weight: style.fontWeight };
+        };
+        const heading = document.querySelector("[data-block='heading-1'] h1");
+        const paragraph = document.querySelector("[data-block='para-1'] p");
+        const plain = document.querySelector("[data-block='heading-2'] h2");
+        const mark = heading && heading.querySelector("mark");
+        if (!heading || !heading.parentElement || !paragraph || !plain || !plain.parentElement || !mark) {
+          return null;
+        }
+        const headingStyle = read(heading);
+        const wrapStyle = read(heading.parentElement);
+        const plainStyle = read(plain);
+        const plainWrap = read(plain.parentElement);
+        const markStyle = read(mark);
+        return {
+          heading: headingStyle.color,
+          mark: markStyle.color,
+          paragraph: read(paragraph).color,
+          plain: plainStyle.color,
+          headingSize: headingStyle.size,
+          wrapSize: wrapStyle.size,
+          headingWeight: headingStyle.weight,
+          wrapWeight: wrapStyle.weight,
+          plainSize: plainStyle.size,
+          plainWrapSize: plainWrap.size,
+        };
+      })()`);
+      if (!editorColours) {
+        throw new Error("editor fixture is missing a block");
+      }
+      assert.equal(editorColours.heading, "#ff8a9a");
+      assert.equal(editorColours.mark, "#e8324c");
+      assert.equal(editorColours.paragraph, "#c8102e");
+      assert.equal(editorColours.plain, "#ffffff");
+      assert.equal(editorColours.headingSize, editorColours.wrapSize);
+      assert.equal(editorColours.headingWeight, editorColours.wrapWeight);
+      assert.notEqual(editorColours.plainSize, editorColours.plainWrapSize);
     } finally {
       server.close();
     }

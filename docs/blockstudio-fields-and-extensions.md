@@ -21,8 +21,8 @@ Hex stays in CSS. See [design-tokens.md](design-tokens.md).
 | Field | File | Id | Notes |
 | --- | --- | --- | --- |
 | `custom/background-colour` | `spa-sage/app/blocks/fields/background-colour/field.json` | `bg_colour` | Dataset `bgColours`. Heroes override the id to `background` so the Astro contract stays `background`. |
-| `custom/text-colour` | `spa-sage/app/blocks/fields/text-colour/field.json` | `text_colour` | `set` writes `color: {attributes.text_colour.value}` (`var(--color-…)`). Do not read `.slug` in `set`. Astro adds `has-text-{slug}`. |
-| `custom/typography` | `spa-sage/app/blocks/fields/typography/field.json` | `text_colour`, `text_size`, `text_weight` | Heading and paragraph. Size classes are the live scale (`fs-display` … `fs-meta`). Weight classes are `fw-400` … `fw-700`. |
+| `custom/text-colour` | `spa-sage/app/blocks/fields/text-colour/field.json` | `text_colour` | Colour swatches save `{ value, name, slug }`. `set` writes class `has-text-{slug}` and `color: {value}`. In the editor those land on the block wrapper, not the inner RichText element. |
+| `custom/typography` | `spa-sage/app/blocks/fields/typography/field.json` | `text_colour`, `text_size`, `text_weight` | Heading and paragraph. Size classes are the live scale (`fs-display` … `fs-meta`). Weight classes are `fw-400` … `fw-700`. The editor hero lets the inner heading inherit the wrapper's colour, size, and weight. |
 | `custom/section` | `blockstudio/fields/section/field.json` | `removeBottomPadding`, `accentBg` | Shared section toggles |
 
 Use one from a block:
