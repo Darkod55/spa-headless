@@ -71,5 +71,5 @@ Astro does not read `innerHTML` for the class. `Heading.astro` and `Paragraph.as
 
 - Expecting `has-text-navy` inside `innerHTML` from the REST response. Add it in the Astro component.
 - Setting a colour `default` to the slug `navy`. The option value is `var(--color-navy)`. Old content that already says `"navy"` still renders; the picker will not show it as selected until the block is saved again.
-- Overwriting a top-level block attribute when flattening. The normalizer only fills keys that are missing.
+- Letting a top-level `text_colour: ""` hide the object in `blockstudio.attributes`. An empty value loses. The editor is given the object, because reading `.slug` on `""` throws and the hero disappears from the canvas. A plain slug such as `navy` is still accepted.
 - Registering the dataset in a plugin the theme does not load. It lives in the theme and is required from `functions.php`.

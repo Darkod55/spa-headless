@@ -220,28 +220,260 @@ function spa_headless_normalize_blocks( array $blocks ): array {
 }
 
 /**
+ * A colour was cleared, or never chosen. "" is what the colour control writes
+ * when clearable; Gutenberg then rejects it if the attribute type is object.
+ *
+ * @param mixed $value
+ */
+function spa_headless_value_is_empty( mixed $value ): bool {
+	if ( null === $value || false === $value ) {
+		return true;
+	}
+	if ( is_string( $value ) ) {
+		return '' === trim( $value );
+	}
+	if ( ! is_array( $value ) || array() === $value ) {
+		return ! is_array( $value ) ? false : true;
+	}
+
+	$slug  = $value['slug'] ?? null;
+	$color = $value['value'] ?? null;
+	$has   = ( is_string( $slug ) && '' !== $slug ) || ( is_string( $color ) && '' !== $color );
+	if ( $has ) {
+		return false;
+	}
+
+	return array_key_exists( 'slug', $value ) || array_key_exists( 'value', $value ) || array_key_exists( 'name', $value );
+}
+
+/**
+ * @param mixed $value
+ * @return array{value: string, name: string, slug: string}|null
+ */
+function spa_headless_colour_object( mixed $value ): ?array {
+	$names = array(
+		'navy'  => 'Navy',
+		'red'   => 'Red',
+		'royal' => 'Royal',
+		'black' => 'Black',
+		'white' => 'White',
+	);
+
+	if ( is_array( $value ) && isset( $value['slug'] ) && is_string( $value['slug'] ) && isset( $names[ $value['slug'] ] ) ) {
+		$slug = $value['slug'];
+		return array(
+			'value' => isset( $value['value'] ) && is_string( $value['value'] ) && '' !== $value['value'] ? $value['value'] : 'var(--color-' . $slug . ')',
+			'name'  => isset( $value['name'] ) && is_string( $value['name'] ) && '' !== $value['name'] ? $value['name'] : $names[ $slug ],
+			'slug'  => $slug,
+		);
+	}
+
+	if ( ! is_string( $value ) ) {
+		return null;
+	}
+
+	$slug = trim( $value );
+	if ( preg_match( '/^var\(--color-([a-z]+)\)$/', $slug, $match ) ) {
+		$slug = $match[1];
+	}
+	if ( ! isset( $names[ $slug ] ) ) {
+		return null;
+	}
+
+	return array(
+		'value' => 'var(--color-' . $slug . ')',
+		'name'  => $names[ $slug ],
+		'slug'  => $slug,
+	);
+}
+
+/**
  * Copy BlockStudio extension values onto the attribute bag.
  *
- * `set` is applied on render in WordPress and is not stored in innerHTML.
- * The values live at attrs.blockstudio.attributes. The nest is kept.
+ * An empty top-level value (the colour control writes "") loses to the
+ * object stored at blockstudio.attributes. The nest is kept. Empty colour
+ * attributes are removed so the editor is not given a string where it
+ * expects an object.
  *
  * @param array<string, mixed> $attrs
  */
 function spa_headless_flatten_blockstudio_attributes( array &$attrs ): void {
-	if ( ! isset( $attrs['blockstudio'] ) || ! is_array( $attrs['blockstudio'] ) ) {
-		return;
+	$nested = null;
+	if ( isset( $attrs['blockstudio'] ) && is_array( $attrs['blockstudio'] ) && isset( $attrs['blockstudio']['attributes'] ) && is_array( $attrs['blockstudio']['attributes'] ) ) {
+		$nested = $attrs['blockstudio']['attributes'];
 	}
 
-	$nested = $attrs['blockstudio']['attributes'] ?? null;
-	if ( ! is_array( $nested ) ) {
-		return;
+	if ( is_array( $nested ) ) {
+		foreach ( $nested as $key => $value ) {
+			if ( ! is_string( $key ) ) {
+				continue;
+			}
+			if ( array_key_exists( $key, $attrs ) && ! spa_headless_value_is_empty( $attrs[ $key ] ) ) {
+				continue;
+			}
+			if ( spa_headless_value_is_empty( $value ) ) {
+				continue;
+			}
+			$attrs[ $key ] = $value;
+		}
 	}
 
-	foreach ( $nested as $key => $value ) {
-		if ( ! is_string( $key ) || array_key_exists( $key, $attrs ) ) {
+	foreach ( array( 'text_colour', 'background' ) as $key ) {
+		if ( ! array_key_exists( $key, $attrs ) ) {
 			continue;
 		}
-		$attrs[ $key ] = $value;
+		$object = spa_headless_colour_object( $attrs[ $key ] );
+		if ( null !== $object ) {
+			$attrs[ $key ] = $object;
+			continue;
+		}
+		if ( spa_headless_value_is_empty( $attrs[ $key ] ) ) {
+			unset( $attrs[ $key ] );
+		}
+	}
+}
+
+/**
+ * Repair parsed blocks so a saved "" colour does not hide the real object.
+ *
+ * @param array<int, mixed> $blocks
+ * @return array<int, mixed>
+ */
+function spa_headless_repair_parsed_blocks( array $blocks ): array {
+	$repaired = array();
+
+	foreach ( $blocks as $block ) {
+		if ( ! is_array( $block ) ) {
+			continue;
+		}
+
+		$attrs = isset( $block['attrs'] ) && is_array( $block['attrs'] ) ? $block['attrs'] : array();
+		spa_headless_flatten_blockstudio_attributes( $attrs );
+		$block['attrs'] = $attrs;
+
+		if ( isset( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+			$block['innerBlocks'] = spa_headless_repair_parsed_blocks( $block['innerBlocks'] );
+		}
+
+		$repaired[] = $block;
+	}
+
+	return $repaired;
+}
+
+/**
+ * Rewrite post_content the block editor will parse. The database is not changed.
+ */
+function spa_headless_repair_post_content( string $content ): string {
+	if ( '' === $content || ! function_exists( 'parse_blocks' ) || ! function_exists( 'serialize_blocks' ) ) {
+		return $content;
+	}
+	if ( ! str_contains( $content, 'text_colour' ) && ! str_contains( $content, 'blockstudio' ) ) {
+		return $content;
+	}
+
+	$repaired = serialize_blocks( spa_headless_repair_parsed_blocks( parse_blocks( $content ) ) );
+
+	return is_string( $repaired ) && '' !== $repaired ? $repaired : $content;
+}
+
+/**
+ * The editor reads content.raw, not the spa/v1 payload. Give it the colour
+ * object so BlockStudio can read .slug and the hero stays in the canvas.
+ *
+ * @param WP_REST_Response|mixed $response
+ * @param WP_Post|mixed          $post
+ * @param WP_REST_Request|mixed  $request
+ * @return mixed
+ */
+function spa_headless_rest_repair_editor_content( $response, $post, $request ) {
+	unset( $post );
+	if ( ! $response instanceof WP_REST_Response || ! $request instanceof WP_REST_Request ) {
+		return $response;
+	}
+	if ( 'edit' !== $request->get_param( 'context' ) ) {
+		return $response;
+	}
+
+	$data = $response->get_data();
+	if ( ! is_array( $data ) || ! isset( $data['content']['raw'] ) || ! is_string( $data['content']['raw'] ) ) {
+		return $response;
+	}
+
+	$repaired = spa_headless_repair_post_content( $data['content']['raw'] );
+	if ( $repaired !== $data['content']['raw'] ) {
+		$data['content']['raw'] = $repaired;
+		$response->set_data( $data );
+	}
+
+	return $response;
+}
+
+/**
+ * Accept both the legacy string and the colour object. An object-only schema
+ * drops "" during parse; a string-only schema drops the saved object.
+ *
+ * @param array<string, mixed> $args
+ * @return array<string, mixed>
+ */
+function spa_headless_widen_colour_attribute_args( array $args ): array {
+	if ( ! isset( $args['attributes'] ) || ! is_array( $args['attributes'] ) ) {
+		$args['attributes'] = array();
+	}
+
+	foreach ( array( 'text_colour', 'background' ) as $key ) {
+		if ( ! isset( $args['attributes'][ $key ] ) || ! is_array( $args['attributes'][ $key ] ) ) {
+			continue;
+		}
+		$args['attributes'][ $key ]['type'] = array( 'string', 'object' );
+	}
+
+	return $args;
+}
+
+/**
+ * @param array<string, mixed> $args
+ * @return array<string, mixed>
+ */
+function spa_headless_register_block_type_args( array $args, string $name ): array {
+	$colour_blocks = array( 'core/heading', 'core/paragraph', 'spa/hero-banner-main', 'spa/hero-banner-default' );
+	if ( ! in_array( $name, $colour_blocks, true ) ) {
+		return $args;
+	}
+
+	return spa_headless_widen_colour_attribute_args( $args );
+}
+
+/**
+ * BlockStudio adds extension attributes as it registers the block. Widen the
+ * type again after that, and add text_colour if the extension stored it only
+ * inside blockstudio.attributes.
+ */
+function spa_headless_widen_registered_colour_attributes(): void {
+	if ( ! class_exists( 'WP_Block_Type_Registry' ) ) {
+		return;
+	}
+
+	$registry = WP_Block_Type_Registry::get_instance();
+	foreach ( array( 'core/heading', 'core/paragraph', 'spa/hero-banner-main', 'spa/hero-banner-default' ) as $name ) {
+		$block = $registry->get_registered( $name );
+		if ( ! $block instanceof WP_Block_Type ) {
+			continue;
+		}
+		if ( ! is_array( $block->attributes ) ) {
+			$block->attributes = array();
+		}
+		if ( ( 'core/heading' === $name || 'core/paragraph' === $name ) && ! isset( $block->attributes['text_colour'] ) ) {
+			$block->attributes['text_colour'] = array(
+				'type' => array( 'string', 'object' ),
+			);
+		}
+		foreach ( array( 'text_colour', 'background' ) as $key ) {
+			if ( ! isset( $block->attributes[ $key ] ) || ! is_array( $block->attributes[ $key ] ) ) {
+				continue;
+			}
+			$block->attributes[ $key ]['type'] = array( 'string', 'object' );
+		}
 	}
 }
 

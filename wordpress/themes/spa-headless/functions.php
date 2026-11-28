@@ -24,6 +24,7 @@ add_action( 'customize_register', 'spa_theme_customize_announcement' );
 add_action( 'customize_controls_enqueue_scripts', 'spa_theme_customize_controls' );
 add_action( 'wp_enqueue_scripts', 'spa_theme_assets' );
 add_action( 'enqueue_block_assets', 'spa_theme_hero_banner_assets' );
+add_action( 'enqueue_block_editor_assets', 'spa_theme_editor_blocks' );
 add_action( 'wp_head', 'spa_theme_noindex', 0 );
 add_filter( 'block_categories_all', 'spa_theme_block_category' );
 add_filter( 'blockstudio/settings/tailwind/config', 'spa_theme_tailwind_config' );
@@ -132,6 +133,19 @@ function spa_theme_hero_banner_assets(): void {
 		get_stylesheet_directory_uri() . '/assets/hero-banner.css',
 		array( 'spa-brand-colours' ),
 		$version
+	);
+}
+
+/**
+ * Coerce saved colour attributes before BlockStudio reads .slug.
+ */
+function spa_theme_editor_blocks(): void {
+	wp_enqueue_script(
+		'spa-editor-blocks',
+		get_stylesheet_directory_uri() . '/assets/editor-blocks.js',
+		array( 'wp-hooks', 'wp-blocks' ),
+		wp_get_theme()->get( 'Version' ),
+		true
 	);
 }
 

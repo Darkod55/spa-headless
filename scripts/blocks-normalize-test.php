@@ -167,4 +167,79 @@ $nested_image = spa_headless_normalize_blocks(
 spa_assert( 4 === $nested_image[0]['attrs']['image']['id'], 'A hero image stored only under blockstudio.attributes should be normalized.' );
 spa_assert( 800 === $nested_image[0]['attrs']['image']['width'], 'Nested hero image dimensions should survive.' );
 
+$saved = spa_headless_repair_parsed_blocks(
+	array(
+		array(
+			'blockName'    => 'spa/hero-banner-main',
+			'attrs'        => array(
+				'background'  => array(
+					'value' => 'var(--color-navy)',
+					'name'  => 'Navy',
+					'slug'  => 'navy',
+				),
+				'image'       => array(
+					'id'  => 44,
+					'url' => 'https://squarepeg-cms.local/wp-content/uploads/hero.jpg',
+				),
+				'blockstudio' => array(
+					'attributes' => array(
+						'background' => array(
+							'value' => 'var(--color-navy)',
+							'name'  => 'Navy',
+							'slug'  => 'navy',
+						),
+						'image'      => 44,
+					),
+				),
+			),
+			'innerBlocks'  => array(
+				array(
+					'blockName'    => 'core/heading',
+					'attrs'        => array(
+						'level'       => 1,
+						'text_colour' => '',
+						'blockstudio' => array(
+							'attributes' => array(
+								'text_colour' => array(
+									'value' => 'var(--color-white)',
+									'name'  => 'White',
+									'slug'  => 'white',
+								),
+							),
+						),
+					),
+					'innerBlocks'  => array(),
+					'innerHTML'    => '<h1 class="wp-block-heading"></h1>',
+					'innerContent' => array( '<h1 class="wp-block-heading"></h1>' ),
+				),
+				array(
+					'blockName'    => 'core/paragraph',
+					'attrs'        => array(
+						'text_colour' => '',
+						'blockstudio' => array(
+							'attributes' => array(
+								'text_colour' => '',
+							),
+						),
+					),
+					'innerBlocks'  => array(),
+					'innerHTML'    => '<p></p>',
+					'innerContent' => array( '<p></p>' ),
+				),
+			),
+			'innerHTML'    => '',
+			'innerContent' => array( null, null ),
+		),
+	)
+);
+spa_assert( 'spa/hero-banner-main' === $saved[0]['blockName'], 'Repair must keep the hero block.' );
+spa_assert( 'navy' === $saved[0]['attrs']['background']['slug'], 'A real background object stays.' );
+spa_assert( 44 === $saved[0]['attrs']['image']['id'], 'A saved image must not be replaced by the nested id alone.' );
+spa_assert( 'white' === $saved[0]['innerBlocks'][0]['attrs']['text_colour']['slug'], 'An empty text_colour must lose to the nested colour object.' );
+spa_assert( ! array_key_exists( 'text_colour', $saved[0]['innerBlocks'][1]['attrs'] ), 'An empty text_colour with no nested colour is removed.' );
+
+$legacy = spa_headless_colour_object( 'navy' );
+spa_assert( is_array( $legacy ) && 'navy' === $legacy['slug'] && 'var(--color-navy)' === $legacy['value'], 'A legacy slug string becomes a colour object.' );
+spa_assert( null === spa_headless_colour_object( '' ), 'An empty string is not a colour.' );
+
 fwrite( STDOUT, "blocks normalizer ok\n" );
