@@ -192,9 +192,19 @@ function spa_headless_normalize_blocks( array $blocks ): array {
 		}
 
 		$attrs = isset( $block['attrs'] ) && is_array( $block['attrs'] ) ? $block['attrs'] : array();
+		$nested_image = null;
+		if ( isset( $attrs['blockstudio']['attributes']['image'] ) ) {
+			$nested_image = $attrs['blockstudio']['attributes']['image'];
+		}
+		$had_image = array_key_exists( 'image', $attrs );
+		spa_headless_flatten_blockstudio_attributes( $attrs );
 
 		if ( is_string( $name ) && in_array( $name, array( 'spa/hero-banner-main', 'spa/hero-banner-default' ), true ) ) {
-			$attrs['image'] = spa_headless_prepare_hero_image( $attrs['image'] ?? null );
+			$raw_image = $had_image ? ( $attrs['image'] ?? null ) : $nested_image;
+			if ( ( null === $raw_image || '' === $raw_image || array() === $raw_image ) && null !== $nested_image ) {
+				$raw_image = $nested_image;
+			}
+			$attrs['image'] = spa_headless_prepare_hero_image( $raw_image );
 		}
 
 		$normalized[] = array(
@@ -207,6 +217,32 @@ function spa_headless_normalize_blocks( array $blocks ): array {
 	}
 
 	return $normalized;
+}
+
+/**
+ * Copy BlockStudio extension values onto the attribute bag.
+ *
+ * `set` is applied on render in WordPress and is not stored in innerHTML.
+ * The values live at attrs.blockstudio.attributes. The nest is kept.
+ *
+ * @param array<string, mixed> $attrs
+ */
+function spa_headless_flatten_blockstudio_attributes( array &$attrs ): void {
+	if ( ! isset( $attrs['blockstudio'] ) || ! is_array( $attrs['blockstudio'] ) ) {
+		return;
+	}
+
+	$nested = $attrs['blockstudio']['attributes'] ?? null;
+	if ( ! is_array( $nested ) ) {
+		return;
+	}
+
+	foreach ( $nested as $key => $value ) {
+		if ( ! is_string( $key ) || array_key_exists( $key, $attrs ) ) {
+			continue;
+		}
+		$attrs[ $key ] = $value;
+	}
 }
 
 /**

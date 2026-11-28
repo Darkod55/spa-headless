@@ -112,4 +112,59 @@ spa_assert( 1600 === $image['width'] && 900 === $image['height'], 'Hero image si
 $empty = spa_headless_prepare_hero_image( null );
 spa_assert( null === $empty, 'A missing hero image should be null.' );
 
+$coloured = spa_headless_normalize_blocks(
+	array(
+		array(
+			'blockName'    => 'core/heading',
+			'attrs'        => array(
+				'level'       => 2,
+				'blockstudio' => array(
+					'attributes' => array(
+						'text_colour' => array(
+							'value' => 'var(--color-red)',
+							'name'  => 'Red',
+							'slug'  => 'red',
+						),
+					),
+				),
+			),
+			'innerBlocks'  => array(),
+			'innerHTML'    => '<h2 class="wp-block-heading">Title</h2>',
+			'innerContent' => array( '<h2 class="wp-block-heading">Title</h2>' ),
+		),
+	)
+);
+spa_assert( 'red' === $coloured[0]['attrs']['text_colour']['slug'], 'Extension attributes should be copied onto attrs.' );
+spa_assert(
+	'red' === $coloured[0]['attrs']['blockstudio']['attributes']['text_colour']['slug'],
+	'The blockstudio.attributes nest should be kept.'
+);
+
+$nested_image = spa_headless_normalize_blocks(
+	array(
+		array(
+			'blockName'    => 'spa/hero-banner-default',
+			'attrs'        => array(
+				'background'  => 'royal',
+				'blockstudio' => array(
+					'attributes' => array(
+						'image' => array(
+							'ID'     => 4,
+							'url'    => 'https://squarepeg-cms.local/wp-content/uploads/nested.jpg',
+							'alt'    => 'Nested',
+							'width'  => 800,
+							'height' => 600,
+						),
+					),
+				),
+			),
+			'innerBlocks'  => array(),
+			'innerHTML'    => '',
+			'innerContent' => array(),
+		),
+	)
+);
+spa_assert( 4 === $nested_image[0]['attrs']['image']['id'], 'A hero image stored only under blockstudio.attributes should be normalized.' );
+spa_assert( 800 === $nested_image[0]['attrs']['image']['width'], 'Nested hero image dimensions should survive.' );
+
 fwrite( STDOUT, "blocks normalizer ok\n" );

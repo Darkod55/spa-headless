@@ -22,6 +22,8 @@ test("background values map to modifier classes", () => {
   assert.equal(heroBackgroundClass("royal"), "hero--bg-royal");
   assert.equal(heroBackgroundClass("black"), "hero--bg-black");
   assert.equal(heroBackgroundClass("white"), "hero--bg-white");
+  assert.equal(heroBackgroundClass("var(--color-black)"), "hero--bg-black");
+  assert.equal(heroBackgroundClass({ slug: "white", value: "var(--color-white)" }), "hero--bg-white");
   assert.equal(heroBackgroundClass(undefined), "hero--bg-navy");
   assert.equal(heroBackgroundClass("lime"), "hero--bg-navy");
 });

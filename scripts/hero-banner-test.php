@@ -25,6 +25,11 @@ spa_hero_assert( 'hero--bg-red' === spa_hero_banner_modifier( 'red' ), 'Red maps
 spa_hero_assert( 'hero--bg-royal' === spa_hero_banner_modifier( 'royal' ), 'Royal maps to hero--bg-royal.' );
 spa_hero_assert( 'hero--bg-black' === spa_hero_banner_modifier( 'black' ), 'Black maps to hero--bg-black.' );
 spa_hero_assert( 'hero--bg-white' === spa_hero_banner_modifier( 'white' ), 'White maps to hero--bg-white.' );
+spa_hero_assert( 'hero--bg-white' === spa_hero_banner_modifier( 'var(--color-white)' ), 'A CSS variable value uses the slug inside it.' );
+spa_hero_assert(
+	'hero--bg-red' === spa_hero_banner_modifier( array( 'slug' => 'red', 'value' => 'var(--color-red)', 'name' => 'Red' ) ),
+	'A colour object uses its slug.'
+);
 spa_hero_assert( 'hero--bg-navy' === spa_hero_banner_modifier( 'lime' ), 'Unknown backgrounds fall back to navy.' );
 spa_hero_assert( 'hero--bg-navy' === spa_hero_banner_modifier( null ), 'A missing background falls back to navy.' );
 spa_hero_assert( 'hero--main' === spa_hero_banner_variant_class( 'main' ), 'Main uses hero--main.' );

@@ -10,17 +10,10 @@
   "blockstudio": {
     "attributes": [
       {
-        "id": "background",
-        "type": "select",
-        "label": "Background",
-        "default": "navy",
-        "options": [
-          { "value": "navy", "label": "Navy" },
-          { "value": "red", "label": "Red" },
-          { "value": "royal", "label": "Royal" },
-          { "value": "black", "label": "Black" },
-          { "value": "white", "label": "White" }
-        ]
+        "type": "custom/background-colour",
+        "overrides": {
+          "background": { "default": "var(--color-navy)" }
+        }
       },
       {
         "id": "image",

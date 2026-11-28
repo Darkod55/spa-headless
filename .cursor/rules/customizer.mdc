@@ -1,0 +1,15 @@
+---
+description: Theme Customizer, menus, and theme.json
+globs:
+  - wordpress/themes/spa-headless/functions.php
+  - wordpress/themes/spa-headless/theme.json
+  - wordpress/themes/spa-headless/inc/**/*
+  - wordpress/plugins/spa-headless-core/**/*
+alwaysApply: false
+---
+
+# Customizer, menus, and REST
+
+Follow [docs/theme-customizer-and-menus.md](docs/theme-customizer-and-menus.md) and [docs/architecture.md](docs/architecture.md).
+
+Menu locations are `primary`, `footer`, `legal`, and `footer-social`. An unassigned location returns an empty list. Alternative logo is theme mod `spa_alt_logo` (attachment id, `absint`). `footerLogo` is that image only when it is set and **Show in footer** is ticked.

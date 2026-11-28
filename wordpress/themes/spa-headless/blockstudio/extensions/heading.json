@@ -1,0 +1,9 @@
+{
+  "$schema": "https://blockstudio.dev/schema/extend",
+  "name": "core/heading",
+  "blockstudio": {
+    "extend": true,
+    "group": "styles",
+    "attributes": [{ "type": "custom/text-colour" }]
+  }
+}

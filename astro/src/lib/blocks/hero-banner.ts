@@ -1,4 +1,7 @@
-import type { SpaFileValue } from "../../generated/blocks";
+import type { SpaColorValue, SpaFileValue } from "../../generated/blocks";
+import { colorSlug } from "./color";
+
+export type HeroBackgroundValue = string | SpaColorValue | null;
 
 export const heroBackgrounds = ["navy", "red", "royal", "black", "white"] as const;
 
@@ -13,9 +16,10 @@ const modifiers: Record<HeroBackground, string> = {
 };
 
 /** Unknown or empty backgrounds use the live homepage navy. */
-export function heroBackgroundClass(background: string | null | undefined): string {
-  if (background && Object.hasOwn(modifiers, background)) {
-    return modifiers[background as HeroBackground];
+export function heroBackgroundClass(background: HeroBackgroundValue | undefined): string {
+  const slug = colorSlug(background);
+  if (slug && Object.hasOwn(modifiers, slug)) {
+    return modifiers[slug];
   }
   return modifiers.navy;
 }

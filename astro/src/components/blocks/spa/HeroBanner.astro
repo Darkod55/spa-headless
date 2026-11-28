@@ -1,11 +1,11 @@
 ---
 import type { SpaFileValue } from "../../../generated/blocks";
-import { heroBackgroundClass, heroImage } from "../../../lib/blocks/hero-banner";
+import { heroBackgroundClass, heroImage, type HeroBackgroundValue } from "../../../lib/blocks/hero-banner";
 import "../../../../../wordpress/themes/spa-headless/assets/hero-banner.css";
 
 interface Props {
   variant: "main" | "default";
-  background?: string | null;
+  background?: HeroBackgroundValue;
   image?: SpaFileValue | null;
 }
 

@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once __DIR__ . '/inc/hero-banner.php';
+require_once __DIR__ . '/inc/colors.php';
 
 add_action( 'after_setup_theme', 'spa_theme_setup' );
 add_action( 'customize_register', 'spa_theme_customize_identity' );
@@ -38,6 +39,7 @@ function spa_theme_setup(): void {
 	add_theme_support( 'editor-styles' );
 	add_editor_style( 'assets/preview.css' );
 	add_editor_style( 'assets/editor.css' );
+	add_editor_style( 'assets/brand-colours.css' );
 	add_editor_style( 'assets/hero-banner.css' );
 	add_theme_support(
 		'html5',
@@ -118,11 +120,18 @@ function spa_theme_fix_svg_mime( array $data, string $file, string $filename, $m
  * imports the same path.
  */
 function spa_theme_hero_banner_assets(): void {
+	$version = wp_get_theme()->get( 'Version' );
+	wp_enqueue_style(
+		'spa-brand-colours',
+		get_stylesheet_directory_uri() . '/assets/brand-colours.css',
+		array(),
+		$version
+	);
 	wp_enqueue_style(
 		'spa-hero-banner',
 		get_stylesheet_directory_uri() . '/assets/hero-banner.css',
-		array(),
-		wp_get_theme()->get( 'Version' )
+		array( 'spa-brand-colours' ),
+		$version
 	);
 }
 

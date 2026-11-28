@@ -2,6 +2,8 @@
 
 WordPress is the CMS. Astro is the public site. This repository is the rebuild of [thesquarepeg.agency](https://thesquarepeg.agency). The current live site stays in its own repo.
 
+Agents start at [AGENTS.md](AGENTS.md). The recipes are in [docs/](docs/): [architecture](docs/architecture.md), [blocks](docs/blockstudio-blocks.md), [tokens](docs/design-tokens.md), [fields and extensions](docs/blockstudio-fields-and-extensions.md), [Customizer and menus](docs/theme-customizer-and-menus.md), [local setup](docs/local-setup.md).
+
 Nothing here deploys. Hosting (WordPress on a `cms.` subdomain, Astro on the public host, a rebuild webhook) comes later.
 
 ```
@@ -115,7 +117,7 @@ Migration has to keep the live paths. Fixtures already use them: `/`, `/about`, 
 
 ## Blocks
 
-Three examples ship with the theme:
+The theme ships these blocks:
 
 | Block | What it is |
 | --- | --- |
@@ -129,7 +131,7 @@ Shared spacing toggles live in `blockstudio/fields/section/field.json` and are p
 
 To add a block, follow [AGENTS.md](AGENTS.md). Short version: `block.json`, `index.php`, an Astro component with a slot, a `*.contract.ts` that lists every field (repeater rows included), register it in `BlockRenderer.astro`, run `pnpm generate`. The generator fails if a BlockStudio block has no component, or if a field was added, renamed, or removed without updating the contract and the component. `astro check` fails as well, because the contract must `satisfy` the generated field map.
 
-Hero Banner Main and Hero Banner Default are the page heroes. Insert one at the top of a page. Pick a background (navy, red, royal, black, white). The stripes follow that choice. Add the image in the block sidebar. The heading is an H1 inner block and the line under it is a paragraph. Main is the homepage height (`100vh` / `100svh` / `100dvh` minus the header). Default is the shorter inner-page band (540px, the live page hero). The old Hero block is hidden from the inserter.
+Hero Banner Main and Hero Banner Default are the page heroes. The background is the shared brand colour field (Navy, Red, Royal, Black, White), not a one-off select. A hero saved earlier as `"background": "navy"` still renders; you do not have to re-save it. New blocks store `var(--color-navy)` plus a slug. Headings and paragraphs take the same colours from the styles tab. See [docs/design-tokens.md](docs/design-tokens.md) and [docs/blockstudio-fields-and-extensions.md](docs/blockstudio-fields-and-extensions.md).
 
 Core blocks the renderer knows: paragraph, heading, image, list (and list item), buttons (and button), group, columns (and column). Any other block, including classic HTML, renders the saved `innerHTML`, with inner blocks spliced in from `innerContent`.
 
@@ -164,7 +166,7 @@ The `url` parameter has to be a full URL, not a path. The response is JSON with 
 ## Scripts
 
 ```bash
-pnpm test     # block.json parser + the PHP block normalizer
+pnpm test     # block contracts, colour helpers, and the PHP normalizer
 pnpm check    # generate types, then astro check
 pnpm build    # generate types, then astro build
 pnpm dev      # Astro at localhost:4321

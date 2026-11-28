@@ -42,11 +42,16 @@ const heroPhoto = {
 
 function heroBanner(
   name: "spa/hero-banner-main" | "spa/hero-banner-default",
-  background: string,
+  background: string | { value: string; name: string; slug: string },
   title: string,
   text: string,
+  textColour?: { value: string; name: string; slug: string },
 ): WpBlock {
-  return block(name, { background, image: heroPhoto }, [heading(1, title), paragraph(text)]);
+  const titleBlock = heading(1, title);
+  if (textColour) {
+    titleBlock.attrs.text_colour = textColour;
+  }
+  return block(name, { background, image: heroPhoto }, [titleBlock, paragraph(text)]);
 }
 
 function page(options: {
@@ -160,7 +165,7 @@ const about = page({
   blocks: [
     heroBanner(
       "spa/hero-banner-main",
-      "red",
+      { value: "var(--color-red)", name: "Red", slug: "red" },
       "A specialist team, not a generalist roster",
       "Strategy, content, design, and development, held in one place.",
     ),
@@ -214,9 +219,10 @@ const services = page({
   blocks: [
     heroBanner(
       "spa/hero-banner-default",
-      "royal",
+      { value: "var(--color-royal)", name: "Royal", slug: "royal" },
       "Marketing that holds together",
       "Strategy, brand, website, content, search, and the work that keeps it moving.",
+      { value: "var(--color-white)", name: "White", slug: "white" },
     ),
     block("spa/card-grid", {
       heading: "The set",

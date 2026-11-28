@@ -168,6 +168,8 @@ export function tsTypeFor(field: CollectedField, indent = 0): string {
       return "number";
     case "link":
       return "SpaLinkValue";
+    case "color":
+      return "string | SpaColorValue";
     case "files":
       return field.multiple === false ? "SpaFileValue | null" : "SpaFileValue[]";
     case "repeater": {

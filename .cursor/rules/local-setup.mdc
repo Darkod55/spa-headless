@@ -1,16 +1,10 @@
 ---
-description: Local WP, PhpStorm, and Astro dev setup for the headless Square Peg site
+description: Local WP, PhpStorm, and Astro dev setup
 alwaysApply: false
 ---
 
 # Local setup
 
-WordPress runs in Local WP (site such as `squarepeg-cms.local`). Astro runs at `http://localhost:4321` and reads `WP_URL` from `astro/.env`. Do not commit that file, preview tokens, Turnstile secrets, or uploads.
+Follow [docs/local-setup.md](docs/local-setup.md).
 
-Symlink the theme and `wordpress/plugins/spa-headless-core` into the Local site's `wp-content` (macOS commands are in the README). Open this repo in PhpStorm, not a copy inside Local, so edits hit the symlinks.
-
-Activate BlockStudio and the Square Peg Headless theme or blocks will not register. Rank Math Pro needs Headless CMS Support (General Settings → Others, advanced mode) before `rankmath/v1/getHead` exists. Leave LiteSpeed Cache off locally. Fluent Forms is optional; the scaffold's contact form is `POST /api/contact`.
-
-Permalinks must preserve live slugs: post name for pages, posts under `/blog/%postname%/`. Paste `wordpress/wp-config.snippet.php` into Local's `wp-config.php` and set the same `SPA_PREVIEW_TOKEN` in `astro/.env`.
-
-`pnpm dev` from the repo root. `WP_FIXTURES=auto` (the default) falls back to fixtures when Local WP is not running. `WP_FIXTURES=0` does not. Deployment is a later change; do not add hosting config here.
+WordPress is Local WP. Astro is http://localhost:4321 and reads `WP_URL` from `astro/.env`. Do not commit that file, preview tokens, Turnstile secrets, or uploads. Symlink the theme and `spa-headless-core` into the Local site. Do not add hosting config.

@@ -1,0 +1,68 @@
+# Architecture
+
+WordPress authors the content. Astro renders the public site. Nothing in this repo deploys.
+
+```
+wordpress/themes/spa-headless/          BlockStudio blocks, Customizer, menus
+wordpress/plugins/spa-headless-core/    REST, CORS, preview, meta, block normalizer
+astro/                                  public site
+scripts/generate-block-types.ts         block.json → astro/src/generated/blocks.ts
+```
+
+Blocks live in the theme because BlockStudio only auto-registers `blockstudio/` on the active theme. The plugin does not register blocks. It turns `parse_blocks()` into the JSON Astro renders.
+
+## Request flow
+
+1. Astro asks `GET /wp-json/spa/v1/routes` for every public path.
+2. Each path is fetched with `GET /wp-json/spa/v1/content?path=/about`.
+3. The layout also fetches `GET /wp-json/spa/v1/site`, `GET /wp-json/spa/v1/menus/{location}`, and Rank Math `getHead`.
+4. `BlockRenderer.astro` walks `blocks`. A known block gets an Astro component. Anything else renders saved `innerHTML`, with inner blocks spliced in from `innerContent`.
+
+The same block tree is on `wp/v2` posts and pages as the `blocks` field. `spa/v1/content` is the path resolver so Astro does not guess permalinks. Paths have no trailing slash. Posts live under `/blog/{slug}`. Pages are `/{slug}`. Keep those slugs identical to the live site.
+
+## Endpoints
+
+| Route | What it returns |
+| --- | --- |
+| `GET /wp-json/spa/v1/routes` | `{ routes: [{ path, id, type, slug }] }` |
+| `GET /wp-json/spa/v1/content?path=/about` | One page or post: title, blocks, meta |
+| `GET /wp-json/spa/v1/menus/{location}?path=/about` | Nested menu. Unknown location is 404. A registered location with no menu is `{ items: [] }` |
+| `GET /wp-json/spa/v1/site` | Title, description, `logo`, `altLogo`, `footerLogo`, `siteIcon`, `announcement` |
+| `GET /wp-json/spa/v1/preview/{id}` | Draft content. Requires header `X-SPA-Preview-Token` |
+| `GET /wp-json/rankmath/v1/getHead?url={absolute WP URL}` | `{ success, head }` HTML tags. Needs Rank Math Headless CMS Support |
+
+Menu URLs on the WordPress host become root-relative paths. Logo and icon URLs stay on the CMS, because the files are in the media library. Rank Math `head` is rewritten from `WP_URL` to `PUBLIC_SITE_URL`. When a site icon is set, icon tags already in that `head` are removed.
+
+Each block is `blockName`, `attrs`, `innerBlocks`, `innerHTML`, `innerContent`. Before that JSON is returned, `spa_headless_normalize_blocks()`:
+
+- drops whitespace-only freeform blocks
+- copies `attrs.blockstudio.attributes` onto `attrs` and keeps the nest
+- rewrites a hero `image` (top-level or nested) to `{ id, url, alt, width, height }`
+
+`set` classes are not in `innerHTML`. Astro adds them from `attrs`. See [blockstudio-fields-and-extensions.md](blockstudio-fields-and-extensions.md).
+
+CORS allows `http://localhost:4321` and `http://127.0.0.1:4321`, plus origins in `SPA_FRONTEND_ORIGINS`.
+
+## Fixtures
+
+`astro/src/lib/wp/client.ts` reads `WP_FIXTURES`:
+
+- unset or `auto` — use WordPress, and fall back to `astro/src/lib/wp/fixtures.ts` if it is unreachable or `WP_URL` is empty
+- `1` / `true` / `force` — always fixtures
+- `0` / `false` / `off` — fail the build when WordPress is down
+
+`/preview/:id` never uses fixtures.
+
+## Checklist
+
+- New public data goes through `spa/v1` or the `blocks` field, not a one-off fetch in a component.
+- A new menu location is registered in the theme and read with `getMenu`. An empty assignment is an empty list.
+- Slugs match the live site.
+- Fixture mode still builds with `WP_URL` unset.
+
+## Common mistakes
+
+- Treating `innerHTML` as the place extension classes are saved. They are not.
+- Pointing Rank Math `getHead` at a path. The `url` argument is an absolute WordPress URL.
+- Adding a block renderer that ignores `attrs.blockstudio.attributes` after a WordPress upgrade of the normalizer. Read the flattened `attrs`.
+- Fetching the live site's repo or host as if it were this codebase.

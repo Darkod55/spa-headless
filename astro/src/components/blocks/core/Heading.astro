@@ -1,4 +1,6 @@
 ---
+import { colorSlug } from "../../../lib/blocks/color";
+import { addClassToRoot } from "../../../lib/blocks/markup";
 import type { WpBlock } from "../../../lib/wp/types";
 
 interface Props {
@@ -7,11 +9,13 @@ interface Props {
 
 const { block } = Astro.props;
 const level = typeof block.attrs.level === "number" ? block.attrs.level : undefined;
-const html =
+const raw =
   block.innerHTML ||
   (typeof block.attrs.content === "string" && level
     ? `<h${level}>${block.attrs.content}</h${level}>`
     : "");
+const textColour = colorSlug(block.attrs.text_colour);
+const html = textColour ? addClassToRoot(raw, `has-text-${textColour}`) : raw;
 ---
 
 <div class="wp-heading" data-level={level}>

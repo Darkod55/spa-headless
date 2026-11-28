@@ -1,0 +1,24 @@
+{
+  "$schema": "https://blockstudio.dev/schema/field",
+  "name": "text-colour",
+  "title": "Text colour",
+  "attributes": [
+    {
+      "id": "text_colour",
+      "type": "color",
+      "label": "Text colour",
+      "disableCustomColors": true,
+      "clearable": false,
+      "populate": {
+        "type": "custom",
+        "custom": "brandColours"
+      },
+      "set": [
+        {
+          "attribute": "class",
+          "value": "has-text-{attributes.text_colour.slug}"
+        }
+      ]
+    }
+  ]
+}

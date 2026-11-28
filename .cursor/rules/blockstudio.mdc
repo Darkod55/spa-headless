@@ -1,0 +1,18 @@
+---
+description: BlockStudio blocks, fields, and extensions
+globs:
+  - wordpress/themes/spa-headless/blockstudio/**/*
+  - wordpress/themes/spa-headless/inc/**/*
+  - wordpress/themes/spa-headless/assets/**/*
+  - astro/src/components/blocks/**/*
+  - astro/src/generated/**/*
+  - scripts/generate-block-types.ts
+  - scripts/block-fields.ts
+alwaysApply: false
+---
+
+# BlockStudio
+
+Follow [docs/blockstudio-blocks.md](docs/blockstudio-blocks.md) and [docs/blockstudio-fields-and-extensions.md](docs/blockstudio-fields-and-extensions.md).
+
+`block.json` is the source of truth. Share one CSS file between the editor and Astro. `set` classes are not in `innerHTML`. Copy extension values from `attrs.blockstudio.attributes` (the normalizer already flattens them) and apply the class in the Astro component. Run `pnpm generate` after a field change.
