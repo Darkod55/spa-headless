@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import "../styles/content.css";
+import Footer from "../components/layout/Footer.astro";
 import SiteHeader from "../components/layout/SiteHeader.astro";
 import { gaMeasurementId } from "../lib/analytics";
 import { getMenu, getSite } from "../lib/wp/client";
@@ -14,7 +15,13 @@ interface Props {
 
 const { title, path, head = null } = Astro.props;
 const gaId = gaMeasurementId();
-const [site, menu] = await Promise.all([getSite(), getMenu("primary")]);
+const [site, menu, footerMenu, legalMenu, socialMenu] = await Promise.all([
+  getSite(),
+  getMenu("primary"),
+  getMenu("footer"),
+  getMenu("legal"),
+  getMenu("footer-social"),
+]);
 const iconTags = siteIconTags(site.siteIcon);
 const seoHead = head && iconTags.length > 0 ? stripHeadIconTags(head) : head;
 ---
@@ -47,14 +54,7 @@ const seoHead = head && iconTags.length > 0 ? stripHeadIconTags(head) : head;
     <main id="content">
       <slot />
     </main>
-    <footer class="site-footer">
-      <p>The Square Peg Agency</p>
-      <nav aria-label="Legal">
-        <a href="/privacy-policy">Privacy</a>
-        <a href="/cookie-policy">Cookies</a>
-        <a href="/terms-and-conditions">Terms</a>
-      </nav>
-    </footer>
+    <Footer site={site} path={path} footer={footerMenu.items} legal={legalMenu.items} social={socialMenu.items} />
     <script>
       const measurementId = document.documentElement.dataset.ga ?? "";
       if (/^G-[A-Z0-9]+$/.test(measurementId)) {

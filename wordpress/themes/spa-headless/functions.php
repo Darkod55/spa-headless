@@ -37,10 +37,14 @@ function spa_theme_setup(): void {
 		array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' )
 	);
 
-	// The Astro header reads this location from spa/v1/menus/primary.
+	// Astro reads these from spa/v1/menus/{location}. An assigned location
+	// with no menu returns an empty list, not an error.
 	register_nav_menus(
 		array(
-			'primary' => __( 'Primary', 'spa-headless' ),
+			'primary'       => __( 'Primary', 'spa-headless' ),
+			'footer'        => __( 'Menu Footer', 'spa-headless' ),
+			'legal'         => __( 'Menu Legal', 'spa-headless' ),
+			'footer-social' => __( 'Footer Menu Social', 'spa-headless' ),
 		)
 	);
 

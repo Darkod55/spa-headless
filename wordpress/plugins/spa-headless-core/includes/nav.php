@@ -256,6 +256,8 @@ function spa_headless_rest_menu( WP_REST_Request $request ) {
 		);
 	}
 
+	// Registered but unassigned: items is an empty list, not an error.
+
 	$path = $request->get_param( 'path' );
 	$current = is_string( $path ) ? $path : '';
 

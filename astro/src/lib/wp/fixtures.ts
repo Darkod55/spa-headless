@@ -382,20 +382,58 @@ function menuItem(
 
 /** Matches the live header, plus one nested item so dropdowns can be checked. */
 export function fixtureMenu(location = "primary"): WpMenu | null {
-  if (location !== "primary") {
-    return null;
+  if (location === "primary") {
+    return {
+      location,
+      items: [
+        menuItem(1, "Home", "/"),
+        menuItem(2, "About", "/about"),
+        menuItem(3, "Services", "/services", {
+          children: [menuItem(5, "Website design", "/services", { parent: 3 })],
+        }),
+        menuItem(4, "Let's talk", "/contact", { classes: ["cta"] }),
+      ],
+    };
   }
-  return {
-    location,
-    items: [
-      menuItem(1, "Home", "/"),
-      menuItem(2, "About", "/about"),
-      menuItem(3, "Services", "/services", {
-        children: [menuItem(5, "Website design", "/services", { parent: 3 })],
-      }),
-      menuItem(4, "Let's talk", "/contact", { classes: ["cta"] }),
-    ],
-  };
+
+  if (location === "footer") {
+    return {
+      location,
+      items: [
+        menuItem(11, "Home", "/"),
+        menuItem(12, "About", "/about"),
+        menuItem(13, "Services", "/services"),
+        menuItem(14, "Contact", "/contact"),
+      ],
+    };
+  }
+
+  if (location === "legal") {
+    return {
+      location,
+      items: [
+        menuItem(21, "Privacy Policy", "/privacy-policy"),
+        menuItem(22, "Cookie Policy", "/cookie-policy"),
+        menuItem(23, "Terms and Conditions", "/terms-and-conditions"),
+        menuItem(24, "Sitemap", "/sitemap.xml"),
+      ],
+    };
+  }
+
+  if (location === "footer-social") {
+    return {
+      location,
+      items: [
+        menuItem(31, "LinkedIn", "https://www.linkedin.com/company/94275355/"),
+        menuItem(32, "Facebook", "https://www.facebook.com/thesquarepegagency"),
+        menuItem(33, "Instagram", "https://www.instagram.com/thesquarepegagency/"),
+        menuItem(34, "X", "https://x.com/thesquarepegagency"),
+        menuItem(35, "YouTube", "https://www.youtube.com/@thesquarepegagency"),
+      ],
+    };
+  }
+
+  return null;
 }
 
 /** Live repo favicon fallback: public/logo.svg (BaseLayout uses this when EmDash has no favicon). */

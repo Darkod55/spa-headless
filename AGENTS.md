@@ -82,7 +82,9 @@ The theme registers the `primary` menu location and `custom-logo`. The plugin ex
 
 A top-level item with the CSS class `cta` (or `button`) is the “Let’s talk” button, not a text link. Items with children are a desktop dropdown and an indented group in the mobile panel. Both follow `WP_FIXTURES` the same way page content does.
 
-In wp-admin: Appearance → Menus, create a menu, assign it to Primary, and enable CSS classes under Screen Options if the CTA class field is hidden. Logo: Appearance → Customize → Site Identity → Logo. Site title is the alt text when the logo has none. Announcement: Appearance → Customize → Announcement bar (show, message, link label, URL, same tab or new tab).
+Menu locations: `primary`, `footer` (Menu Footer), `legal` (Menu Legal), `footer-social` (Footer Menu Social). A registered location with no menu assigned returns `{ items: [] }`, not a 404. Social icons are chosen from each item’s URL host (facebook.com/fb.com, instagram.com, linkedin.com, x.com/twitter.com, youtube.com/youtu.be); anything else gets a generic link icon. They always open in a new tab.
+
+In wp-admin: Appearance → Menus, create a menu, assign it under Menu Settings, and enable CSS classes under Screen Options if the CTA class field is hidden. Logo: Appearance → Customize → Site Identity → Logo. Site title is the alt text when the logo has none. Announcement: Appearance → Customize → Announcement bar (show, message, link label, URL, same tab or new tab). The footer wordmark is the white logo file, matching the live footer, not the colour Site Identity logo.
 
 ## Fixtures
 

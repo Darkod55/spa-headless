@@ -1,0 +1,105 @@
+---
+import "../../styles/footer.css";
+import SocialIcon from "./SocialIcon.astro";
+import { withCurrent, type MenuItem, type WpSite } from "../../lib/wp/menu";
+import { socialAriaLabel, socialPlatformFromUrl } from "../../lib/wp/social";
+
+interface Props {
+  site: WpSite;
+  footer: MenuItem[];
+  legal: MenuItem[];
+  social: MenuItem[];
+  path: string;
+}
+
+const { site, footer, legal, social, path } = Astro.props;
+const footerItems = withCurrent(footer, path);
+const legalItems = withCurrent(legal, path);
+const year = new Date().getFullYear();
+const homeLabel = `${site.title || "The Square Peg Agency"} – home`;
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__main">
+    <a class="site-footer__logo" href="/" aria-label={homeLabel}>
+      <img
+        src="/fixtures/logo-white.svg"
+        alt={site.title || "The Square Peg Agency"}
+        class="site-footer__logo-img"
+        width="232"
+        height="60"
+        decoding="async"
+      />
+    </a>
+
+    {
+      footerItems.length > 0 && (
+        <nav class="site-footer__nav" aria-label="Footer">
+          <ul class="site-footer__nav-list">
+            {footerItems.map((item) => (
+              <li>
+                <a
+                  href={item.url}
+                  class:list={["site-footer__nav-link", item.current && "is-active"]}
+                  aria-current={item.current ? "page" : undefined}
+                  target={item.target === "_blank" ? "_blank" : undefined}
+                  rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+
+    {
+      social.length > 0 && (
+        <ul class="site-footer__social">
+          {social.map((item) => {
+            const platform = socialPlatformFromUrl(item.url);
+            return (
+              <li>
+                <span class="site-footer__social-wrap">
+                  <a
+                    class="site-footer__social-link"
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={socialAriaLabel(item.title, platform)}
+                  >
+                    <SocialIcon platform={platform} />
+                  </a>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )
+    }
+  </div>
+
+  <div class="site-footer__bottom">
+    <div class="container site-footer__bottom-inner">
+      <p class="site-footer__copy">© {year} {site.title || "The Square Peg Agency"}. All rights reserved.</p>
+      {
+        legalItems.length > 0 && (
+          <ul class="site-footer__legal">
+            {legalItems.map((item) => (
+              <li>
+                <a
+                  class:list={["site-footer__legal-link", item.current && "is-active"]}
+                  href={item.url}
+                  aria-current={item.current ? "page" : undefined}
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+</footer>

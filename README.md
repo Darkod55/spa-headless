@@ -95,8 +95,14 @@ The header reads WordPress, and falls back with the rest of the site when `WP_FI
 1. Appearance → Menus → create a menu. The live header is Home, About, and Services. Tick **Primary** under Menu Settings and save.
 2. “Let’s talk” is a menu item with the CSS class `cta`. In the menu editor, open Screen Options (top of the screen) and enable **CSS Classes** if that field is hidden. Add the Contact page, set its class to `cta`, and save.
 3. To nest a dropdown, drag an item to the right under its parent. Desktop shows a menu; the mobile panel indents the children.
-4. Appearance → Customize → Site Identity → **Logo**. The site title is the alt text when the logo has none, and the text in the header when no logo is set. PNG, WebP, and JPEG work. An SVG is used as an image (not redrawn) when WordPress accepts the upload; if it has no pixel size, the viewBox supplies width and height.
-5. On that same Site Identity screen, set **Site Icon**. Astro prints it as the favicon: 32 and 192 `rel="icon"` links, an apple-touch icon at 180, and the 270 tile image. An SVG site icon is a single icon link. If Rank Math's head HTML already contains icon tags, those are removed so the page does not list two favicons.
+4. Create three more menus and assign one location each:
+   - **Menu Footer** — the row next to the white wordmark (live: Home, About, Services, Contact).
+   - **Menu Legal** — the bottom row (live: Privacy Policy, Cookie Policy, Terms and Conditions, Sitemap).
+   - **Footer Menu Social** — one item per profile. The icon comes from the URL host: facebook.com or fb.com, instagram.com, linkedin.com, x.com or twitter.com, youtube.com or youtu.be. Any other host gets a generic link icon. These links always open in a new tab. A location with no menu assigned returns an empty list.
+
+The live footer only links LinkedIn (`https://www.linkedin.com/company/94275355/`), Facebook (`https://www.facebook.com/thesquarepegagency`), and Instagram (`https://www.instagram.com/thesquarepegagency/`). The fixture also includes placeholder X and YouTube items (`https://x.com/thesquarepegagency`, `https://www.youtube.com/@thesquarepegagency`) so all five icons can be checked. The wordmark is the white logo from the live repo, not the colour Site Identity logo.
+5. Appearance → Customize → Site Identity → **Logo**. The site title is the alt text when the logo has none, and the text in the header when no logo is set. PNG, WebP, and JPEG work. An SVG is used as an image (not redrawn) when WordPress accepts the upload; if it has no pixel size, the viewBox supplies width and height.
+6. On that same Site Identity screen, set **Site Icon**. Astro prints it as the favicon: 32 and 192 `rel="icon"` links, an apple-touch icon at 180, and the 270 tile image. An SVG site icon is a single icon link. If Rank Math's head HTML already contains icon tags, those are removed so the page does not list two favicons.
 
 `GET /wp-json/spa/v1/menus/primary` returns the tree. Links on the WordPress host are paths such as `/about`. `GET /wp-json/spa/v1/site` returns the title, description, logo, site icon, and announcement bar. The logo URL stays on the CMS, because the file is in the media library.
 
