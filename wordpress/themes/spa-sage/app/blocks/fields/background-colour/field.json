@@ -1,0 +1,16 @@
+{
+  "name": "background-colour",
+  "attributes": [
+    {
+      "id": "bg_colour",
+      "type": "color",
+      "label": "Background Colour",
+      "clearable": false,
+      "disableCustomColors": true,
+      "populate": {
+        "type": "custom",
+        "custom": "bgColours"
+      }
+    }
+  ]
+}

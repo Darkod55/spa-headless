@@ -1,0 +1,12 @@
+---
+description: Astro public site, tokens, and WordPress client
+globs:
+  - astro/src/**/*
+alwaysApply: false
+---
+
+# Astro
+
+Follow [docs/architecture.md](docs/architecture.md) and [docs/design-tokens.md](docs/design-tokens.md).
+
+Fetch pages, menus, and site settings through `astro/src/lib/wp/client.ts`. Do not call WordPress from a component with a one-off URL. Brand colours are `var(--color-*)` plus a slug. `colorSlug()` accepts a legacy slug, a `var(--color-…)` string, and `{ slug }`. Text-colour classes are added to the root element of `innerHTML` from `attrs`, not parsed out of saved HTML with a brittle replace.

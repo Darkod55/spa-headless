@@ -1,0 +1,103 @@
+/**
+ * Theme design tokens — colours, spacing, layout, radii, type.
+ *
+ * Human edits: docs/design-tokens.md (§ Active brand tokens / type scale).
+ * This file is the runtime CSS the agent writes from that playbook.
+ *
+ * `@theme static` + `--color-*: initial` keeps these as Tailwind utilities.
+ * theme.json's colour palette is the curated list in theme.json, not this file.
+ *
+ * Consume via var(--…).
+ */
+
+/*
+  Utilities read these @theme values. The same hex is repeated, unlayered,
+  in color-tokens.css so the editor iframe and Astro always have the
+  variables even when this block is emitted only inside @layer theme.
+  Keep the two lists in step.
+*/
+@theme static {
+  --color-*: initial;
+
+  --color-primary: #031433;
+  --color-secondary: #c8102e;
+  --color-secondary-deep: #970c23;
+  --color-tertiary: #012169;
+  --color-white: #ffffff;
+  --color-gray: #f4f5f7;
+  --color-black: #000000;
+  --color-secondary-on-primary: #e8324c;
+  --color-secondary-on-tertiary: #ff8a9a;
+  --color-navy: #031433;
+  --color-royal: #012169;
+  --color-red: #c8102e;
+  --color-red-deep: #970c23;
+  --color-red-on-navy: #e8324c;
+  --color-red-on-royal: #ff8a9a;
+  --color-grey: #f4f5f7;
+  --color-grey-50: #f4f5f7;
+  --color-grey-100: #e8ebf0;
+  --color-grey-200: #e3e6ec;
+  --color-grey-400: #9aa3b5;
+  --color-text: #031433;
+  --color-text-body: #3a4560;
+  --color-text-on-dark: #d2d8e3;
+  --color-text-on-royal: #d6dce8;
+  --color-text-on-tertiary: #d6dce8;
+  --color-text-muted-dark: #aeb7c7;
+  --color-text-on-red: #fbe7ea;
+  --color-text-on-secondary: #fbe7ea;
+  --color-success: #0f5132;
+  --color-success-bg: #e8f5ec;
+  --color-danger-bg: #fde8ec;
+  --color-team-name: #31394a;
+  --color-team-rule: #c9cfda;
+  --color-dark-blue: #031433;
+  --color-white-75: rgb(255 255 255 / 0.75);
+  --color-gold: #c8102e;
+  --color-navy-light: #012169;
+  --color-coral-dark: #c8102e;
+  --color-light: #f4f5f7;
+
+  /**
+   * Fluid section padding.
+   */
+  --spacing-clamp-inline: 24px;
+  --spacing-clamp-block: 48px;
+  --spacing-clamp-block-xl: 90px;
+
+  /**
+   * Layout widths.
+   * --width-container → `.container` + editor canvas mirrors
+   * --width-content   → `.mw-1000` (one-column / paragraph limit)
+   */
+  --width-container: 1280px;
+  --width-content: 1000px;
+
+  /**
+   * Shared corner radius (buttons, inputs, cards, images, panels…).
+   * Tailwind: `rounded-surface`.
+   */
+  --radius-surface: 2px;
+
+  /**
+   * Surface padding (cards, FAQ cards, column cells, bleed calc).
+   * Use --padding-surface-lg from `lg` up.
+   */
+  --padding-surface: 20px;
+  --padding-surface-lg: 30px;
+
+  /**
+   * Button metrics.
+   */
+  --padding-btn-y: 15px;
+  --padding-btn-x: 40px;
+  --padding-btn-sm-y: 10px;
+  --padding-btn-sm-x: 20px;
+  --font-size-btn: 14px;
+
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lead: 20px;
+}

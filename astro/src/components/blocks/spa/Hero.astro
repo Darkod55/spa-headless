@@ -1,0 +1,60 @@
+---
+import type { SpaHeroAttributes } from "../../../generated/blocks";
+import { heroFields } from "./hero.contract";
+
+interface Props {
+  attrs: SpaHeroAttributes;
+}
+
+const { attrs } = Astro.props;
+void heroFields;
+
+const image = attrs.image && !Array.isArray(attrs.image) ? attrs.image : null;
+---
+
+<section
+  class:list={[
+    "block-section",
+    { "is-accent": attrs.accentBg, "is-flush": attrs.removeBottomPadding },
+  ]}
+>
+  <div class="container">
+    {attrs.eyebrow && <p class="type-eyebrow">{attrs.eyebrow}</p>}
+    {attrs.heading && <h1 class="type-display">{attrs.heading}</h1>}
+    {attrs.description && <p class="type-lead">{attrs.description}</p>}
+    {(attrs.primaryButton?.url || attrs.secondaryButton?.url) && (
+      <div class="actions">
+        {attrs.primaryButton?.url && (
+          <a
+            class="btn btn--primary"
+            href={attrs.primaryButton.url}
+            target={attrs.primaryButton.opensInNewTab ? "_blank" : undefined}
+            rel={attrs.primaryButton.opensInNewTab ? "noopener noreferrer" : undefined}
+          >
+            {attrs.primaryButton.title || attrs.primaryButton.url}
+          </a>
+        )}
+        {attrs.secondaryButton?.url && (
+          <a
+            class="btn btn--dark"
+            href={attrs.secondaryButton.url}
+            target={attrs.secondaryButton.opensInNewTab ? "_blank" : undefined}
+            rel={attrs.secondaryButton.opensInNewTab ? "noopener noreferrer" : undefined}
+          >
+            {attrs.secondaryButton.title || attrs.secondaryButton.url}
+          </a>
+        )}
+      </div>
+    )}
+    {image?.url && (
+      <img
+        class="hero-media"
+        src={image.url}
+        alt={image.alt ?? ""}
+        width={image.width}
+        height={image.height}
+      />
+    )}
+    <slot />
+  </div>
+</section>

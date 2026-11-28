@@ -1,0 +1,296 @@
+/**
+ * Generate Astro attribute types from BlockStudio block.json files and
+ * fail when a block has no component, or when the component contract does
+ * not list the same field ids.
+ *
+ * Wired to `astro check` and `astro build` through the precheck/prebuild
+ * scripts in astro/package.json, and to the root `pnpm check` / `pnpm build`.
+ */
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { dirname, join, relative, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import {
+  attributeInterfaceName,
+  collectFields,
+  componentBaseName,
+  contractFileName,
+  diffManifest,
+  fieldManifest,
+  manifestIdentifiers,
+  parseContractManifest,
+  splitBlockName,
+  tsTypeFor,
+  type CollectedField,
+  type FieldManifest,
+  type FieldNode,
+} from "./block-fields.ts";
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const legacyDir = join(root, "wordpress/themes/spa-headless/blockstudio");
+const sageDir = join(root, "wordpress/themes/spa-sage/app/blocks");
+const componentsDir = join(root, "astro/src/components/blocks");
+const rendererPath = join(componentsDir, "BlockRenderer.astro");
+const outputPath = join(root, "astro/src/generated/blocks.ts");
+
+interface BlockSchema {
+  name?: string;
+  title?: string;
+  blockstudio?: { attributes?: FieldNode[]; extend?: boolean } | boolean;
+}
+
+interface PreparedBlock {
+  name: string;
+  title: string;
+  source: string;
+  fields: CollectedField[];
+}
+
+interface BlockSource {
+  dir: string;
+  fieldsDir: string;
+  skipDirs: Set<string>;
+}
+
+const sources: BlockSource[] = [
+  {
+    dir: legacyDir,
+    fieldsDir: join(legacyDir, "fields"),
+    skipDirs: new Set(["hero-banner-main", "hero-banner-default", "hero-banner"]),
+  },
+  {
+    dir: sageDir,
+    fieldsDir: join(sageDir, "fields"),
+    skipDirs: new Set(["fields", "extensions", "hero-banner"]),
+  },
+];
+
+function walkBlockJson(dir: string, skipDirs: Set<string>): string[] {
+  const files: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (skipDirs.has(entry.name)) {
+        continue;
+      }
+      files.push(...walkBlockJson(path, skipDirs));
+      continue;
+    }
+    if (entry.name === "block.json") {
+      files.push(path);
+    }
+  }
+  return files;
+}
+
+function resolveCustom(fieldsDir: string, name: string): FieldNode[] {
+  const file = join(fieldsDir, name, "field.json");
+  if (!existsSync(file)) {
+    throw new Error(`Custom field "${name}" has no ${relative(root, file)}.`);
+  }
+  const parsed = JSON.parse(readFileSync(file, "utf8")) as { attributes?: FieldNode[] };
+  return parsed.attributes ?? [];
+}
+
+function loadBlocks(): PreparedBlock[] {
+  const blocks: PreparedBlock[] = [];
+  for (const source of sources) {
+    const resolve = (name: string) => resolveCustom(source.fieldsDir, name);
+    for (const file of walkBlockJson(source.dir, source.skipDirs)) {
+      const parsed = JSON.parse(readFileSync(file, "utf8")) as BlockSchema;
+      const studio = parsed.blockstudio;
+      if (!studio || studio === true || ("extend" in studio && studio.extend)) {
+        continue;
+      }
+      if (typeof parsed.name !== "string" || parsed.name.startsWith("core/")) {
+        throw new Error(`${relative(root, file)} is missing a block name.`);
+      }
+      splitBlockName(parsed.name);
+      blocks.push({
+        name: parsed.name,
+        title: parsed.title ?? parsed.name,
+        source: relative(root, file),
+        fields: collectFields(studio.attributes ?? [], resolve),
+      });
+    }
+  }
+
+  blocks.sort((a, b) => a.name.localeCompare(b.name));
+  const seen = new Set<string>();
+  for (const block of blocks) {
+    if (seen.has(block.name)) {
+      throw new Error(`Duplicate block name ${block.name}.`);
+    }
+    seen.add(block.name);
+  }
+  return blocks;
+}
+
+function printInterface(block: PreparedBlock): string {
+  const iface = attributeInterfaceName(block.name);
+  const lines = block.fields.map((field) => `  ${field.id}?: ${tsTypeFor(field, 2)};`);
+  return `/** ${block.title} — ${block.name} (${block.source}) */\nexport interface ${iface} {\n${lines.join("\n")}\n}`;
+}
+
+function printManifestType(name: string, manifest: FieldManifest, indent: number): string {
+  const pad = " ".repeat(indent);
+  const lines = Object.entries(manifest).map(([key, value]) => {
+    if (value === true) {
+      return `${pad}${key}: true;`;
+    }
+    return `${pad}${key}: {\n${printManifestType(name, value, indent + 2)}\n${pad}};`;
+  });
+  return lines.join("\n");
+}
+
+function renderOutput(blocks: PreparedBlock[]): string {
+  const names = blocks.map((block) => `  "${block.name}",`).join("\n");
+  const map = blocks
+    .map((block) => `  "${block.name}": ${attributeInterfaceName(block.name)};`)
+    .join("\n");
+
+  return `/**
+ * Generated by scripts/generate-block-types.ts.
+ * Do not edit. Heroes come from wordpress/themes/spa-sage/app/blocks.
+ * Older blocks still come from wordpress/themes/spa-headless/blockstudio.
+ */
+/** BlockStudio colour field. A legacy hero may still store a plain slug string. */
+export interface SpaColorValue {
+  value?: string;
+  name?: string;
+  slug?: string;
+}
+
+export interface SpaLinkValue {
+  url?: string;
+  title?: string;
+  id?: number | string;
+  type?: string;
+  kind?: string;
+  opensInNewTab?: boolean;
+}
+
+/** Single file field (\`multiple: false\`). BlockStudio returns an object. */
+export interface SpaFileValue {
+  id?: number;
+  ID?: number;
+  url?: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+  mime?: string;
+  type?: string;
+  size?: string;
+  title?: string;
+}
+
+${blocks.map(printInterface).join("\n\n")}
+
+${blocks
+  .map((block) => {
+    const name = `${attributeInterfaceName(block.name).replace(/Attributes$/, "")}FieldMap`;
+    return `export interface ${name} {\n${printManifestType(name, fieldManifest(block.fields), 2)}\n}`;
+  })
+  .join("\n\n")}
+
+export const spaBlockNames = [
+${names}
+] as const;
+
+export type SpaBlockName = (typeof spaBlockNames)[number];
+
+export interface SpaBlockAttributesByName {
+${map}
+}
+`;
+}
+
+function checkBlock(block: PreparedBlock, renderer: string): string[] {
+  const { namespace } = splitBlockName(block.name);
+  const directory = join(componentsDir, namespace);
+  const component = join(directory, `${componentBaseName(block.name)}.astro`);
+  const contract = join(directory, contractFileName(block.name));
+  const problems: string[] = [];
+  const expected = fieldManifest(block.fields);
+  const iface = attributeInterfaceName(block.name);
+  const fieldMap = `${iface.replace(/Attributes$/, "")}FieldMap`;
+
+  if (!existsSync(component)) {
+    problems.push(
+      `Block ${block.name} has no Astro component at ${relative(root, component)}.`,
+    );
+  } else {
+    const componentSource = readFileSync(component, "utf8");
+    const contractBase = contractFileName(block.name).replace(/\.ts$/, "");
+    if (!componentSource.includes(contractBase)) {
+      problems.push(
+        `${relative(root, component)} must import ${contractBase} so the field contract is part of the component.`,
+      );
+    }
+    const missingIds = manifestIdentifiers(expected).filter((id) => !new RegExp(`\\b${id}\\b`).test(componentSource));
+    if (missingIds.length > 0) {
+      problems.push(
+        `${relative(root, component)} does not mention field${missingIds.length === 1 ? "" : "s"}: ${missingIds.join(", ")}.`,
+      );
+    }
+  }
+
+  if (!existsSync(contract)) {
+    problems.push(`Block ${block.name} has no field contract at ${relative(root, contract)}.`);
+  } else {
+    const contractSource = readFileSync(contract, "utf8");
+    if (!contractSource.includes(`satisfies ${fieldMap}`)) {
+      problems.push(
+        `${relative(root, contract)} must \`satisfy ${fieldMap}\` so a new, renamed, or removed field fails typecheck.`,
+      );
+    }
+    const actual = parseContractManifest(contractSource, relative(root, contract));
+    const diff = diffManifest(expected, actual);
+    if (diff.missing.length > 0 || diff.extra.length > 0) {
+      problems.push(
+        [
+          `Block ${block.name} field mismatch (${relative(root, contract)}).`,
+          `  In block.json but not in the component contract: ${diff.missing.join(", ") || "(none)"}`,
+          `  In the component contract but not in block.json: ${diff.extra.join(", ") || "(none)"}`,
+          "  Update block.json, the PHP template, the Astro component, and the contract together.",
+        ].join("\n"),
+      );
+    }
+  }
+
+  if (!renderer.includes(`'${block.name}'`) && !renderer.includes(`"${block.name}"`)) {
+    problems.push(`BlockRenderer.astro does not register '${block.name}'.`);
+  }
+
+  return problems;
+}
+
+function main(): void {
+  const blocks = loadBlocks();
+  if (blocks.length === 0) {
+    throw new Error(`No BlockStudio blocks found under ${relative(root, blockstudioDir)}.`);
+  }
+
+  const renderer = existsSync(rendererPath) ? readFileSync(rendererPath, "utf8") : "";
+  const problems = blocks.flatMap((block) => checkBlock(block, renderer));
+  if (!existsSync(rendererPath)) {
+    problems.unshift("Missing astro/src/components/blocks/BlockRenderer.astro.");
+  }
+
+  if (problems.length > 0) {
+    console.error(`Block contract failed (${problems.length}).\n`);
+    console.error(problems.join("\n\n"));
+    process.exit(1);
+  }
+
+  mkdirSync(dirname(outputPath), { recursive: true });
+  const next = renderOutput(blocks);
+  const current = existsSync(outputPath) ? readFileSync(outputPath, "utf8") : "";
+  if (current !== next) {
+    writeFileSync(outputPath, next);
+  }
+  console.log(
+    `Generated ${relative(root, outputPath)} for ${blocks.map((block) => block.name).join(", ")}.`,
+  );
+}
+
+main();

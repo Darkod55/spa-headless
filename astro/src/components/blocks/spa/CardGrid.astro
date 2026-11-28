@@ -1,0 +1,45 @@
+---
+import type { SpaCardGridAttributes } from "../../../generated/blocks";
+import { cardGridFields } from "./card-grid.contract";
+
+interface Props {
+  attrs: SpaCardGridAttributes;
+}
+
+const { attrs } = Astro.props;
+void cardGridFields;
+const cards = attrs.cards ?? [];
+---
+
+<section
+  class:list={[
+    "block-section",
+    { "is-accent": attrs.accentBg, "is-flush": attrs.removeBottomPadding },
+  ]}
+>
+  <div class="container">
+    {attrs.heading && <h2 class="type-h2">{attrs.heading}</h2>}
+    {attrs.intro && <p class="type-lead">{attrs.intro}</p>}
+    {cards.length > 0 && (
+      <div class="cards">
+        {cards.map((card) => (
+          <article class="card">
+            {card.title && <h3>{card.title}</h3>}
+            {card.text && <p>{card.text}</p>}
+            {card.link?.url && (
+              <a
+                class="text-link"
+                href={card.link.url}
+                target={card.link.opensInNewTab ? "_blank" : undefined}
+                rel={card.link.opensInNewTab ? "noopener noreferrer" : undefined}
+              >
+                {card.link.title || card.title || card.link.url}
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+    )}
+    <slot />
+  </div>
+</section>

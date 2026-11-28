@@ -1,0 +1,82 @@
+---
+import type { MenuItem } from "../../lib/wp/menu";
+import MenuList from "./MenuList.astro";
+
+interface Props {
+  items: MenuItem[];
+  variant: "desktop" | "mobile";
+  nested?: boolean;
+  parentId?: number;
+}
+
+const { items, variant, nested = false, parentId } = Astro.props;
+const desktop = variant === "desktop";
+const listClass = desktop
+  ? nested
+    ? "site-header__sub"
+    : "site-header__list"
+  : nested
+    ? "site-header__panel-sub"
+    : "site-header__panel-list";
+---
+
+<ul class={listClass} id={nested && parentId ? `submenu-${parentId}` : undefined}>
+  {
+    items.map((item) => {
+      const external = item.target === "_blank";
+      return (
+        <li
+          class:list={[
+            desktop ? "site-header__item" : "site-header__panel-item",
+            item.children.length > 0 && "has-children",
+            item.currentAncestor && "is-ancestor",
+            item.current && "is-current",
+          ]}
+        >
+          <a
+            href={item.url}
+            class:list={[desktop ? "site-header__link" : "site-header__panel-link", item.current && "is-active"]}
+            aria-current={item.current ? "page" : undefined}
+            target={external ? "_blank" : undefined}
+            rel={external ? "noopener noreferrer" : undefined}
+          >
+            {
+              !desktop && (
+                <svg
+                  class="site-header__panel-slash"
+                  width="14"
+                  height="18"
+                  viewBox="0 0 14 18"
+                  fill="none"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M4 16 L10 2" stroke="var(--color-red)" stroke-width="3" stroke-linecap="round" />
+                </svg>
+              )
+            }
+            {item.title}
+          </a>
+          {
+            desktop && item.children.length > 0 && (
+              <button
+                type="button"
+                class="site-header__subtoggle"
+                aria-expanded="false"
+                aria-controls={`submenu-${item.id}`}
+                aria-label={`Show pages under ${item.title}`}
+              >
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+                  <path d="M1 1 L5 5 L9 1" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+              </button>
+            )
+          }
+          {item.children.length > 0 && (
+            <MenuList items={item.children} variant={variant} nested parentId={item.id} />
+          )}
+        </li>
+      );
+    })
+  }
+</ul>

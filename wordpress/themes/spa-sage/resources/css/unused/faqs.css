@@ -1,0 +1,74 @@
+/**
+ * Rank Math FAQ frontend cards (via trait-blocks faqWidget).
+ *
+ * Parked: not imported. To re-enable, move to theme/faqs.css and
+ * uncomment the import in theme.css.
+ */
+
+.spa-faqs-grid.grid-auto-cards {
+  --grid-min-mobile: 100%;
+  --grid-min-tablet: 100%;
+  --grid-min-desktop: 100%;
+  --grid-gap-col: 20px;
+  --grid-gap-row: 20px;
+  align-items: stretch;
+}
+
+.spa-faqs-grid.grid-auto-cards.is-two-columns {
+  --grid-min-tablet: calc(50% - 20px * 0.5);
+  --grid-min-desktop: calc(50% - 20px * 0.5);
+
+  /* Keep half-width tracks; don't let an odd last card fill the row. */
+  & > * {
+    flex-grow: 0;
+  }
+}
+
+.spa-faqs-grid.is-white-cards .spa-faq-card {
+  background-color: var(--color-white);
+}
+
+@layer components {
+  .spa-faq-card {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    box-sizing: border-box;
+    width: 100%;
+    padding: var(--padding-surface);
+    border-radius: var(--radius-surface);
+    background-color: var(--color-tertiary);
+
+    @media (width >= theme(--breakpoint-lg)) {
+      padding: var(--padding-surface-lg);
+    }
+  }
+
+  .spa-faq-card__question {
+    margin-bottom: 0.75rem;
+    font-family: var(--font-heading);
+    font-size: clamp(1.375rem, 1.0012rem + 0.7797vw, 1.625rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-primary);
+  }
+
+  .spa-faq-card__answer {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+    color: color-mix(in srgb, var(--color-primary) 72%, white);
+
+    & :is(p, ul, ol):last-child {
+      margin-bottom: 0;
+    }
+
+    & img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+  }
+}

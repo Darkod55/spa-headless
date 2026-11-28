@@ -1,0 +1,10 @@
+---
+description: Local WP, PhpStorm, and Astro dev setup
+alwaysApply: false
+---
+
+# Local setup
+
+Follow [docs/local-setup.md](docs/local-setup.md).
+
+WordPress is Local WP. Astro is http://localhost:4321 and reads `WP_URL` from `astro/.env`. Do not commit that file, preview tokens, Turnstile secrets, or uploads. Symlink the theme and `spa-headless-core` into the Local site. Do not add hosting config.

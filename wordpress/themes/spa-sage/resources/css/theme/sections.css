@@ -1,0 +1,787 @@
+/**
+ * Section layout utilities
+ *
+ * py-clamp-xl / p-clamp-xl block padding is fluid between
+ * --spacing-clamp-block (min, ~767px) and --spacing-clamp-block-xl
+ * (max, width-container / 1200px). Recalculate if those tokens change.
+ */
+
+@utility p-clamp {
+  padding-inline: var(--spacing-clamp-inline);
+  padding-block: var(--spacing-clamp-block);
+}
+
+@utility p-clamp-xl {
+  padding-inline: var(--spacing-clamp-inline);
+  /* 48px → 90px over 767px → 1200px */
+  padding-block: clamp(3rem, -1.6498rem + 9.6998vw, 5.625rem);
+}
+
+@utility px-clamp {
+  padding-inline: var(--spacing-clamp-inline);
+}
+
+@utility py-clamp {
+  padding-block: var(--spacing-clamp-block);
+}
+
+@utility py-clamp-xl {
+  /* 48px → 90px over 767px → 1200px */
+  padding-block: clamp(3rem, -1.6498rem + 9.6998vw, 5.625rem);
+}
+
+/**
+ * Fixed surface padding on all sides.
+ */
+@utility p-20px {
+  padding: var(--padding-surface);
+}
+
+/**
+ * Fixed-width, centered container.
+ */
+@utility container {
+  margin-inline: auto;
+  max-width: var(--width-container);
+}
+
+/**
+ * Optional content-width cap (spa/one-column Limit width toggle,
+ * core/paragraph Limit Width?). Override via `--spa-content-max`.
+ */
+@utility mw-1000 {
+  width: 100%;
+  max-width: var(--spa-content-max, var(--width-content));
+}
+
+/**
+ * Place a limited-width `.container.mw-1000` in the section
+ * (overrides container’s default margin-inline: auto).
+ */
+@utility content-align-left {
+  margin-inline: 0 auto;
+}
+
+@utility content-align-center {
+  margin-inline: auto;
+}
+
+@utility content-align-right {
+  margin-inline: auto 0;
+}
+
+/**
+ * Align content *inside* the column (spa/one-column Align inner content).
+ */
+@utility content-pos-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@utility content-pos-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@utility content-pos-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/**
+ * Fixed dark overlay for image-backed sections (columns / one-column).
+ */
+@utility hero-overlay {
+  background: linear-gradient(
+    90deg,
+    oklab(41.0848% -0.0238351 -0.0807145 / 0.9) 0%,
+    oklab(41.0848% -0.0238351 -0.0807145 / 0.7) 100%
+  );
+}
+
+/**
+ * spa/hero — content in site container grid; image fills the right half
+ * and breaks out to the viewport edge on desktop, with a colour blend overlay.
+ *
+ * Viewport fill (100dvh − header chrome) is desktop (`lg`) only.
+ * Mobile/tablet stack the image under copy (300px / 400px max). Compact
+ * caps desktop min-height at 500px.
+ */
+@layer components {
+  .spa-hero__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .spa-hero__content {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .spa-hero__content-inner,
+  .spa-hero__content-inner > .block-editor-inner-blocks > .block-editor-block-list__layout,
+  .spa-hero__content-inner > .block-editor-block-list__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    max-width: 36rem;
+  }
+
+  .spa-hero__content-inner > *,
+  .spa-hero__content-inner > .block-editor-inner-blocks > .block-editor-block-list__layout > *,
+  .spa-hero__content-inner > .block-editor-block-list__layout > *,
+  .spa-hero__content-inner :is(h1, h2, h3, h4, h5, h6, p) {
+    margin-block: 0 !important;
+  }
+
+  .spa-hero h1 {
+    font-weight: 400;
+    line-height: 1.25;
+  }
+
+  .spa-hero .spa-subheading {
+    margin-bottom: 0;
+  }
+
+  .spa-hero .btn,
+  .front-work .btn,
+  .front-speaking .btn,
+  .front-books .btn,
+  .front-contact .btn,
+  .front-grief .btn {
+    border-radius: 2px !important;
+    font-family: var(--font-sans) !important;
+    font-size: var(--font-size-sm) !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.06em !important;
+  }
+
+  .spa-hero__media {
+    position: relative;
+    /* Full-bleed below the container-aligned copy on small screens. */
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    line-height: 0;
+    max-height: 300px;
+    overflow: hidden;
+  }
+
+  /**
+   * Mobile: cap at 300px. Tablet: 400px. Desktop covers the column.
+   */
+  .spa-hero__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .spa-hero__placeholder {
+    display: grid;
+    place-items: center;
+    height: 300px;
+    max-height: 300px;
+    padding: 1.5rem;
+    background: color-mix(in srgb, var(--spa-hero-bg, var(--color-primary)) 70%, white);
+    color: color-mix(in srgb, var(--color-white) 70%, transparent);
+    text-align: center;
+    font-size: 0.875rem;
+    line-height: normal;
+  }
+
+  @media (width >= theme(--breakpoint-md)) {
+    .spa-hero__media {
+      max-height: 400px;
+    }
+
+    .spa-hero__image {
+      max-height: 400px;
+    }
+
+    .spa-hero__placeholder {
+      height: 400px;
+      max-height: 400px;
+    }
+  }
+
+  /**
+   * Desktop-only blend overlay — hidden on tablet/mobile so the photo stays clear.
+   */
+  .spa-hero__overlay {
+    display: none;
+  }
+
+  @media (width >= theme(--breakpoint-lg)) {
+    .spa-hero {
+      --spa-hero-min-h: calc(100vh - var(--site-chrome-height, 5.5rem));
+      --spa-hero-min-h: calc(100dvh - var(--site-chrome-height, 5.5rem));
+      min-height: var(--spa-hero-min-h);
+    }
+
+    .spa-hero--compact {
+      --spa-hero-min-h: 500px;
+    }
+
+    .spa-hero__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      min-height: var(--spa-hero-min-h);
+    }
+
+    /**
+     * Mid-container sits at 50vw, so 50vw fills from the content
+     * column edge out to the right of the viewport.
+     */
+    .spa-hero__media {
+      width: 50vw;
+      margin-left: 0;
+      max-height: none;
+      min-height: 100%;
+      overflow: hidden;
+    }
+
+    .spa-hero__image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .spa-hero__placeholder {
+      height: 100%;
+      max-height: none;
+    }
+
+    .spa-hero__overlay {
+      display: block;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        to right,
+        var(--spa-hero-bg, var(--color-primary)) 0%,
+        color-mix(in srgb, var(--spa-hero-bg, var(--color-primary)) 92%, transparent) 4%,
+        color-mix(in srgb, var(--spa-hero-bg, var(--color-primary)) 78%, transparent) 10%,
+        color-mix(in srgb, var(--spa-hero-bg, var(--color-primary)) 58%, transparent) 18%,
+        color-mix(in srgb, var(--spa-hero-bg, var(--color-primary)) 36%, transparent) 28%,
+        color-mix(in srgb, var(--spa-hero-bg, var(--color-primary)) 16%, transparent) 38%,
+        color-mix(in srgb, var(--spa-hero-bg, var(--color-primary)) 5%, transparent) 48%,
+        transparent 58%
+      );
+    }
+  }
+}
+
+/**
+ * spa/hero-v2 — cinematic full-bleed photo with left brand scrim + overlaid copy.
+ * Distinct from Hero V1 (split columns) and from typical “pill CTA + bottom fade” heroes:
+ * serif heading, square brand button, left-weighted primary scrim, container-aligned copy.
+ */
+@layer components {
+  .spa-hero-v2 {
+    /**
+     * Fill the viewport below the preheader + sticky header.
+     * `--site-chrome-height` is measured in app.js (fallback ≈ one header bar).
+     */
+    --spa-hero-v2-min-h: calc(100vh - var(--site-chrome-height, 5.5rem));
+    --spa-hero-v2-min-h: calc(100dvh - var(--site-chrome-height, 5.5rem));
+    min-height: var(--spa-hero-v2-min-h);
+    background-color: var(--spa-hero-v2-scrim, var(--color-primary));
+  }
+
+  .spa-hero-v2__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .spa-hero-v2__image,
+  .spa-hero-v2__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Mobile → optional override, else desktop. */
+    object-position: var(
+      --spa-hero-v2-pos-mobile,
+      var(--spa-hero-v2-pos-desktop, 100% 50%)
+    );
+  }
+
+  @media (width >= theme(--breakpoint-md)) {
+    .spa-hero-v2__image,
+    .spa-hero-v2__placeholder {
+      /* Tablet → optional override, else desktop. */
+      object-position: var(
+        --spa-hero-v2-pos-tablet,
+        var(--spa-hero-v2-pos-desktop, 100% 50%)
+      );
+    }
+  }
+
+  @media (width >= theme(--breakpoint-lg)) {
+    .spa-hero-v2__image,
+    .spa-hero-v2__placeholder {
+      object-position: var(--spa-hero-v2-pos-desktop, 100% 50%);
+    }
+  }
+
+  .spa-hero-v2__placeholder {
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--spa-hero-v2-scrim, var(--color-primary)) 80%, white);
+    color: color-mix(in srgb, var(--color-white) 75%, transparent);
+    text-align: center;
+    font-size: 0.875rem;
+    line-height: normal;
+    object-fit: unset;
+  }
+
+  /**
+   * Mobile/tablet: bottom scrim so the subject stays clear above the copy.
+   */
+  .spa-hero-v2__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      var(--spa-hero-v2-scrim, var(--color-primary)) 0%,
+      color-mix(in srgb, var(--spa-hero-v2-scrim, var(--color-primary)) 92%, transparent) 28%,
+      color-mix(in srgb, var(--spa-hero-v2-scrim, var(--color-primary)) 55%, transparent) 48%,
+      color-mix(in srgb, var(--spa-hero-v2-scrim, var(--color-primary)) 18%, transparent) 68%,
+      transparent 82%
+    );
+  }
+
+  .spa-hero-v2__foreground {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    min-height: var(--spa-hero-v2-min-h);
+  }
+
+  .spa-hero-v2__content,
+  .spa-hero-v2__content .block-editor-block-list__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    max-width: 34rem;
+  }
+
+  .spa-hero-v2__content > *,
+  .spa-hero-v2__content .block-editor-block-list__layout > *,
+  .spa-hero-v2__content :is(h1, h2, h3, h4, h5, h6, p) {
+    margin-block: 0 !important;
+  }
+
+  .spa-hero-v2__content .spa-subheading {
+    margin-bottom: 0;
+  }
+
+  @media (width >= theme(--breakpoint-lg)) {
+    /**
+     * Desktop: left-weighted brand scrim; photo stays open on the right.
+     */
+    .spa-hero-v2__scrim {
+      background:
+        linear-gradient(
+          to right,
+          var(--spa-hero-v2-scrim, var(--color-primary)) 0%,
+          color-mix(in srgb, var(--spa-hero-v2-scrim, var(--color-primary)) 88%, transparent) 28%,
+          color-mix(in srgb, var(--spa-hero-v2-scrim, var(--color-primary)) 45%, transparent) 52%,
+          color-mix(in srgb, var(--spa-hero-v2-scrim, var(--color-primary)) 12%, transparent) 72%,
+          transparent 88%
+        ),
+        linear-gradient(
+          to top,
+          color-mix(in srgb, var(--spa-hero-v2-scrim, var(--color-primary)) 35%, transparent) 0%,
+          transparent 42%
+        );
+    }
+
+    .spa-hero-v2__foreground {
+      align-items: center;
+    }
+
+    .spa-hero-v2__content,
+    .spa-hero-v2__content .block-editor-block-list__layout {
+      gap: 30px;
+      max-width: 38rem;
+    }
+  }
+}
+
+/**
+ * spa/column-cover — full-bleed photo with a content box overlaid on the left
+ * (same InnerBlocks as Hero: heading, paragraph, button).
+ */
+@layer components {
+  .spa-column-cover {
+    --spa-cover-min-h: min(36rem, 70vh);
+    min-height: var(--spa-cover-min-h);
+    background-color: var(--spa-cover-box-bg, var(--color-primary));
+  }
+
+  .spa-column-cover__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .spa-column-cover__image,
+  .spa-column-cover__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--spa-cover-pos, 70% 50%);
+  }
+
+  .spa-column-cover__placeholder {
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--spa-cover-box-bg, var(--color-primary)) 80%, white);
+    color: color-mix(in srgb, var(--color-white) 75%, transparent);
+    text-align: center;
+    font-size: 0.875rem;
+    line-height: normal;
+    object-fit: unset;
+  }
+
+  .spa-column-cover__foreground {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    min-height: var(--spa-cover-min-h);
+  }
+
+  .spa-column-cover__foreground > .container {
+    width: 100%;
+    display: flex;
+  }
+
+  .spa-column-cover.is-box-right .spa-column-cover__foreground > .container {
+    justify-content: flex-end;
+  }
+
+  .spa-column-cover__box {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    padding: 1.5rem;
+    border-radius: var(--radius-surface);
+    background-color: var(--spa-cover-box-bg, #00000070);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: var(--color-white);
+  }
+
+  .spa-column-cover__box,
+  .spa-column-cover__box .block-editor-block-list__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .spa-column-cover__box > *,
+  .spa-column-cover__box .block-editor-block-list__layout > *,
+  .spa-column-cover__box :is(h1, h2, h3, h4, h5, h6, p) {
+    margin-block: 0 !important;
+  }
+
+  .spa-column-cover__box :is(h1, h2, h3, h4, h5, h6, p, a:not(.btn)) {
+    color: inherit;
+  }
+
+  @media (width >= theme(--breakpoint-lg)) {
+    .spa-column-cover__box {
+      width: 50%;
+      max-width: 50%;
+      padding: 2.5rem;
+    }
+
+    .spa-column-cover__box,
+    .spa-column-cover__box .block-editor-block-list__layout {
+      gap: 1.5rem;
+    }
+  }
+}
+
+/**
+ * Client gradient images were removed with the Edy Nathan art. Section
+ * backgrounds use the navy / red / royal / black / white utilities.
+ */
+
+/**
+ * spa/columns — optional brand gradient section background
+ * (same primary → tertiary wash as Cards), plus card-style column cells.
+ */
+@layer components {
+  .spa-columns-section--gradient {
+    background-color: var(--color-primary);
+    background-image: linear-gradient(
+      90deg,
+      var(--color-primary) 0%,
+      var(--color-tertiary) 100%
+    );
+  }
+
+  .spa-partial-column {
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .spa-partial-column--has-bg {
+    display: flex;
+    flex-direction: column;
+    padding: var(--padding-surface);
+    border-radius: var(--radius-surface);
+    background-color: var(--spa-column-bg, var(--color-light));
+  }
+
+  /**
+   * Default card stack: flex gap owns rhythm, so zero block margins.
+   * `--no-gap` drops the gap and leaves typography margins alone.
+   */
+  .spa-partial-column--has-bg:not(.spa-partial-column--no-gap) {
+    gap: 1.25rem;
+  }
+
+  .spa-partial-column--has-bg:not(.spa-partial-column--no-gap) > :is(h1, h2, h3, h4, h5, h6, p, ul, ol),
+  .spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
+    > .block-editor-inner-blocks
+    > .block-editor-block-list__layout
+    > *,
+  .spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
+    > .block-editor-block-list__layout
+    > * {
+    margin-block: 0;
+  }
+
+  .spa-partial-column--has-bg.spa-partial-column--no-gap {
+    gap: 0;
+  }
+
+  @media (width >= theme(--breakpoint-lg)) {
+    .spa-partial-column--has-bg {
+      padding: var(--padding-surface-lg);
+    }
+  }
+}
+
+/**
+ * Flexible wrapping column layout (spa/columns, spa/hero, cards + Grid Controls).
+ *
+ * Per-item overrides:
+ * - --col-width-* → flex-basis (px / % / auto)
+ * - --col-grow-*  → flex-grow (0 for fixed px so `auto` siblings can fill)
+ */
+@utility grid-auto-cards {
+  --_min: var(--grid-min-mobile, 100%);
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+
+  & > * {
+    flex-grow: var(--col-grow-mobile, 1);
+    flex-shrink: 1;
+    flex-basis: var(--col-width-mobile, var(--_min));
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /*
+   * Section-level subheading (spa/columns sibling of columns):
+   * full-width row above the column cells; order keeps it on top
+   */
+  & > .spa-subheading,
+  & > .wp-block-spa-partial-subheading {
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+    order: -1;
+  }
+
+  @media (width >= theme(--breakpoint-md)) {
+    --_min: var(--grid-min-tablet, var(--grid-min-mobile, 100%));
+
+    & > * {
+      flex-grow: var(--col-grow-tablet, var(--col-grow-mobile, 1));
+      flex-basis: var(--col-width-tablet, var(--col-width-mobile, var(--_min)));
+    }
+
+    & > .spa-subheading,
+    & > .wp-block-spa-partial-subheading {
+      flex-grow: 0;
+      flex-basis: 100%;
+    }
+
+    /*
+     * Flip via `order` only — DOM order (and :first-child width targeting)
+     * stays the same. Avoid direction:rtl which visually swaps columns.
+     */
+    &.is-flipped > :first-child {
+      order: 2;
+    }
+
+    &.is-flipped > :first-child + * {
+      order: 1;
+    }
+  }
+
+  @media (width >= theme(--breakpoint-lg)) {
+    --_min: var(--grid-min-desktop, var(--grid-min-tablet, 100%));
+
+    & > * {
+      flex-grow: var(
+        --col-grow-desktop,
+        var(--col-grow-tablet, var(--col-grow-mobile, 1))
+      );
+      flex-basis: var(
+        --col-width-desktop,
+        var(--col-width-tablet, var(--col-width-mobile, var(--_min)))
+      );
+    }
+
+    & > .spa-subheading,
+    & > .wp-block-spa-partial-subheading {
+      flex-grow: 0;
+      flex-basis: 100%;
+    }
+  }
+}
+
+/**
+ * spa/columns — two-column layout. Widths come from parent CSS vars
+ * (`--col-1-*` → `:first-child`, `--col-2-*` → second child).
+ * Flip only changes visual order via `order`; DOM targeting stays the same.
+ * Mobile is always full width.
+ */
+@layer utilities {
+  /*
+   * Must live in utilities — @utility grid-auto-cards sets align-items:start
+   * and would otherwise win over a components-layer stretch rule.
+   */
+  .spa-columns.grid-auto-cards {
+    align-items: stretch;
+  }
+
+  .spa-columns.grid-auto-cards > :first-child,
+  .spa-columns.grid-auto-cards > :first-child + * {
+    flex-grow: 1;
+    flex-basis: 100%;
+    align-self: stretch;
+  }
+
+  /**
+   * Vertical content align (both columns). Columns stretch to equal height;
+   * `--spa-col-justify` is set from the Columns block (top/center/bottom).
+   */
+  .spa-columns.grid-auto-cards > .spa-partial-column,
+  .spa-columns.grid-auto-cards > .wp-block-spa-partial-column {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    justify-content: var(--spa-col-justify, flex-start);
+  }
+
+  .spa-columns.grid-auto-cards > .spa-partial-column--has-bg {
+    height: auto;
+    min-height: 100%;
+  }
+
+  @media (width >= theme(--breakpoint-md)) {
+    .spa-columns.grid-auto-cards > :first-child {
+      flex-grow: var(--col-1-grow-tablet, 1);
+      flex-basis: var(--col-1-width-tablet, 50%);
+    }
+
+    .spa-columns.grid-auto-cards > :first-child + * {
+      flex-grow: var(--col-2-grow-tablet, 1);
+      flex-basis: var(--col-2-width-tablet, 50%);
+    }
+  }
+
+  @media (width >= theme(--breakpoint-lg)) {
+    .spa-columns.grid-auto-cards > :first-child {
+      flex-grow: var(--col-1-grow-desktop, 1);
+      flex-basis: var(--col-1-width-desktop, var(--col-1-width-tablet, 50%));
+    }
+
+    .spa-columns.grid-auto-cards > :first-child + * {
+      flex-grow: var(--col-2-grow-desktop, 1);
+      flex-basis: var(--col-2-width-desktop, var(--col-2-width-tablet, 50%));
+    }
+
+    /**
+     * Sticky column (desktop only). align-self:flex-start is required —
+     * stretch makes the column as tall as the row so sticky never engages.
+     * Top offset clears the sticky site header and, when logged in, the admin bar.
+     */
+    .spa-columns.is-sticky-left > :first-child,
+    .spa-columns.is-sticky-left > .spa-partial-column:first-child,
+    .spa-columns.is-sticky-left > .wp-block-spa-partial-column:first-child {
+      position: sticky;
+      top: calc(var(--admin-bar-offset, 0px) + var(--site-chrome-height, 5.5rem) + 1.5rem);
+      align-self: flex-start;
+    }
+
+    .spa-columns.is-sticky-right > :first-child + *,
+    .spa-columns.is-sticky-right > .spa-partial-column:first-child + *,
+    .spa-columns.is-sticky-right > .wp-block-spa-partial-column:first-child + * {
+      position: sticky;
+      top: calc(var(--admin-bar-offset, 0px) + var(--site-chrome-height, 5.5rem) + 1.5rem);
+      align-self: flex-start;
+    }
+  }
+}
+
+/**
+ * Gap companion for grid-auto-cards.
+ * 30px column/row gap on mobile/tablet;
+ * desktop reads `--grid-gap-col` / `--grid-gap-row`.
+ */
+@utility grid-auto-cards-gap {
+  column-gap: 30px;
+  row-gap: 30px;
+
+  @media (width >= theme(--breakpoint-lg)) {
+    column-gap: var(--grid-gap-col, 20px);
+    row-gap: var(--grid-gap-row, 20px);
+  }
+}
+
+/**
+ * Keep columns on one row from desktop up (hero). Below lg, tablet/mobile
+ * tracks can still stack (e.g. 100% basis). Prevents a fixed px + auto
+ * pair from wrapping early on mid-width desktops.
+ */
+@utility grid-auto-cards-nowrap {
+  @media (width >= theme(--breakpoint-lg)) {
+    flex-wrap: nowrap;
+
+    & > * {
+      min-width: 0;
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "spa/hero",
+  "title": "Hero (deprecated)",
+  "category": "spa",
+  "icon": "star-filled",
+  "inserter": false,
+  "description": "Deprecated scaffold. Use Hero Banner Main or Hero Banner Default. Existing content still renders.",
+  "blockstudio": {
+    "attributes": [
+      {
+        "type": "tabs",
+        "tabs": [
+          {
+            "title": "Content",
+            "attributes": [
+              {
+                "type": "group",
+                "attributes": [
+                  {
+                    "id": "eyebrow",
+                    "type": "text",
+                    "label": "Eyebrow",
+                    "default": "Addiction, mental health and wellness"
+                  },
+                  {
+                    "id": "heading",
+                    "type": "text",
+                    "label": "Heading",
+                    "default": "Why fit in when you can stand out?"
+                  },
+                  {
+                    "id": "description",
+                    "type": "textarea",
+                    "label": "Description",
+                    "default": "Strategic marketing for organisations in the addiction, mental health, behavioural health and wellness sectors."
+                  }
+                ]
+              },
+              {
+                "type": "group",
+                "attributes": [
+                  {
+                    "id": "primaryButton",
+                    "type": "link",
+                    "label": "Primary button",
+                    "default": {
+                      "title": "Our services",
+                      "url": "/services"
+                    }
+                  },
+                  {
+                    "id": "secondaryButton",
+                    "type": "link",
+                    "label": "Secondary button",
+                    "default": {
+                      "title": "Get in touch",
+                      "url": "/contact"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "group",
+                "attributes": [
+                  {
+                    "id": "image",
+                    "type": "files",
+                    "label": "Image",
+                    "multiple": false,
+                    "allowedTypes": ["image"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Section",
+            "attributes": [{ "type": "custom/section" }]
+          }
+        ]
+      }
+    ]
+  }
+}

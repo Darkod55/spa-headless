@@ -1,0 +1,117 @@
+/**
+ * Base typography
+ */
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+  }
+
+  p, ul, ol {
+    margin-bottom: 1.5rem;
+  }
+
+  /**
+   * Undo Tailwind Preflight's `list-style: none` on all lists so content lists (core/list) keep bullets/numbers. Navigation menus stay unstyled via nav.css.
+   */
+  ul {
+    list-style-type: disc;
+    padding-left: 1.5em;
+  }
+
+  ol {
+    list-style-type: decimal;
+    padding-left: 1.5em;
+  }
+
+  :is(h1, h2, h3, h4, h5, h6, p, ul, ol):last-child {
+    margin-bottom: 0 !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  /**
+   * Heading sizes.
+   * Regenerate from docs/design-tokens.md § Type scale (agent prompt at top of that file).
+   * vmin=1000, vmax=1200 (width-container) for fluid H1; H2/H3 use Active recipes as specified.
+   */
+  h1, .h1 { font-size: clamp(2rem, -2.0625rem + 6.5vw, 2.8125rem); }
+  h2, .h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 400;
+  }
+  h3, .h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+  h4, .h4 { font-size: 22px; }
+  h5, .h5 { font-size: 20px; }
+  h6, .h6 { font-size: 18px; }
+
+  @media (width >= theme(--breakpoint-lg)) {
+    h1, .h1 { line-height: 64px; }
+  }
+
+  /**
+   * WordPress text-alignment classes (`has-text-align-*`).
+   */
+  .has-text-align-center { text-align: center; }
+  .has-text-align-left { text-align: left; }
+  .has-text-align-right { text-align: right; }
+}
+
+/**
+ * WordPress palette presets (`has-{slug}-color` / `has-{slug}-background-color`).
+ *
+ * Core global-styles CSS is dequeued on the front end (SetupPlus), so the
+ * editor’s Highlight / text-colour classes would otherwise render as black.
+ * Mirror theme.json palette → our `--color-*` tokens.
+ */
+:root {
+  --wp--preset--color--primary: var(--color-primary);
+  --wp--preset--color--secondary: var(--color-secondary);
+  --wp--preset--color--tertiary: var(--color-tertiary);
+  --wp--preset--color--secondary-deep: var(--color-secondary-deep);
+  --wp--preset--color--secondary-on-primary: var(--color-secondary-on-primary);
+  --wp--preset--color--secondary-on-tertiary: var(--color-secondary-on-tertiary);
+  --wp--preset--color--gray: var(--color-gray);
+  --wp--preset--color--white: var(--color-white);
+  --wp--preset--color--black: var(--color-black);
+}
+
+@layer base {
+  .has-primary-color { color: var(--wp--preset--color--primary) !important; }
+  .has-secondary-color { color: var(--wp--preset--color--secondary) !important; }
+  .has-tertiary-color { color: var(--wp--preset--color--tertiary) !important; }
+  .has-secondary-deep-color { color: var(--wp--preset--color--secondary-deep) !important; }
+  .has-secondary-on-primary-color { color: var(--wp--preset--color--secondary-on-primary) !important; }
+  .has-secondary-on-tertiary-color { color: var(--wp--preset--color--secondary-on-tertiary) !important; }
+  .has-gray-color { color: var(--wp--preset--color--gray) !important; }
+  .has-white-color { color: var(--wp--preset--color--white) !important; }
+  .has-black-color { color: var(--wp--preset--color--black) !important; }
+
+  .has-primary-background-color { background-color: var(--wp--preset--color--primary) !important; }
+  .has-secondary-background-color { background-color: var(--wp--preset--color--secondary) !important; }
+  .has-tertiary-background-color { background-color: var(--wp--preset--color--tertiary) !important; }
+  .has-secondary-deep-background-color { background-color: var(--wp--preset--color--secondary-deep) !important; }
+  .has-secondary-on-primary-background-color { background-color: var(--wp--preset--color--secondary-on-primary) !important; }
+  .has-secondary-on-tertiary-background-color { background-color: var(--wp--preset--color--secondary-on-tertiary) !important; }
+  .has-gray-background-color { background-color: var(--wp--preset--color--gray) !important; }
+  .has-white-background-color { background-color: var(--wp--preset--color--white) !important; }
+  .has-black-background-color { background-color: var(--wp--preset--color--black) !important; }
+}
+
+/**
+ * Body text sizes from the typography field's `text_size` select
+ */
+@layer components {
+  .fs-xs { font-size: var(--font-size-xs); }
+  .fs-sm { font-size: var(--font-size-sm); }
+  .fs-base { font-size: var(--font-size-base); }
+  .fs-lead { font-size: var(--font-size-lead); }
+}

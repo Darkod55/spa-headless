@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/wp/6.7/theme.json",
+  "version": 3,
+  "settings": {
+    "color": {
+      "custom": false,
+      "customDuotone": false,
+      "customGradient": false,
+      "defaultDuotone": false,
+      "defaultGradients": false,
+      "defaultPalette": false,
+      "palette": []
+    },
+    "blocks": {
+      "core/heading": {
+        "color": {
+          "text": false,
+          "background": false,
+          "custom": false
+        }
+      },
+      "core/paragraph": {
+        "color": {
+          "text": false,
+          "background": false,
+          "custom": false
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1194 @@
+@import "./theme/color-tokens.css";
+@import "tailwindcss";
+@import "./theme.css";
+@source "../../app/**/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.js";
+
+/**
+ * Page/post title in the editor canvas.
+ */
+.edit-post-visual-editor__post-title-wrapper,
+.editor-visual-editor__post-title-wrapper {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none !important;
+  margin-block: 0 !important;
+  padding-block: 0.75rem !important;
+  padding-inline: var(--spacing-clamp-inline, 24px) !important;
+}
+
+.edit-post-visual-editor__post-title-wrapper .editor-post-title,
+.editor-visual-editor__post-title-wrapper .editor-post-title,
+.edit-post-visual-editor__post-title-wrapper .wp-block-post-title,
+.editor-visual-editor__post-title-wrapper .wp-block-post-title,
+.edit-post-visual-editor__post-title-wrapper .editor-post-title__input,
+.editor-visual-editor__post-title-wrapper .editor-post-title__input {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: var(--width-container) !important;
+  margin-block: 0 !important;
+  margin-inline: auto !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+/*
+*This runs inside the editor iframe, alongside the block's own rendered markup, so it can actually reach classes like `.bs-block` - unlike editor-canvas.css, which only ever runs in the parent wp-admin document.
+*/
+.bs-block {
+  max-width: 100% !important;
+
+  & .container {
+    max-width: var(--width-container);
+
+    /**
+     * Limited column sits *inside* the site container (grid), not on the section.
+     */
+    & .spa-one-column__measure.mw-1000,
+    & .mw-1000 {
+      width: 100%;
+      max-width: var(--spa-content-max, var(--width-content));
+    }
+
+    & .content-align-left,
+    &.content-align-left {
+      margin-inline: 0 auto !important;
+    }
+
+    & .content-align-center,
+    &.content-align-center {
+      margin-inline: auto !important;
+    }
+
+    & .content-align-right,
+    &.content-align-right {
+      margin-inline: auto 0 !important;
+    }
+
+    &.content-pos-left > .block-editor-block-list__layout,
+    &.content-pos-center > .block-editor-block-list__layout,
+    &.content-pos-right > .block-editor-block-list__layout,
+    & .content-pos-left > .block-editor-block-list__layout,
+    & .content-pos-center > .block-editor-block-list__layout,
+    & .content-pos-right > .block-editor-block-list__layout,
+    & .content-pos-left > .block-editor-inner-blocks > .block-editor-block-list__layout,
+    & .content-pos-center > .block-editor-inner-blocks > .block-editor-block-list__layout,
+    & .content-pos-right > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100%;
+    }
+
+    &.content-pos-left > .block-editor-block-list__layout,
+    & .content-pos-left > .block-editor-block-list__layout,
+    & .content-pos-left > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      align-items: flex-start !important;
+    }
+
+    &.content-pos-center > .block-editor-block-list__layout,
+    & .content-pos-center > .block-editor-block-list__layout,
+    & .content-pos-center > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      align-items: center !important;
+    }
+
+    &.content-pos-right > .block-editor-block-list__layout,
+    & .content-pos-right > .block-editor-block-list__layout,
+    & .content-pos-right > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      align-items: flex-end !important;
+    }
+
+    &.grid-auto-cards {
+      display: block !important;
+      width: 100%;
+    }
+
+    /*
+     * Cards / other grids — per-item `--col-width-*` / `--col-grow-*`.
+     * Exclude `.spa-columns` (parent owns `--col-1-*` / `--col-2-*`).
+     */
+    &.grid-auto-cards:not(.spa-columns) > .block-editor-block-list__layout,
+    &.grid-auto-cards:not(.spa-columns) > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      --_min: var(--grid-min-desktop, 50%);
+
+      display: flex !important;
+      flex-wrap: wrap;
+      align-items: start;
+      width: 100% !important;
+      min-width: var(--width-container);
+
+      & > *,
+      & > .wp-block-spa-partial-column,
+      & > [data-type="spa/partial-column"] {
+        flex-grow: var(
+          --col-grow-desktop,
+          var(--col-grow-tablet, var(--col-grow-mobile, 1))
+        );
+        flex-shrink: 1;
+        flex-basis: var(
+          --col-width-desktop,
+          var(--col-width-tablet, var(--col-width-mobile, var(--_min)))
+        );
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      & > .spa-subheading,
+      & > .wp-block-spa-partial-subheading,
+      & > [data-type="spa/partial-subheading"] {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        order: -1;
+      }
+    }
+
+    /*
+     * spa/columns — parent CSS vars on `.spa-columns` (`--col-1-*` / `--col-2-*`).
+     * Use `nth-child(n of …)` so we hit column blocks even when not :first-child.
+     */
+    &.spa-columns.grid-auto-cards > .block-editor-block-list__layout,
+    &.spa-columns.grid-auto-cards > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      display: flex !important;
+      flex-wrap: wrap;
+      align-items: stretch;
+      width: 100% !important;
+      min-width: var(--width-container);
+      /* Match frontend `grid-auto-cards-gap`: 30px below lg, then --grid-gap-*. */
+      column-gap: 30px;
+      row-gap: 30px;
+
+      @media (width >= theme(--breakpoint-lg)) {
+        column-gap: var(--grid-gap-col, 20px);
+        row-gap: var(--grid-gap-row, 20px);
+      }
+
+      & > [data-type="spa/partial-column"] {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 1;
+        align-self: stretch;
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      & > [data-type="spa/partial-column"] > .spa-partial-column,
+      & > [data-type="spa/partial-column"] > .spa-partial-column--has-bg {
+        flex: 1 1 auto;
+        width: 100%;
+        min-height: 100%;
+      }
+
+      & > [data-type="spa/partial-column"]:nth-child(1 of [data-type="spa/partial-column"]) {
+        flex-grow: var(--col-1-grow-mobile, 1);
+        flex-basis: var(--col-1-width-mobile, 100%);
+      }
+
+      & > [data-type="spa/partial-column"]:nth-child(2 of [data-type="spa/partial-column"]) {
+        flex-grow: var(--col-2-grow-mobile, 1);
+        flex-basis: var(--col-2-width-mobile, 100%);
+      }
+
+      @media (width >= theme(--breakpoint-md)) {
+        & > [data-type="spa/partial-column"]:nth-child(1 of [data-type="spa/partial-column"]) {
+          flex-grow: var(--col-1-grow-tablet, 1);
+          flex-basis: var(--col-1-width-tablet, 50%);
+        }
+
+        & > [data-type="spa/partial-column"]:nth-child(2 of [data-type="spa/partial-column"]) {
+          flex-grow: var(--col-2-grow-tablet, 1);
+          flex-basis: var(--col-2-width-tablet, 50%);
+        }
+      }
+
+      @media (width >= theme(--breakpoint-lg)) {
+        & > [data-type="spa/partial-column"]:nth-child(1 of [data-type="spa/partial-column"]) {
+          flex-grow: var(--col-1-grow-desktop, 1);
+          flex-basis: var(--col-1-width-desktop, var(--col-1-width-tablet, 50%));
+        }
+
+        & > [data-type="spa/partial-column"]:nth-child(2 of [data-type="spa/partial-column"]) {
+          flex-grow: var(--col-2-grow-desktop, 1);
+          flex-basis: var(--col-2-width-desktop, var(--col-2-width-tablet, 50%));
+        }
+      }
+    }
+
+    &.spa-columns.grid-auto-cards.is-flipped > .block-editor-block-list__layout,
+    &.spa-columns.grid-auto-cards.is-flipped > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      & > [data-type="spa/partial-column"]:nth-child(1 of [data-type="spa/partial-column"]) {
+        order: 2;
+      }
+
+      & > [data-type="spa/partial-column"]:nth-child(2 of [data-type="spa/partial-column"]) {
+        order: 1;
+      }
+    }
+
+    &.grid-auto-cards-gap > .block-editor-block-list__layout,
+    &.grid-auto-cards-gap > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      column-gap: 30px;
+      row-gap: 30px;
+
+      @media (width >= theme(--breakpoint-lg)) {
+        column-gap: var(--grid-gap-col, 20px);
+        row-gap: var(--grid-gap-row, 20px);
+      }
+    }
+
+    &.grid-auto-cards-nowrap > .block-editor-block-list__layout,
+    &.grid-auto-cards-nowrap > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      flex-wrap: nowrap;
+
+      & > * {
+        min-width: 0;
+      }
+    }
+
+    &.grid-auto-cards.is-flipped:not(.spa-columns) > .block-editor-block-list__layout,
+    &.grid-auto-cards.is-flipped:not(.spa-columns) > .block-editor-inner-blocks > .block-editor-block-list__layout {
+      & > :first-child {
+        order: 2;
+      }
+
+      & > :first-child + * {
+        order: 1;
+      }
+    }
+
+  }
+}
+
+.block-library-block__reusable-block-container { max-width: unset !important; }
+
+/**
+ * spa/partial-subheading — inner stack (heading + paragraphs).
+ */
+.spa-subheading > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-subheading > .block-editor-block-list__layout,
+[data-type="spa/partial-subheading"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+[data-type="spa/partial-subheading"] > .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  & > * {
+    margin-block: 0 !important;
+  }
+}
+
+/**
+ * spa/columns — gradient section + card-style column cells in the canvas.
+ */
+.spa-columns-section--gradient {
+  background-color: var(--color-primary) !important;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-primary) 0%,
+    var(--color-tertiary) 100%
+  ) !important;
+}
+
+.spa-partial-column--has-bg > .block-editor-inner-blocks,
+.spa-partial-column--has-bg > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-partial-column--has-bg > .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.spa-partial-column--has-bg:not(.spa-partial-column--no-gap) > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-partial-column--has-bg:not(.spa-partial-column--no-gap) > .block-editor-block-list__layout,
+[data-type="spa/partial-column"].spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
+  > .block-editor-inner-blocks
+  > .block-editor-block-list__layout,
+[data-type="spa/partial-column"].spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
+  > .block-editor-block-list__layout {
+  gap: 1.25rem;
+}
+
+.spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
+  > .block-editor-inner-blocks
+  > .block-editor-block-list__layout
+  > *,
+.spa-partial-column--has-bg:not(.spa-partial-column--no-gap) > .block-editor-block-list__layout > *,
+[data-type="spa/partial-column"].spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
+  > .block-editor-inner-blocks
+  > .block-editor-block-list__layout
+  > *,
+[data-type="spa/partial-column"].spa-partial-column--has-bg:not(.spa-partial-column--no-gap)
+  > .block-editor-block-list__layout
+  > * {
+  margin-block: 0 !important;
+}
+
+.spa-partial-column--has-bg.spa-partial-column--no-gap > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-partial-column--has-bg.spa-partial-column--no-gap > .block-editor-block-list__layout,
+[data-type="spa/partial-column"].spa-partial-column--no-gap
+  > .block-editor-inner-blocks
+  > .block-editor-block-list__layout,
+[data-type="spa/partial-column"].spa-partial-column--no-gap > .block-editor-block-list__layout {
+  gap: 0;
+}
+
+/**
+ * spa/partial-box — editor stack.
+ * Gap owns spacing (same as frontend); zero default block margins.
+ */
+.spa-box > .block-editor-inner-blocks,
+.spa-box > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-box > .block-editor-block-list__layout,
+[data-type="spa/partial-box"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+[data-type="spa/partial-box"] > .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  & > * {
+    margin-block: 0 !important;
+  }
+}
+
+/**
+ * Styled list in the editor — WP wraps items; target li inside .spa-list.
+ */
+.spa-list,
+ul.spa-list,
+.editor-styles-wrapper .spa-list,
+.editor-styles-wrapper ul.spa-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.spa-list > li,
+.spa-list .wp-block-list-item,
+[data-type="core/list"].spa-list [data-type="core/list-item"],
+.editor-styles-wrapper .spa-list li {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.75rem !important;
+  margin: 0 !important;
+  padding-inline-start: 0 !important;
+  list-style: none !important;
+}
+
+.spa-list > li::before,
+.editor-styles-wrapper .spa-list li::before {
+  content: "" !important;
+  flex: 0 0 0.375rem !important;
+  width: 0.375rem !important;
+  height: 0.375rem !important;
+  margin-top: 0.55em !important;
+  border-radius: 50% !important;
+  background-color: var(--spa-list-bullet, var(--color-secondary)) !important;
+}
+
+.spa-list--divided > li,
+.editor-styles-wrapper .spa-list--divided li {
+  padding-block: 1rem !important;
+  border-bottom: 1px solid
+    var(
+      --spa-list-divider,
+      color-mix(in srgb, currentColor 12%, transparent)
+    ) !important;
+}
+
+.spa-list--divided > li:first-child,
+.editor-styles-wrapper .spa-list--divided li:first-child {
+  padding-top: 0 !important;
+}
+
+.spa-list--divided > li:last-child,
+.editor-styles-wrapper .spa-list--divided li:last-child {
+  padding-bottom: 0 !important;
+  border-bottom: none !important;
+}
+
+/**
+ * Tag list — inline pills in the editor canvas.
+ */
+.spa-list--tags,
+ul.spa-list--tags,
+.editor-styles-wrapper .spa-list--tags,
+.editor-styles-wrapper ul.spa-list--tags,
+[data-type="core/list"].spa-list--tags > .block-editor-inner-blocks > .block-editor-block-list__layout,
+[data-type="core/list"].spa-list--tags > .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+.spa-list--tags > li,
+.spa-list--tags .wp-block-list-item,
+[data-type="core/list"].spa-list--tags [data-type="core/list-item"],
+.editor-styles-wrapper .spa-list--tags li {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  padding: 0.4rem 0.85rem !important;
+  border-radius: var(--radius-surface) !important;
+  border-bottom: none !important;
+  background-color: var(--spa-list-tag-bg, var(--color-light)) !important;
+  color: inherit !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  font-style: inherit !important;
+  text-transform: inherit !important;
+  line-height: 1.35 !important;
+  width: auto !important;
+}
+
+.spa-list--tags > li::before,
+.editor-styles-wrapper .spa-list--tags li::before,
+[data-type="core/list"].spa-list--tags [data-type="core/list-item"]::before {
+  content: none !important;
+  display: none !important;
+}
+
+.spa-list--tags:where(:not([class*="text-"])),
+ul.spa-list--tags:where(:not([class*="text-"])),
+[data-type="core/list"].spa-list--tags:where(:not([class*="text-"])),
+.editor-styles-wrapper .spa-list--tags:where(:not([class*="text-"])) {
+  color: color-mix(in srgb, var(--color-primary) 58%, transparent);
+}
+
+.spa-list--tags:where(:not([class*="fs-"])),
+ul.spa-list--tags:where(:not([class*="fs-"])),
+[data-type="core/list"].spa-list--tags:where(:not([class*="fs-"])),
+.editor-styles-wrapper .spa-list--tags:where(:not([class*="fs-"])) {
+  font-size: var(--font-size-sm);
+}
+
+/**
+ * spa/partial-row — space-between subheading + badges.
+ */
+.spa-row > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-row > .block-editor-block-list__layout,
+[data-type="spa/partial-row"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+[data-type="spa/partial-row"] > .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 0.75rem 1.5rem !important;
+  width: 100% !important;
+}
+
+.spa-row > .block-editor-inner-blocks > .block-editor-block-list__layout > *,
+.spa-row > .block-editor-block-list__layout > *,
+[data-type="spa/partial-row"] > .block-editor-inner-blocks > .block-editor-block-list__layout > * {
+  margin-block: 0 !important;
+  flex: 0 1 auto !important;
+  max-width: 100% !important;
+}
+
+/**
+ * spa/keynote — editor stack mirrors frontend gap.
+ */
+.spa-keynote__inner {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  column-gap: clamp(1.25rem, 4vw, 3.5rem) !important;
+  align-items: start !important;
+}
+
+.spa-keynote__mark {
+  position: sticky !important;
+  top: 1rem !important;
+  width: 3.5rem !important;
+}
+
+.spa-keynote__mark-image {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+.spa-keynote__content > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-keynote__content > .block-editor-block-list__layout,
+[data-type="spa/keynote"] .spa-keynote__content > .block-editor-inner-blocks > .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important;
+}
+
+.spa-keynote__content > .block-editor-inner-blocks > .block-editor-block-list__layout > *,
+.spa-keynote__content > .block-editor-block-list__layout > * {
+  margin-block: 0 !important;
+}
+
+/**
+ * Sticky targets `.spa-columns > :first-child`, which is the column on the
+ * front end and `.block-editor-inner-blocks` in the canvas. That wrapper
+ * then sticks and the two columns overlap. Leave the editor in normal flow.
+ */
+.spa-columns.is-sticky-left > .block-editor-inner-blocks,
+.spa-columns.is-sticky-right > .block-editor-inner-blocks,
+.spa-columns.is-sticky-left > .block-editor-block-list__layout,
+.spa-columns.is-sticky-right > .block-editor-block-list__layout,
+.spa-columns.is-sticky-left .block-editor-block-list__layout > [data-type="spa/partial-column"],
+.spa-columns.is-sticky-right .block-editor-block-list__layout > [data-type="spa/partial-column"] {
+  position: static !important;
+  top: auto !important;
+}
+
+/**
+ * spa/columns vertical align (editor).
+ *
+ * useBlockProps is on the column root itself (`[data-type].spa-partial-column`),
+ * not a nested child. InnerBlocks sits directly under that root.
+ * `--spa-col-justify` is set on the section / `.spa-columns` wrapper.
+ */
+.spa-columns-section [data-type="spa/partial-column"],
+.spa-columns [data-type="spa/partial-column"],
+.spa-columns-section .wp-block-spa-partial-column,
+.spa-columns .wp-block-spa-partial-column {
+  display: flex !important;
+  flex-direction: column !important;
+  align-self: stretch !important;
+  min-height: 100% !important;
+  height: auto !important;
+  justify-content: var(--spa-col-justify, flex-start) !important;
+}
+
+.spa-columns-section [data-type="spa/partial-column"] > .block-editor-inner-blocks,
+.spa-columns [data-type="spa/partial-column"] > .block-editor-inner-blocks,
+.spa-columns-section .wp-block-spa-partial-column > .block-editor-inner-blocks,
+.spa-columns .wp-block-spa-partial-column > .block-editor-inner-blocks,
+.spa-columns-section [data-type="spa/partial-column"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-columns [data-type="spa/partial-column"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-columns-section .wp-block-spa-partial-column > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-columns .wp-block-spa-partial-column > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-columns-section [data-type="spa/partial-column"] > .block-editor-block-list__layout,
+.spa-columns [data-type="spa/partial-column"] > .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  min-height: 100% !important;
+  height: 100% !important;
+  justify-content: var(--spa-col-justify, flex-start) !important;
+}
+
+/**
+ * spa/column-cover — keep the content box usable in the canvas.
+ */
+.spa-column-cover {
+  display: block !important;
+  width: 100%;
+  min-height: 28rem;
+}
+
+.spa-column-cover__box > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-column-cover__box > .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/**
+ * spa/hero — keep the left content column interactive in the canvas.
+ * Media breakout can overlap the content column visually; raise z-index
+ * and disable pointer events on the media so InnerBlocks stay editable.
+ */
+.spa-hero {
+  position: relative !important;
+}
+
+.spa-hero .spa-hero__content {
+  position: relative !important;
+  z-index: 2 !important;
+  min-height: 12rem;
+}
+
+.spa-hero .spa-hero__content-inner,
+.spa-hero .spa-hero__content-inner > .block-editor-inner-blocks,
+.spa-hero .spa-hero__content-inner > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-hero .spa-hero__content-inner > .block-editor-block-list__layout,
+.spa-hero #blockstudio-replace-innerblocks {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.25rem !important;
+  width: 100% !important;
+  min-height: 8rem;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.spa-hero .spa-hero__media {
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/**
+ * Keep Buttons partial horizontal even inside hero’s column layout.
+ */
+.spa-hero .spa-buttons,
+.spa-hero .spa-buttons > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-hero .spa-buttons > .block-editor-block-list__layout,
+.spa-hero [data-type="spa/partial-buttons"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-hero [data-type="spa/partial-buttons"] > .block-editor-block-list__layout {
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  min-height: 0 !important;
+}
+
+.spa-hero .spa-buttons .wp-block-button,
+.spa-hero .spa-buttons [data-type="core/button"],
+.spa-hero [data-type="spa/partial-buttons"] .wp-block-button,
+.spa-hero [data-type="spa/partial-buttons"] [data-type="core/button"] {
+  width: auto !important;
+  flex: 0 0 auto !important;
+}
+
+/**
+ * spa/partial-cards editor grid.
+ * Slider mode is frontend-only — the editor always uses the wrapping grid.
+ */
+.spa-cards.grid-auto-cards {
+  display: block !important;
+  width: 100%;
+}
+
+.spa-cards.spa-cards--gradient .spa-card,
+.spa-cards.spa-cards--gradient [data-type^="spa/partial-card"] .spa-card {
+  background-color: transparent !important;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-primary) 0%,
+    var(--color-tertiary) 100%
+  ) !important;
+  color: var(--color-white) !important;
+  text-align: center;
+}
+
+.spa-cards.spa-cards--gradient .spa-card--testimonial-simple,
+.spa-cards.spa-cards--gradient [data-type="spa/partial-card-testimonial-simple"] .spa-card {
+  text-align: left !important;
+  align-items: flex-start;
+}
+
+.spa-cards.grid-auto-cards > .block-editor-block-list__layout {
+  --_min: var(--grid-min-desktop, 100%);
+
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100% !important;
+  min-width: var(--width-container);
+  column-gap: var(--grid-gap-col, 20px);
+  row-gap: var(--grid-gap-row, 20px);
+
+  & > .spa-card,
+  & > [data-type="spa/partial-card"],
+  & > [data-type="spa/partial-card-icon"],
+  & > [data-type="spa/partial-card-image"],
+  & > [data-type="spa/partial-card-testimonial-simple"],
+  & > [data-type="spa/partial-button"] {
+    flex: 0 1 var(
+      --col-width-desktop,
+      var(--col-width-tablet, var(--col-width-mobile, var(--_min)))
+    );
+    align-self: stretch;
+    max-width: 100%;
+    min-width: 0;
+    width: auto;
+  }
+
+  & > [data-type="spa/partial-button"] {
+    display: flex;
+
+    & .spa-partial-button,
+    & .wp-block-buttons,
+    & .wp-block-button,
+    & .wp-block-button__link {
+      width: 100%;
+    }
+  }
+
+  & > .block-list-appender {
+    flex: 1 0 100%;
+  }
+}
+
+.spa-cards.grid-auto-cards.is-fill-row > .block-editor-block-list__layout {
+  & > .spa-card,
+  & > [data-type="spa/partial-card"],
+  & > [data-type="spa/partial-card-icon"],
+  & > [data-type="spa/partial-card-image"],
+  & > [data-type="spa/partial-card-testimonial-simple"],
+  & > [data-type="spa/partial-button"] {
+    flex-grow: 1;
+  }
+}
+
+/**
+ * Card inner stack (icon / heading / paragraph / button).
+ */
+.spa-card--icon > .block-editor-block-list__layout,
+.spa-card--image > .block-editor-block-list__layout,
+.spa-card--icon > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.spa-card--image > .block-editor-inner-blocks > .block-editor-block-list__layout,
+[data-type="spa/partial-card-image"] > .block-editor-block-list__layout,
+[data-type="spa/partial-card-image"] > .block-editor-inner-blocks > .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: column;
+  gap: 1rem;
+
+  & > * {
+    margin-block: 0 !important;
+  }
+}
+
+/**
+ * Card (Image) — edge-to-edge via negative margins (same idea as frontend).
+ * Keeps card padding for text; only the first image breaks out.
+ */
+[data-type="spa/partial-card-image"].is-bleed-image,
+[data-type="spa/partial-card-image"] .spa-card--image.is-bleed-image,
+.spa-card--image.is-bleed-image {
+  --_card-pad: var(--padding-surface);
+  overflow: hidden !important;
+  align-items: stretch !important;
+  text-align: center;
+
+  @media (width >= theme(--breakpoint-lg)) {
+    --_card-pad: var(--padding-surface-lg);
+  }
+}
+
+[data-type="spa/partial-card-image"].is-bleed-image > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
+[data-type="spa/partial-card-image"].is-bleed-image > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
+[data-type="spa/partial-card-image"] .is-bleed-image > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
+[data-type="spa/partial-card-image"] .is-bleed-image > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
+.spa-card--image.is-bleed-image > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]),
+.spa-card--image.is-bleed-image > .block-editor-block-list__layout > [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) {
+  width: calc(100% + (var(--_card-pad, var(--padding-surface)) * 2)) !important;
+  max-width: none !important;
+  margin-top: calc(var(--_card-pad, var(--padding-surface)) * -1) !important;
+  margin-inline: calc(var(--_card-pad, var(--padding-surface)) * -1) !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+[data-type="spa/partial-card-image"].is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .wp-block-image,
+[data-type="spa/partial-card-image"] .is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .wp-block-image,
+.spa-card--image.is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .wp-block-image,
+[data-type="spa/partial-card-image"].is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .components-resizable-box__container,
+[data-type="spa/partial-card-image"] .is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .components-resizable-box__container,
+.spa-card--image.is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) .components-resizable-box__container {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+[data-type="spa/partial-card-image"].is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) img,
+[data-type="spa/partial-card-image"] .is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) img,
+.spa-card--image.is-bleed-image [data-type="core/image"]:nth-child(1 of [data-type="core/image"]) img {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+/**
+ * Testimonial card — quote grows; name / company sit at the bottom.
+ */
+.spa-card--testimonial-simple {
+  & > .spa-card__body > .block-editor-inner-blocks,
+  & > .spa-card__body > .block-editor-inner-blocks > .block-editor-block-list__layout {
+    display: flex !important;
+    flex-direction: column;
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+  }
+
+  & > .spa-card__body > .block-editor-inner-blocks > .block-editor-block-list__layout {
+    & > *:first-child {
+      flex: 1 1 auto;
+      margin-bottom: 1.5rem !important;
+    }
+
+    & > * {
+      margin-block: 0 !important;
+    }
+
+    & > [data-type="core/heading"] {
+      margin-bottom: 0.25rem !important;
+    }
+  }
+}
+
+/**
+ * Icon-beside-content toggle — editor.
+ */
+.spa-card.spa-card--icon.is-horizontal {
+  --_icon-size: 28px;
+  --_icon-gap: 1rem;
+
+  position: relative;
+  padding-inline-start: var(--padding-surface) !important;
+  min-height: 0 !important;
+
+  @media (width >= theme(--breakpoint-lg)) {
+    padding-inline-start: var(--padding-surface-lg) !important;
+  }
+}
+
+.spa-card--icon.is-horizontal > .block-editor-block-list__layout,
+.spa-card--icon.is-horizontal > .block-editor-inner-blocks > .block-editor-block-list__layout {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+  box-sizing: border-box;
+  min-height: var(--_icon-size, 28px);
+  padding-inline-start: calc(var(--_icon-size, 28px) + var(--_icon-gap, 1rem)) !important;
+
+  & > [data-type="spa/partial-icon"] {
+    position: absolute !important;
+    top: 0 !important;
+    inset-inline-start: 0 !important;
+    inset-inline-end: auto !important;
+    margin: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+
+    & :is(.icon, svg.icon) {
+      width: var(--_icon-size, 28px) !important;
+      height: var(--_icon-size, 28px) !important;
+    }
+  }
+
+  & > :not([data-type="spa/partial-icon"]) {
+    margin-inline-start: 0 !important;
+    max-width: 100%;
+  }
+
+  & :is(h1, h2, h3, h4, h5, h6, p) {
+    margin-bottom: 0 !important;
+  }
+}
+
+/**
+ * Paragraph / one-column Limit Width? (`mw-1000`).
+ * One-column can set `--spa-content-max` (800px / 1000px / custom).
+ * `.fs-*` text sizes come from theme/typography.css via theme.css import.
+ */
+.mw-1000 {
+  width: 100%;
+  max-width: var(--spa-content-max, var(--width-content));
+}
+
+/**
+ * Paragraph / list Use Heading Font? (`font-heading`).
+ * List Italic? (`italic`) — also a Tailwind utility; keep explicit for editor.
+ * Paragraph Uppercase? (`uppercase`).
+ */
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.italic {
+  font-style: italic;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+/**
+ * Glass-panel utilities applied via Additional CSS class(es)
+ */
+.bg-white\/10 {
+  background-color: color-mix(in oklab, var(--color-white) 10%, transparent);
+}
+
+.backdrop-blur-sm {
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.border {
+  border-style: solid;
+  border-width: 1px;
+}
+
+.border-white\/20 {
+  border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
+}
+
+.rounded-lg {
+  border-radius: var(--radius-surface);
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+/**
+ * core/button editor preview
+ */
+.wp-block-button.btn > .wp-block-button__link,
+.wp-block-button[class*='btn-'] > .wp-block-button__link {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: var(--padding-btn-y) var(--padding-btn-x) !important;
+  border-radius: var(--radius-surface) !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-sm) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  box-sizing: border-box;
+  height: auto;
+}
+
+.wp-block-button.btn-primary > .wp-block-button__link,
+.wp-block-button.btn-primary-alt > .wp-block-button__link {
+  background-color: var(--color-primary) !important;
+  background-image: none !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.wp-block-button.btn-primary > .wp-block-button__link:hover,
+.wp-block-button.btn-primary-alt > .wp-block-button__link:hover {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-secondary) !important;
+}
+
+.wp-block-button.btn-secondary > .wp-block-button__link {
+  background-color: var(--color-secondary) !important;
+  background-image: none !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-secondary) !important;
+}
+
+.wp-block-button.btn-secondary > .wp-block-button__link:hover {
+  background-color: var(--color-gold) !important;
+  color: var(--color-primary) !important;
+  border-color: var(--color-gold) !important;
+}
+
+.wp-block-button.btn-secondary-inverse > .wp-block-button__link {
+  background-color: transparent !important;
+  background-image: none !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-secondary) !important;
+}
+
+.wp-block-button.btn-secondary-inverse > .wp-block-button__link:hover {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-secondary) !important;
+}
+
+.wp-block-button.btn-secondary-outline > .wp-block-button__link {
+  background-color: transparent !important;
+  background-image: none !important;
+  color: var(--color-secondary) !important;
+  border-color: var(--color-secondary) !important;
+}
+
+.wp-block-button.btn-secondary-outline > .wp-block-button__link:hover {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-secondary) !important;
+}
+
+.wp-block-button.btn-tertiary > .wp-block-button__link {
+  background-color: var(--color-tertiary) !important;
+  background-image: none !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-tertiary) !important;
+}
+
+.wp-block-button.btn-tertiary > .wp-block-button__link:hover {
+  background-color: var(--color-primary) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.wp-block-button.btn-dark-blue > .wp-block-button__link {
+  background-color: var(--color-dark-blue) !important;
+  background-image: none !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-dark-blue) !important;
+}
+
+.wp-block-button.btn-dark-blue > .wp-block-button__link:hover {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-secondary) !important;
+}
+
+.wp-block-button.btn-white > .wp-block-button__link,
+.wp-block-button.btn-outline-primary > .wp-block-button__link {
+  background-color: var(--color-white) !important;
+  background-image: none !important;
+  color: var(--color-primary) !important;
+  border-color: var(--color-white) !important;
+}
+
+.wp-block-button.btn-white > .wp-block-button__link:hover,
+.wp-block-button.btn-outline-primary > .wp-block-button__link:hover {
+  background-color: transparent !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-white) !important;
+}
+
+.wp-block-button.btn-white-inverse > .wp-block-button__link {
+  background-color: transparent !important;
+  background-image: none !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-white) !important;
+}
+
+.wp-block-button.btn-white-inverse > .wp-block-button__link:hover {
+  background-color: var(--color-white) !important;
+  color: var(--color-primary) !important;
+  border-color: var(--color-white) !important;
+}
+
+.wp-block-button.btn-gradient > .wp-block-button__link {
+  background-color: var(--color-primary) !important;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-primary) 0%,
+    var(--color-tertiary) 100%
+  ) !important;
+  color: var(--color-white) !important;
+  border-color: transparent !important;
+}
+
+.wp-block-button.btn-gradient > .wp-block-button__link:hover {
+  background-color: var(--color-tertiary) !important;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-tertiary) 0%,
+    var(--color-primary) 100%
+  ) !important;
+  color: var(--color-white) !important;
+  border-color: transparent !important;
+}
+
+.wp-block-button.btn-sm > .wp-block-button__link {
+  padding: var(--padding-btn-sm-y) var(--padding-btn-sm-x) !important;
+  font-size: var(--font-size-sm) !important;
+  font-weight: 400 !important;
+}
+
+.wp-block-button.btn-full,
+.wp-block-button.btn-full > .wp-block-button__link,
+.wp-block-button.btn-full > a {
+  width: 100% !important;
+}
+
+/**
+ * Include icon — editor canvas can't receive the PHP-injected sprite (<use href="#icon-arrow-insert">), so mirror it with a mask of the same path from footer-icons. Frontend renders the real SVG.
+ */
+.wp-block-button.btn-has-icon > .wp-block-button__link::after {
+  content: '';
+  display: inline-block;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='black' d='M3.265 0c-1.443 0-2.612 1.17-2.612 2.612s1.169 2.612 2.612 2.612h19.816l-22.316 22.317c-1.020 1.020-1.020 2.674 0 3.694s2.674 1.021 3.694 0l22.316-22.316v19.817c0 1.443 1.17 2.612 2.612 2.612s2.612-1.169 2.612-2.612v-26.123c0-0.208-0.025-0.41-0.071-0.605-0.013-0.054-0.025-0.108-0.041-0.161-0.039-0.127-0.091-0.249-0.148-0.367-0.050-0.104-0.106-0.206-0.171-0.304-0.237-0.359-0.559-0.657-0.939-0.862-0.036-0.019-0.073-0.036-0.11-0.054-0.118-0.057-0.24-0.109-0.367-0.148-0.053-0.016-0.107-0.028-0.161-0.041-0.030-0.007-0.059-0.014-0.089-0.020-0.005-0.001-0.010-0.002-0.015-0.003l-0.232-0.036c-0.088-0.009-0.178-0.013-0.268-0.013h-26.123z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='black' d='M3.265 0c-1.443 0-2.612 1.17-2.612 2.612s1.169 2.612 2.612 2.612h19.816l-22.316 22.317c-1.020 1.020-1.020 2.674 0 3.694s2.674 1.021 3.694 0l22.316-22.316v19.817c0 1.443 1.17 2.612 2.612 2.612s2.612-1.169 2.612-2.612v-26.123c0-0.208-0.025-0.41-0.071-0.605-0.013-0.054-0.025-0.108-0.041-0.161-0.039-0.127-0.091-0.249-0.148-0.367-0.050-0.104-0.106-0.206-0.171-0.304-0.237-0.359-0.559-0.657-0.939-0.862-0.036-0.019-0.073-0.036-0.11-0.054-0.118-0.057-0.24-0.109-0.367-0.148-0.053-0.016-0.107-0.028-0.161-0.041-0.030-0.007-0.059-0.014-0.089-0.020-0.005-0.001-0.010-0.002-0.015-0.003l-0.232-0.036c-0.088-0.009-0.178-0.013-0.268-0.013h-26.123z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/**
+ * Button Align / Position — Blockstudio sets `w-full flex justify-*` on `.wp-block-button`.
+ */
+.wp-block-button.w-full {
+  width: 100% !important;
+}
+
+.wp-block-button.flex {
+  display: flex !important;
+}
+
+.wp-block-button.justify-center {
+  justify-content: center !important;
+}
+
+@media (width >= 768px) {
+  .wp-block-button.md\:justify-end {
+    justify-content: flex-end !important;
+  }
+}
+
+/**
+ * Circular portrait (core/image extension → `.is-portrait`).
+ */
+.wp-block-image.is-portrait img,
+.wp-block-image.is-portrait .components-resizable-box__container img {
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover !important;
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 100% !important;
+  border: 2px solid var(--color-gold) !important;
+  box-sizing: border-box !important;
+}
+
+/**
+ * Custom HTML preview strips <script>, so a Flodesk embed is an empty
+ * #fd-form-* div and the block collapses. Hold the space open until
+ * editor.js mounts the form (which adds [data-ff-el="root"]).
+ */
+[id^="fd-form-"]:not(:has([data-ff-el="root"])) {
+  box-sizing: border-box;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 148px;
+  border: 1px dashed color-mix(in srgb, var(--color-primary) 35%, transparent);
+  background: color-mix(in srgb, var(--color-light) 55%, var(--color-white));
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+[id^="fd-form-"]:not(:has([data-ff-el="root"]))::before {
+  content: "Flodesk form";
+}

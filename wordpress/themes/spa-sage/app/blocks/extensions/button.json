@@ -1,0 +1,88 @@
+{
+  "$schema": "https://blockstudio.dev/schema/extend",
+  "name": "core/button",
+  "blockstudio": {
+    "extend": true,
+    "attributes": [
+      {
+        "id": "button_type",
+        "type": "select",
+        "label": "Button Types",
+        "default": "primary",
+        "returnFormat": "both",
+        "options": [
+          { "value": "primary", "label": "Primary" },
+          { "value": "light", "label": "Light" },
+          { "value": "dark", "label": "Dark" },
+          { "value": "outline-light", "label": "Outline" },
+          { "value": "text", "label": "Text" }
+        ],
+        "set": [
+          {
+            "attribute": "class",
+            "value": "cta cta--{attributes.button_type.value}"
+          }
+        ]
+      },
+      {
+        "id": "arrow",
+        "type": "toggle",
+        "label": "Arrow",
+        "default": true,
+        "help": "Show the arrow. Its colour follows the button type. On when this was never saved."
+      },
+      {
+        "id": "full_width",
+        "type": "toggle",
+        "label": "Full Width?",
+        "set": [
+          {
+            "attribute": "class",
+            "value": "btn-full"
+          }
+        ]
+      },
+      {
+        "id": "button_align",
+        "type": "toggle",
+        "label": "Button Align?"
+      },
+      {
+        "id": "button_position",
+        "type": "select",
+        "label": "Button Position",
+        "default": "",
+        "returnFormat": "both",
+        "options": [
+          {
+            "value": "",
+            "label": "Start"
+          },
+          {
+            "value": "justify-center",
+            "label": "Center"
+          },
+          {
+            "value": "md:justify-end",
+            "label": "End"
+          }
+        ],
+        "conditions": [
+          [
+            {
+              "id": "button_align",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        ],
+        "set": [
+          {
+            "attribute": "class",
+            "value": "w-full flex {attributes.button_position.value}"
+          }
+        ]
+      }
+    ]
+  }
+}

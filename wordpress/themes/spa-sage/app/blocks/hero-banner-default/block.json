@@ -1,0 +1,37 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "spa/hero-banner-default",
+  "title": "Hero Banner Default",
+  "category": "spa",
+  "icon": "cover",
+  "description": "Inner-page hero. Shorter than the homepage banner. Heading and paragraph are inner blocks.",
+  "supports": {
+    "align": ["full"],
+    "html": false
+  },
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    }
+  },
+  "style": "file:../../resources/css/components/spa-hero-banner.css",
+  "editorStyle": "file:../../resources/css/components/spa-hero-banner.css",
+  "blockstudio": {
+    "attributes": [
+      {
+        "type": "custom/background-colour",
+        "overrides": {
+          "bg_colour": { "id": "background", "default": "var(--color-navy)" }
+        }
+      },
+      {
+        "id": "image",
+        "type": "files",
+        "label": "Image",
+        "multiple": false,
+        "allowedTypes": ["image"]
+      }
+    ]
+  }
+}

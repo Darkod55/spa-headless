@@ -1,0 +1,104 @@
+# Local setup
+
+WordPress runs in [Local WP](https://localwp.com/). Astro runs at http://localhost:4321 and reads `WP_URL` from `astro/.env`. Open this repo in PhpStorm, not a copy inside Local, so edits hit the symlinks.
+
+You need PHP 8.3+ (Sage), WordPress 6.6+, Node 22+, and pnpm 10. BlockStudio on the Local site is 7.7.x (7.7.15 is the known-good version). The theme also needs Composer and npm inside `wordpress/themes/spa-sage`. `vendor/`, `node_modules/`, and `public/build/` stay gitignored.
+
+## Plugins
+
+- BlockStudio — required
+- Rank Math Pro — Headless CMS Support on (General Settings → Others, advanced mode)
+- Fluent Forms — only if messages should stay in WordPress
+- LiteSpeed Cache — installed for production parity, **left off** locally
+
+## Symlinks
+
+```bash
+LOCAL_WP="$HOME/Local Sites/squarepeg-cms/app/public"
+REPO="$HOME/code/spa-headless"
+
+ln -s "$REPO/wordpress/plugins/spa-headless-core" \
+  "$LOCAL_WP/wp-content/plugins/spa-headless-core"
+
+ln -sfn "$REPO/wordpress/themes/spa-sage" \
+  "$LOCAL_WP/wp-content/themes/spa-sage"
+```
+
+Inside the theme, once per machine:
+
+```bash
+cd "$REPO/wordpress/themes/spa-sage"
+composer install
+npm install
+npm run build
+```
+
+`npm run dev` is the Vite watcher while you edit theme CSS. The Astro site does not use that build. Hero and brand CSS are imported from `resources/css` directly.
+
+Then in wp-admin: activate **Square Peg Headless Core** and the **Square Peg Agency** theme (spa-sage). The old Square Peg Headless theme is deprecated; leave it inactive. Settings → Permalinks → **Post name**. Create a page with slug `blog` and set it as the posts page so posts are `/blog/{slug}`.
+
+Switching themes does not copy theme mods. Re-assign Primary, Footer, Legal, and Footer social, upload the logo and the alternative logo, tick Show in footer, and set the announcement bar again.
+
+Paste `wordpress/wp-config.snippet.php` into the site's `wp-config.php` and set a long random `SPA_PREVIEW_TOKEN`. Do not commit that value.
+
+## Env
+
+```bash
+pnpm install
+cp astro/.env.example astro/.env
+pnpm dev
+```
+
+| Variable | Purpose |
+| --- | --- |
+| `WP_URL` | Local origin, no trailing slash, for example `http://squarepeg-cms.local` |
+| `WP_FIXTURES` | `auto` (default), `1` to skip WordPress, `0` to fail when WordPress is down |
+| `PUBLIC_SITE_URL` | Astro origin. Rank Math canonicals are rewritten to this |
+| `PUBLIC_GA_MEASUREMENT_ID` | GA4 id. Empty disables the tag. The live id is `G-GQXT7PFHES`; put it in `.env`, never in source |
+| `PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY` | Both empty skips the check |
+| `SPA_PREVIEW_TOKEN` | Same value as `wp-config.php` |
+
+`astro/.env` is gitignored.
+
+## Commands
+
+```bash
+pnpm test     # unit tests and the PHP normalizer
+pnpm check    # generate types, then astro check
+pnpm build    # generate types, then astro build
+pnpm dev      # Astro at localhost:4321
+```
+
+With no `.env`, `WP_URL` is unset and the build uses fixtures. That is what CI should do.
+
+Draft preview is http://localhost:4321/preview/{postId} while `pnpm dev` is running. It sends `X-SPA-Preview-Token`. An empty token disables preview on both sides. Preview never uses fixtures.
+
+## Try a hero in Local WP
+
+1. Edit the homepage. Insert **Hero Banner Main**. The background defaults to Navy (`var(--color-navy)`).
+2. Set the image in the sidebar. Edit the H1 and paragraph in the canvas. On a heading or paragraph, the styles tab has **Text colour**.
+3. On any other page, insert **Hero Banner Default**.
+4. Publish and reload http://localhost:4321.
+
+A hero already saved as `"background": "navy"` still renders. You do not have to re-save it. The new picker stores `var(--color-navy)` (and a slug). Until you pick Navy again and update, the control may not show that old string as the selected swatch.
+
+## Checklist
+
+- Theme and plugin are symlinks, not copies.
+- BlockStudio and the Square Peg theme are active.
+- Permalinks are Post name, and the posts page slug is `blog`.
+- `SPA_PREVIEW_TOKEN` matches on both sides and is not in git.
+- `pnpm test`, `pnpm check`, and `pnpm build` pass before you push.
+
+## If the editor canvas is empty
+
+Pull this repo and hard-refresh the editor. The plugin must not add a `blocks` field to `wp/v2` posts or pages. That name is reserved by the editor; a parsed tree there replaces `content.raw` and the canvas opens empty. Content saved while the canvas was empty was serialized from the blocks open in that session, so a save of a visible page is the page you saw.
+
+The grey bar on http://localhost:4321 means Astro is not reading WordPress. No bar means the published page is what `spa/v1/content` returned.
+
+## Common mistakes
+
+- Committing `.env`, `node_modules`, `vendor`, `dist`, or uploads.
+- Running Astro against a `WP_URL` that has a trailing slash. The client strips one, but the env example does not use one.
+- Turning LiteSpeed on locally and then debugging a stale REST response.
+- Editing files inside `~/Local Sites/.../wp-content` instead of this repo. The symlink should point here.

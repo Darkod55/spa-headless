@@ -1,0 +1,355 @@
+/*
+  Live Button.astro, default (md) size.
+  Primary, light, dark, and outline are parallelograms (slant 14px).
+  Text is an underlined link. The arrow is the 20×12 stroke.
+  Light keeps a red arrow. The other types use the label colour.
+  Editor `set` lands on the block wrapper, so the painted control is the inner link.
+*/
+
+.cta,
+.editor-styles-wrapper .cta .wp-block-button__link,
+.editor-styles-wrapper .cta .wp-element-button {
+  --slant: 14px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: none;
+  min-height: 54px;
+  min-width: max-content;
+  margin: 0;
+  padding: 0 34px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: var(--color-red);
+  box-shadow: none !important;
+  color: var(--color-white);
+  font-family: var(--font-heading) !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.06em !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  clip-path: polygon(var(--slant) 0, 100% 0, calc(100% - var(--slant)) 100%, 0 100%);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    filter 0.15s ease;
+}
+
+.cta__label {
+  flex: 0 0 auto;
+  min-width: max-content;
+  white-space: nowrap;
+  transition: transform 0.2s ease;
+}
+
+.cta__arrow {
+  display: block;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 12px;
+  min-width: 20px;
+  max-width: 20px;
+  background: none;
+  fill: none;
+  color: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.cta--primary,
+.editor-styles-wrapper .cta--primary .wp-block-button__link {
+  background: var(--color-red);
+  color: var(--color-white);
+}
+
+.cta--light,
+.editor-styles-wrapper .cta--light .wp-block-button__link {
+  background: var(--color-white);
+  color: var(--color-navy);
+}
+
+.cta--light .cta__arrow {
+  color: var(--color-red);
+}
+
+.cta--dark,
+.editor-styles-wrapper .cta--dark .wp-block-button__link {
+  background: var(--color-navy);
+  color: var(--color-white);
+}
+
+.cta-wrap--outline {
+  --slant: 14px;
+  display: inline-flex;
+  box-sizing: border-box;
+  padding: 2px;
+  background: var(--color-white);
+  clip-path: polygon(var(--slant) 0, 100% 0, calc(100% - var(--slant)) 100%, 0 100%);
+}
+
+.cta--outline-light,
+.editor-styles-wrapper .cta--outline-light .wp-block-button__link {
+  --slant: 12px;
+  background: var(--btn-surface, var(--color-navy));
+  color: var(--color-white);
+}
+
+.editor-styles-wrapper .cta--outline-light {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: auto;
+  padding: 2px;
+  background: var(--color-white);
+  clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+}
+
+.cta--text,
+.editor-styles-wrapper .cta--text .wp-block-button__link {
+  --slant: 0px;
+  gap: 10px;
+  min-height: 44px;
+  padding: 4px 0 !important;
+  background: none;
+  color: var(--color-red);
+  border: none !important;
+  border-bottom: 2px solid var(--color-red) !important;
+  border-radius: 0 !important;
+  clip-path: none;
+}
+
+.editor-styles-wrapper .cta--arrow:not(.cta--no-arrow) .wp-block-button__link::after {
+  content: "";
+  display: block;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 12px;
+  padding: 0;
+  background-color: currentColor;
+  background-image: none;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'%3E%3Cpath d='M0 6 H16 M12 1 L17 6 L12 11' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='miter'/%3E%3C/svg%3E") center / 20px 12px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'%3E%3Cpath d='M0 6 H16 M12 1 L17 6 L12 11' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='miter'/%3E%3C/svg%3E") center / 20px 12px no-repeat;
+}
+
+.editor-styles-wrapper .cta--light.cta--arrow:not(.cta--no-arrow) .wp-block-button__link::after {
+  background-color: var(--color-red);
+}
+
+.editor-styles-wrapper .cta--no-arrow .wp-block-button__link::after {
+  content: none;
+}
+
+/*
+  Live Button.astro hover, focus, and active.
+  `a:hover { color: var(--color-red-deep) }` is one element and one
+  pseudo-class, so these rules name the link and the type.
+*/
+a.cta:hover,
+a.cta:focus,
+a.cta:focus-visible,
+a.cta:active,
+a.cta:visited,
+.editor-styles-wrapper .cta a.wp-block-button__link:hover,
+.editor-styles-wrapper .cta a.wp-block-button__link:focus,
+.editor-styles-wrapper .cta a.wp-block-button__link:focus-visible,
+.editor-styles-wrapper .cta a.wp-block-button__link:active,
+.editor-styles-wrapper .cta a.wp-block-button__link:visited {
+  text-decoration: none;
+}
+
+a.cta.cta--primary:hover,
+a.cta.cta--primary:focus,
+a.cta.cta--primary:focus-visible,
+a.cta.cta--primary:active,
+.editor-styles-wrapper .cta--primary a.wp-block-button__link:hover,
+.editor-styles-wrapper .cta--primary a.wp-block-button__link:focus,
+.editor-styles-wrapper .cta--primary a.wp-block-button__link:focus-visible,
+.editor-styles-wrapper .cta--primary a.wp-block-button__link:active {
+  background: var(--color-red-deep);
+  color: var(--color-white);
+}
+
+a.cta.cta--primary:hover .cta__arrow,
+a.cta.cta--primary:focus .cta__arrow,
+a.cta.cta--primary:active .cta__arrow {
+  color: var(--color-white);
+  background: none;
+}
+
+a.cta.cta--light:hover,
+a.cta.cta--light:focus,
+a.cta.cta--light:focus-visible,
+a.cta.cta--light:active,
+.editor-styles-wrapper .cta--light a.wp-block-button__link:hover,
+.editor-styles-wrapper .cta--light a.wp-block-button__link:focus,
+.editor-styles-wrapper .cta--light a.wp-block-button__link:focus-visible,
+.editor-styles-wrapper .cta--light a.wp-block-button__link:active {
+  background: var(--color-grey-50);
+  color: var(--color-navy);
+}
+
+a.cta.cta--light:hover .cta__arrow,
+a.cta.cta--light:focus .cta__arrow,
+a.cta.cta--light:active .cta__arrow {
+  color: var(--color-red);
+  background: none;
+}
+
+.editor-styles-wrapper .cta--light.cta--arrow:not(.cta--no-arrow) a.wp-block-button__link:hover::after,
+.editor-styles-wrapper .cta--light.cta--arrow:not(.cta--no-arrow) a.wp-block-button__link:focus::after,
+.editor-styles-wrapper .cta--light.cta--arrow:not(.cta--no-arrow) a.wp-block-button__link:active::after {
+  background-color: var(--color-red);
+}
+
+a.cta.cta--dark:hover,
+a.cta.cta--dark:focus,
+a.cta.cta--dark:focus-visible,
+a.cta.cta--dark:active,
+.editor-styles-wrapper .cta--dark a.wp-block-button__link:hover,
+.editor-styles-wrapper .cta--dark a.wp-block-button__link:focus,
+.editor-styles-wrapper .cta--dark a.wp-block-button__link:focus-visible,
+.editor-styles-wrapper .cta--dark a.wp-block-button__link:active {
+  background: var(--color-royal);
+  color: var(--color-white);
+}
+
+a.cta.cta--outline-light:hover,
+a.cta.cta--outline-light:focus,
+a.cta.cta--outline-light:focus-visible,
+a.cta.cta--outline-light:active,
+.editor-styles-wrapper .cta--outline-light a.wp-block-button__link:hover,
+.editor-styles-wrapper .cta--outline-light a.wp-block-button__link:focus,
+.editor-styles-wrapper .cta--outline-light a.wp-block-button__link:focus-visible,
+.editor-styles-wrapper .cta--outline-light a.wp-block-button__link:active {
+  background: color-mix(in srgb, var(--btn-surface, var(--color-navy)) 85%, white);
+  color: var(--color-white);
+}
+
+a.cta.cta--text:hover,
+a.cta.cta--text:focus,
+a.cta.cta--text:focus-visible,
+a.cta.cta--text:active,
+.editor-styles-wrapper .cta--text a.wp-block-button__link:hover,
+.editor-styles-wrapper .cta--text a.wp-block-button__link:focus,
+.editor-styles-wrapper .cta--text a.wp-block-button__link:focus-visible,
+.editor-styles-wrapper .cta--text a.wp-block-button__link:active {
+  background: none;
+  color: var(--color-red-deep);
+  border-bottom: 2px solid var(--color-red-deep) !important;
+}
+
+a.cta:focus-visible,
+.editor-styles-wrapper .cta a.wp-block-button__link:focus-visible {
+  outline: none;
+  filter: drop-shadow(0 0 0 var(--color-red-on-navy))
+    drop-shadow(3px 0 0 var(--color-red-on-navy))
+    drop-shadow(-3px 0 0 var(--color-red-on-navy))
+    drop-shadow(0 3px 0 var(--color-red-on-navy))
+    drop-shadow(0 -3px 0 var(--color-red-on-navy));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a.cta:hover .cta__arrow,
+  a.cta:focus-visible .cta__arrow {
+    transform: translateX(4px);
+  }
+
+  a.cta.cta--no-arrow:hover .cta__label,
+  a.cta.cta--no-arrow:focus-visible .cta__label {
+    transform: translateY(-2px);
+  }
+
+  .editor-styles-wrapper .cta--arrow:not(.cta--no-arrow) a.wp-block-button__link:hover::after,
+  .editor-styles-wrapper .cta--arrow:not(.cta--no-arrow) a.wp-block-button__link:focus-visible::after {
+    transform: translateX(4px);
+  }
+}
+
+.hero__copy .wp-block-buttons,
+.hero__copy .wp-buttons,
+.editor-styles-wrapper .hero__copy [data-type="core/buttons"].is-layout-flex,
+.editor-styles-wrapper .hero__copy [data-type="core/buttons"] .block-editor-block-list__layout,
+.editor-styles-wrapper .hero__copy .wp-block-buttons .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 14px !important;
+  width: auto !important;
+  max-width: 100%;
+  margin: 10px 0 0 !important;
+  padding: 0 !important;
+}
+
+.editor-styles-wrapper .hero__copy [data-type="core/buttons"] .block-editor-block-list__layout > .wp-block,
+.editor-styles-wrapper .hero__copy [data-type="core/button"] {
+  width: fit-content !important;
+  max-width: none !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  left: auto !important;
+  transform: none !important;
+}
+
+.editor-styles-wrapper .hero__copy [data-type="core/button"] > .wp-block-button {
+  width: auto !important;
+  margin: 0 !important;
+}
+
+.editor-styles-wrapper .hero__copy [data-type="core/buttons"] .block-list-appender,
+.editor-styles-wrapper .hero__copy [data-type="core/buttons"] .block-editor-button-block-appender {
+  width: auto !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+}
+
+/*
+  Live Button.astro: under 640px every parallelogram control is full-bleed.
+  This applies to every core/button, not only the hero. The editor iframe
+  uses the same query, so the mobile preview matches.
+*/
+@media (max-width: 639px) {
+  .wp-block-buttons,
+  .wp-buttons,
+  .hero__copy .wp-block-buttons,
+  .hero__copy .wp-buttons,
+  .editor-styles-wrapper [data-type="core/buttons"] .block-editor-block-list__layout,
+  .editor-styles-wrapper .wp-block-buttons .block-editor-block-list__layout,
+  .editor-styles-wrapper .hero__copy [data-type="core/buttons"] .block-editor-block-list__layout,
+  .editor-styles-wrapper .hero__copy .wp-block-buttons .block-editor-block-list__layout {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 14px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .wp-block-buttons > .wp-block,
+  .wp-block-button,
+  .cta-wrap,
+  a.cta,
+  .editor-styles-wrapper [data-type="core/button"],
+  .editor-styles-wrapper .hero__copy [data-type="core/buttons"] .block-editor-block-list__layout > .wp-block,
+  .editor-styles-wrapper .hero__copy [data-type="core/button"],
+  .editor-styles-wrapper [data-type="core/button"] > .wp-block-button,
+  .editor-styles-wrapper .hero__copy [data-type="core/button"] > .wp-block-button,
+  .editor-styles-wrapper .cta .wp-block-button__link,
+  .editor-styles-wrapper .cta .wp-element-button {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    box-sizing: border-box;
+    justify-content: center !important;
+  }
+}

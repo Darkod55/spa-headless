@@ -1,0 +1,22 @@
+{
+  "name": "icon_colour",
+  "attributes": [
+    {
+      "id": "icon_colour",
+      "type": "color",
+      "label": "Icon Colour",
+      "help": "Fill colour for the SVG icon.",
+      "clearable": false,
+      "disableCustomColors": true,
+      "default": {
+        "value": "var(--color-tertiary)",
+        "name": "Tertiary",
+        "slug": "tertiary"
+      },
+      "populate": {
+        "type": "custom",
+        "custom": "textColours"
+      }
+    }
+  ]
+}

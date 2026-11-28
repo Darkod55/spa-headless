@@ -1,0 +1,68 @@
+{
+  "$schema": "https://blockstudio.dev/schema/extend",
+  "name": "core/paragraph",
+  "blockstudio": {
+    "extend": true,
+    "attributes": [
+      {
+        "type": "custom/typography"
+      },
+      {
+        "id": "limit_width",
+        "type": "toggle",
+        "label": "Limit Width?",
+        "help": "Caps the paragraph at 1000px wide.",
+        "default": false,
+        "set": [
+          {
+            "attribute": "class",
+            "value": "mw-1000"
+          }
+        ]
+      },
+      {
+        "id": "use_heading_font",
+        "type": "toggle",
+        "label": "Use Heading Font?",
+        "help": "Applies the heading font family to this paragraph.",
+        "default": false,
+        "set": [
+          {
+            "attribute": "class",
+            "value": "font-heading"
+          }
+        ]
+      },
+      {
+        "id": "use_uppercase",
+        "type": "toggle",
+        "label": "Uppercase?",
+        "help": "Transforms this paragraph to uppercase.",
+        "default": false,
+        "set": [
+          {
+            "attribute": "class",
+            "value": "uppercase"
+          }
+        ]
+      },
+      {
+        "id": "margin_bottom",
+        "type": "select",
+        "label": "Margin Bottom",
+        "default": "",
+        "options": [
+          { "value": "", "label": "Default" },
+          { "value": "mb-0", "label": "None" },
+          { "value": "mb-2", "label": "Small" }
+        ],
+        "set": [
+          {
+            "attribute": "class",
+            "value": "{attributes.margin_bottom}"
+          }
+        ]
+      }
+    ]
+  }
+}

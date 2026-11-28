@@ -1,0 +1,25 @@
+/*
+  Live Label.astro letter stagger. The pill is already visible.
+  Each character rises in on load. Not an in-view trigger.
+  This file is imported only by the Astro badge, so the editor never runs it.
+*/
+
+.badge__char {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .badge--animate .badge__char {
+    opacity: 0;
+    transform: translateY(0.35em);
+    animation: label-char-in 0.55s ease-out forwards;
+    animation-delay: calc(0.1s + var(--i) * 0.032s);
+  }
+}
+
+@keyframes label-char-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

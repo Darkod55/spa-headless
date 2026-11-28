@@ -1,0 +1,33 @@
+{
+  "name": "grid_gaps",
+  "attributes": [
+    {
+      "type": "group",
+      "title": "Gaps",
+      "attributes": [
+        {
+          "id": "gap_col_desktop",
+          "type": "unit",
+          "label": "Column gap (desktop)",
+          "description": "Used from the desktop breakpoint up. Tablet and mobile are fixed at 30px.",
+          "default": "20px",
+          "units": [
+            { "value": "px", "label": "px", "default": 20 },
+            { "value": "rem", "label": "rem", "default": 1.25 }
+          ]
+        },
+        {
+          "id": "gap_row_desktop",
+          "type": "unit",
+          "label": "Row gap (desktop)",
+          "description": "Used from the desktop breakpoint up. Tablet and mobile are fixed at 30px.",
+          "default": "20px",
+          "units": [
+            { "value": "px", "label": "px", "default": 20 },
+            { "value": "rem", "label": "rem", "default": 1.25 }
+          ]
+        }
+      ]
+    }
+  ]
+}

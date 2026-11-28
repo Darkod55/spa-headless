@@ -1,0 +1,146 @@
+{
+  "__preprocessed__": "This file is used to build the theme.json file in the `public/build/assets` directory. The built artifact includes Tailwind's colors, fonts, and font sizes.",
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "layout": {
+      "contentSize": "1280px",
+      "wideSize": "1280px"
+    },
+    "background": {
+      "backgroundImage": true
+    },
+    "color": {
+      "custom": false,
+      "customDuotone": false,
+      "customGradient": false,
+      "defaultDuotone": false,
+      "defaultGradients": false,
+      "defaultPalette": false,
+      "duotone": [],
+      "palette": [
+        { "name": "Primary", "slug": "primary", "color": "#031433" },
+        { "name": "Secondary", "slug": "secondary", "color": "#c8102e" },
+        { "name": "Tertiary", "slug": "tertiary", "color": "#012169" },
+        { "name": "Secondary deep", "slug": "secondary-deep", "color": "#970c23" },
+        { "name": "Red on navy", "slug": "secondary-on-primary", "color": "#e8324c" },
+        { "name": "Red on royal", "slug": "secondary-on-tertiary", "color": "#ff8a9a" },
+        { "name": "Gray", "slug": "gray", "color": "#f4f5f7" },
+        { "name": "White", "slug": "white", "color": "#ffffff" },
+        { "name": "Black", "slug": "black", "color": "#000000" }
+      ]
+    },
+    "blocks": {
+      "core/button": {
+        "typography": {
+          "fontFamilies": [],
+          "fontSizes": [],
+          "customFontSize": false,
+          "lineHeight": false,
+          "fontWeight": false,
+          "fontStyle": false,
+          "textTransform": false,
+          "letterSpacing": false,
+          "textDecoration": false
+        },
+        "color": {
+          "text": false,
+          "custom": false,
+          "background": false,
+          "customGradient": false,
+          "gradients": []
+        },
+        "border": {
+          "customRadius": false,
+          "radius": false,
+          "color": false,
+          "style": false,
+          "width": false
+        },
+        "shadow": {
+          "defaultPresets": false
+        },
+        "spacing": {
+          "padding": false,
+          "margin": false
+        },
+        "dimensions": {
+          "width": false
+        }
+      },
+
+      "core/buttons": {
+        "typography": {
+          "fontFamilies": []
+        },
+        "layout": {
+          "custom": false,
+          "contentSize": null,
+          "blockGap": null
+        }
+      },
+      "core/heading": {
+        "typography": {
+          "fontFamilies": [],
+          "fontSizes": []
+        },
+        "color": {
+          "background": false,
+          "text": false
+        }
+      },
+      "core/paragraph": {
+        "typography": {
+          "fontFamilies": []
+        },
+        "color": {
+          "background": false,
+          "text": false
+        }
+      },
+      "core/list": {
+        "typography": {
+          "fontFamilies": [],
+          "fontSizes": []
+        },
+        "color": {
+          "background": false,
+          "text": false
+        }
+      },
+      "core/image": {
+        "shadow": {
+          "defaultPresets": false
+        }
+      }
+    },
+    "spacing": {
+      "blockGap": null,
+      "margin": false,
+      "padding": false,
+      "units": [],
+      "customSpacingSize": false,
+      "spacingScale": []
+    },
+    "border": {
+      "color": false,
+      "radius": false,
+      "style": false,
+      "width": false,
+      "customRadius": false
+    },
+    "appearanceTools": false,
+    "typography": {
+      "fontSizes": [],
+      "customFontSize": false,
+      "lineHeight": false,
+      "fontWeight": false,
+      "fontStyle": false,
+      "textTransform": false,
+      "letterSpacing": false,
+      "dropCap": false,
+      "textDecoration": false,
+      "fluid": false
+    }
+  }
+}

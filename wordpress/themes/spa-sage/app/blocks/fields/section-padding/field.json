@@ -1,0 +1,17 @@
+{
+  "name": "section_padding",
+  "attributes": [
+    {
+      "id": "section_padding",
+      "type": "select",
+      "label": "Section Padding",
+      "default": ["py-clamp"],
+      "multiple": true,
+      "allowNull": true,
+      "populate": {
+        "type": "custom",
+        "custom": "sectionPadding"
+      }
+    }
+  ]
+}

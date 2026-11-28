@@ -1,0 +1,64 @@
+/**
+ * spa/partial-subheading — accent bar beside heading / paragraph content.
+ *
+ * Kept outside resources/css/theme/ so bridgeTailwindConfig() (which globs
+ * theme/*.css into Blockstudio's inline Tailwind) does not duplicate it.
+ * Vite still loads this via theme.css → app.css / editor.css.
+ *
+ * Line colour: `--spa-subheading-line`
+ * Optional panel: `.spa-subheading--panel` (padding + border + light overlay)
+ * Text colour / size / case: set on the inner heading / paragraph blocks.
+ */
+
+@layer components {
+  .spa-subheading {
+    --_subheading-pad: var(--padding-surface);
+    --_subheading-gap: 16px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-sizing: border-box;
+    margin-bottom: 1.5rem;
+    border-left: 3px solid var(--spa-subheading-line, currentColor);
+    padding-left: var(--_subheading-gap);
+
+    @media (width >= theme(--breakpoint-lg)) {
+      --_subheading-pad: 20px;
+    }
+
+    & :is(h1, h2, h3, h4, h5, h6, p) {
+      margin-block: 0;
+      border-left: none;
+      padding-left: 0;
+    }
+
+    /**
+     * Classic single-line label (only child is a paragraph).
+     */
+    & > p:only-child {
+      font-family: var(--font-sans);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  /**
+   * Frosted panel — navy overlay look (padding + border + white/10).
+   * Accent bar stays as the left border; panel chrome on the other sides.
+   */
+  .spa-subheading--panel {
+    padding-block: var(--_subheading-pad);
+    padding-inline-end: var(--_subheading-pad);
+    padding-inline-start: calc(var(--_subheading-pad) + var(--_subheading-gap));
+    border-radius: var(--radius-surface);
+    border-top: 1px solid color-mix(in srgb, var(--color-white) 20%, transparent);
+    border-right: 1px solid color-mix(in srgb, var(--color-white) 20%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-white) 20%, transparent);
+    background-color: color-mix(in srgb, var(--color-white) 10%, transparent);
+  }
+}

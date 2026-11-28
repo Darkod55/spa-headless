@@ -1,0 +1,91 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "spa/card-grid",
+  "title": "Card grid",
+  "category": "spa",
+  "icon": "grid-view",
+  "description": "A heading plus a repeater of cards. Each card has a title, text, and link.",
+  "blockstudio": {
+    "attributes": [
+      {
+        "type": "tabs",
+        "tabs": [
+          {
+            "title": "Content",
+            "attributes": [
+              {
+                "type": "group",
+                "attributes": [
+                  {
+                    "id": "heading",
+                    "type": "text",
+                    "label": "Heading",
+                    "default": "How we help"
+                  },
+                  {
+                    "id": "intro",
+                    "type": "textarea",
+                    "label": "Intro",
+                    "default": "Every service sits on the same foundation: understanding, strategy, then implementation."
+                  }
+                ]
+              },
+              {
+                "type": "group",
+                "attributes": [
+                  {
+                    "id": "cards",
+                    "type": "repeater",
+                    "label": "Cards",
+                    "min": 1,
+                    "max": 12,
+                    "textButton": "Add card",
+                    "textMinimized": {
+                      "id": "title",
+                      "fallback": "Card"
+                    },
+                    "default": [
+                      {
+                        "title": "Marketing strategy",
+                        "text": "A practical plan around the organisation, the audience, and the next step."
+                      },
+                      {
+                        "title": "Brand strategy and design",
+                        "text": "Identity, language, and design that the organisation can actually use."
+                      },
+                      {
+                        "title": "Website design and development",
+                        "text": "Sites that explain the work and make the next step obvious."
+                      }
+                    ],
+                    "attributes": [
+                      {
+                        "id": "title",
+                        "type": "text",
+                        "label": "Title"
+                      },
+                      {
+                        "id": "text",
+                        "type": "textarea",
+                        "label": "Text"
+                      },
+                      {
+                        "id": "link",
+                        "type": "link",
+                        "label": "Link"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Section",
+            "attributes": [{ "type": "custom/section" }]
+          }
+        ]
+      }
+    ]
+  }
+}

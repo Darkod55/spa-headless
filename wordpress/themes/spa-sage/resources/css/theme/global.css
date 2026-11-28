@@ -1,0 +1,224 @@
+/**
+ * Global CSS
+ */
+
+/**
+ * Menu-editor alias for `lg:hidden` — WP strips colons from nav CSS Classes.
+ */
+@layer utilities {
+  @media (width >= theme(--breakpoint-lg)) {
+    .lg-hidden { display: none !important; }
+  }
+}
+
+/**
+ * Logged-in admin bar is position:fixed above 600px (32px, or 46px below 783px).
+ * Sticky and fixed chrome use this so they sit under the bar instead of
+ * sliding into it. Below 600px WordPress switches the bar to
+ * position:absolute, so it scrolls away and the offset stays 0.
+ */
+:root {
+  --admin-bar-offset: 0px;
+}
+
+@media (width >= 601px) {
+  html:has(body.admin-bar) {
+    --admin-bar-offset: var(--wp-admin--admin-bar--height, 32px);
+  }
+}
+
+/**
+ * Smooth in-page anchors (TOC, nav hash links, block anchors).
+ * scroll-padding-top clears the sticky header; heading-level
+ * scroll-margin-top in posts.css covers the same for post content.
+ */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(7rem + var(--admin-bar-offset, 0px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+#main-header {
+  top: var(--admin-bar-offset, 0px);
+}
+
+/* Full-viewport off-canvas sits on the viewport, not inside the sticky bar. */
+#main-header > .fixed,
+#main-header > .offcanvas-nav {
+  top: var(--admin-bar-offset, 0px);
+}
+
+#main-header > .container {
+  transition: padding-block 300ms ease;
+}
+
+#main-header .brand {
+  line-height: 0.8em;
+}
+
+#main-header .site-logo {
+  height: auto;
+  transition: width 300ms ease;
+}
+
+/**
+ * Desktop scrolled: compact the sticky cream bar + logo.
+ * Preheader is a sibling above and scrolls away normally.
+ */
+body.scrolled #main-header {
+  @media (width >= theme(--breakpoint-lg)) {
+    & > .container {
+      padding-block: 1rem; /* py-6 → py-4 */
+    }
+
+    & .site-logo {
+      width: var(--logo-width-min, calc(var(--logo-width, 150px) * 2 / 3)) !important;
+    }
+  }
+}
+
+#main-header .nav-dropdown { border-radius: var(--radius-surface); }
+
+.site-footer .site-logo {
+  width: var(--logo-width, 180px);
+  height: auto;
+}
+
+.site-footer .btn {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.front-grief__input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+  border-radius: var(--radius-surface);
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.front-grief__input::placeholder {
+  color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+  opacity: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.page-template-tpl-legal a { text-decoration: underline; }
+.page-template-tpl-legal a:hover { color: var(--color-secondary); }
+
+.front-grief__input:focus {
+  border-color: var(--color-secondary);
+}
+
+.wp-block-image img { border-radius: var(--radius-surface); }
+
+/**
+ * Circular portrait (Blockstudio toggle on core/image → `.is-portrait`).
+ */
+.wp-block-image.is-portrait img {
+  border-radius: 100%;
+  border: 2px solid var(--color-gold);
+  box-sizing: border-box;
+}
+
+.wp-block-image.is-portrait.size-full {
+  width: auto !important;
+  height: auto !important;
+}
+
+.wp-block-image.is-portrait.aligncenter img {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Bleed / post cards: square image edges (card clips via overflow + radius). */
+.spa-card--image .wp-block-image img,
+.spa-post-card .wp-block-image img,
+.spa-post-card__image {
+  border-radius: 0;
+}
+
+/**
+ * Partners slider logos — theme fallback so size wins even if the
+ * Blockstudio block stylesheet loses the cascade to Preflight/img attrs.
+ */
+.spa-partners-slider .wp-block-gallery img {
+  display: block !important;
+  width: auto !important;
+  max-width: 10rem !important;
+  height: 2.75rem !important;
+  max-height: 2.75rem !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 767px) {
+  .spa-partners-slider .wp-block-gallery img {
+    max-width: 8rem !important;
+    height: 2.25rem !important;
+    max-height: 2.25rem !important;
+  }
+}
+
+/**
+ * Responsive embeds (YouTube etc.).
+ * Block-library CSS is dequeued on the front end. One Column (and other
+ * flex parents with align-items ≠ stretch) would otherwise shrink the
+ * figure to 0 width once the iframe is absolutely positioned.
+ */
+@layer components {
+  .wp-block-embed,
+  [data-type="core/embed"] {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    align-self: stretch;
+    margin-bottom: 1.5rem;
+  }
+
+  .wp-block-embed__wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+
+  .wp-block-embed iframe {
+    max-width: 100%;
+  }
+
+  .wp-has-aspect-ratio .wp-block-embed__wrapper {
+    aspect-ratio: 16 / 9;
+  }
+
+  .wp-embed-aspect-21-9 .wp-block-embed__wrapper { aspect-ratio: 21 / 9; }
+  .wp-embed-aspect-18-9 .wp-block-embed__wrapper { aspect-ratio: 18 / 9; }
+  .wp-embed-aspect-16-9 .wp-block-embed__wrapper { aspect-ratio: 16 / 9; }
+  .wp-embed-aspect-4-3 .wp-block-embed__wrapper { aspect-ratio: 4 / 3; }
+  .wp-embed-aspect-1-1 .wp-block-embed__wrapper { aspect-ratio: 1 / 1; }
+  .wp-embed-aspect-9-16 .wp-block-embed__wrapper { aspect-ratio: 9 / 16; }
+  .wp-embed-aspect-1-2 .wp-block-embed__wrapper { aspect-ratio: 1 / 2; }
+
+  .wp-has-aspect-ratio iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

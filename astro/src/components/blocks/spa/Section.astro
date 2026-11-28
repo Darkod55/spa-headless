@@ -1,0 +1,26 @@
+---
+import type { SpaSectionAttributes } from "../../../generated/blocks";
+import { sectionFields } from "./section.contract";
+
+interface Props {
+  attrs: SpaSectionAttributes;
+}
+
+const { attrs } = Astro.props;
+void sectionFields;
+---
+
+<section
+  class:list={[
+    "block-section",
+    { "is-accent": attrs.accentBg, "is-flush": attrs.removeBottomPadding },
+  ]}
+>
+  <div class="container">
+    {attrs.heading && <h2 class="type-h2">{attrs.heading}</h2>}
+    {attrs.intro && <p class="type-lead">{attrs.intro}</p>}
+    <div class="stack">
+      <slot />
+    </div>
+  </div>
+</section>

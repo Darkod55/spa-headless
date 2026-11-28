@@ -1,0 +1,23 @@
+---
+import { typographyClasses } from "../../../lib/blocks/typography";
+import { addClassToRoot } from "../../../lib/blocks/markup";
+import type { WpBlock } from "../../../lib/wp/types";
+
+interface Props {
+  block: WpBlock;
+}
+
+const { block } = Astro.props;
+const raw =
+  block.innerHTML ||
+  (typeof block.attrs.content === "string" ? `<p>${block.attrs.content}</p>` : "");
+const html = typographyClasses(block.attrs).reduce(
+  (markup, className) => addClassToRoot(markup, className),
+  raw,
+);
+---
+
+<div class="wp-paragraph">
+  <Fragment set:html={html} />
+  <slot />
+</div>

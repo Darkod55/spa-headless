@@ -1,0 +1,66 @@
+{
+  "$schema": "https://blockstudio.dev/schema/block",
+  "name": "spa/badge",
+  "title": "Badge",
+  "category": "spa",
+  "icon": "tag",
+  "description": "Slanted eyebrow label. Red parallelogram, white uppercase Oswald, by default.",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "text": {
+      "type": "string",
+      "default": "Different by design"
+    },
+    "bg_colour": {
+      "type": "object"
+    },
+    "text_colour": {
+      "type": "object"
+    },
+    "animate": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "style": "file:../../resources/css/components/spa-badge.css",
+  "editorStyle": "file:../../resources/css/components/spa-badge.css",
+  "blockstudio": {
+    "attributes": [
+      {
+        "id": "text",
+        "type": "richtext",
+        "label": "Text",
+        "default": "Different by design"
+      },
+      {
+        "id": "bg_colour",
+        "type": "custom/background-colour",
+        "overrides": {
+          "bg_colour": {
+            "id": "bg_colour",
+            "default": "var(--color-secondary)"
+          }
+        }
+      },
+      {
+        "id": "text_colour",
+        "type": "custom/text-colour",
+        "overrides": {
+          "text_colour": {
+            "id": "text_colour",
+            "default": "var(--color-white)"
+          }
+        }
+      },
+      {
+        "id": "animate",
+        "type": "toggle",
+        "label": "Animate",
+        "default": true,
+        "help": "Letters stagger in on the public site. The editor stays still."
+      }
+    ]
+  }
+}

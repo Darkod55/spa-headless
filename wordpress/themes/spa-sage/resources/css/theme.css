@@ -1,0 +1,46 @@
+/**
+ * Theme design system entry point.
+ * color-tokens.css is plain :root CSS. It must load even when Tailwind
+ * drops unused @theme variables.
+ */
+@import "./theme/color-tokens.css";
+@import "./theme/variables.css";
+@import "./theme/fonts.css";
+@import "./theme/sections.css";
+@import "./theme/cards.css";
+/* Rank Math FAQ cards — unused here for now. Re-enable: move unused/faqs.css → theme/faqs.css and uncomment.
+@import "./theme/faqs.css";
+*/
+@import "./theme/buttons.css";
+@import "./theme/forms.css";
+@import "./theme/nav.css";
+@import "./theme/typography.css";
+@import "./theme/posts.css";
+@import "./theme/global.css";
+@import "./theme/editor-safelist.css";
+/* Outside theme/ so Blockstudio's bridgeTailwindConfig() glob does not re-emit it. */
+@import "./components/spa-subheading.css";
+@import "./components/spa-buttons.css";
+@import "./components/spa-icon-divider.css";
+@import "./components/spa-box.css";
+@import "./components/spa-keynote.css";
+@import "./components/spa-row.css";
+@import "./components/spa-hero-banner.css";
+@import "./components/spa-badge.css";
+@import "./components/spa-button.css";
+@import "./components/spa-typography.css";
+@import "./components/spa-brand-colours.css";
+
+@source inline("text-primary text-secondary text-tertiary text-navy text-red text-royal text-dark-blue text-black text-white text-gold text-light");
+@source inline("bg-primary bg-secondary bg-tertiary bg-navy bg-red bg-royal bg-dark-blue bg-black bg-white bg-gold bg-light");
+@source inline("font-heading italic uppercase is-portrait");
+/**
+ * One-off utilities applied via the block editor's "Additional CSS class(es)"
+ * field (not spacing — those live in editor-safelist.css). Those class names
+ * live in post content, not in theme source files, so Tailwind's @source
+ * globs never see them. Listing them here keeps the Vite app.css / editor.css
+ * bundles in sync with the frontend after Blockstudio's per-request frontend
+ * Tailwind compile is disabled.
+ */
+@source inline("bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6 p-20px mt-4 brand-form");
+@source inline("is-v-align-top is-v-align-center is-v-align-bottom is-bleed-image is-sticky-left is-sticky-right");

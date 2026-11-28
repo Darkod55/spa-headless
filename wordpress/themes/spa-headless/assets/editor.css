@@ -1,0 +1,65 @@
+/*
+  Editor canvas tokens and the same Oswald / Montserrat files the public site
+  loads through @fontsource. The theme symlink does not include node_modules,
+  so these four latin files are copied into the theme.
+*/
+
+@font-face {
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/oswald-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/oswald-latin-700-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/montserrat-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/montserrat-latin-500-normal.woff2") format("woff2");
+}
+
+:root {
+  --header-height: 5.5rem;
+  --font-heading: "Oswald", "Arial Narrow", sans-serif;
+  --font-body: "Montserrat", system-ui, sans-serif;
+  --color-primary: #031433;
+  --color-secondary: #c8102e;
+  --color-tertiary: #012169;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-navy: var(--color-primary);
+  --color-royal: var(--color-tertiary);
+  --color-red: var(--color-secondary);
+  --fs-display: clamp(3.5rem, 6.4vw, 6rem);
+  --fs-h1-page: clamp(3rem, 5.6vw, 5.25rem);
+  --container-max: 1280px;
+  --gutter: 24px;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --header-height: 4.5rem;
+  }
+}
+
+.editor-styles-wrapper {
+  font-family: var(--font-body);
+}

@@ -1,0 +1,16 @@
+---
+import type { SpaHeroBannerDefaultAttributes } from "../../../generated/blocks";
+import { heroBannerDefaultFields } from "./hero-banner-default.contract";
+import HeroBanner from "./HeroBanner.astro";
+
+interface Props {
+  attrs: SpaHeroBannerDefaultAttributes;
+}
+
+const { attrs } = Astro.props;
+void heroBannerDefaultFields;
+---
+
+<HeroBanner variant="default" background={attrs.background} image={attrs.image}>
+  <slot />
+</HeroBanner>

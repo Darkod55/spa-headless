@@ -1,0 +1,60 @@
+import type { SpaColorValue, SpaFileValue } from "../../generated/blocks";
+import { colorSlug } from "./color";
+
+export type HeroBackgroundValue = string | SpaColorValue | null;
+
+export const heroBackgrounds = ["navy", "red", "royal", "black", "white"] as const;
+
+export type HeroBackground = (typeof heroBackgrounds)[number];
+
+const modifiers: Record<string, string> = {
+  navy: "hero--bg-navy",
+  primary: "hero--bg-navy",
+  red: "hero--bg-red",
+  secondary: "hero--bg-red",
+  royal: "hero--bg-royal",
+  tertiary: "hero--bg-royal",
+  black: "hero--bg-black",
+  white: "hero--bg-white",
+  gray: "hero--bg-gray",
+  grey: "hero--bg-gray",
+  "secondary-deep": "hero--bg-secondary-deep",
+  "red-deep": "hero--bg-secondary-deep",
+};
+
+/** Unknown or empty backgrounds use the live homepage navy. */
+export function heroBackgroundClass(background: HeroBackgroundValue | undefined): string {
+  const slug = colorSlug(background);
+  if (slug && Object.hasOwn(modifiers, slug)) {
+    return modifiers[slug];
+  }
+  return modifiers.navy;
+}
+
+export interface HeroImage {
+  id: number;
+  url: string;
+  alt: string;
+  width: number | null;
+  height: number | null;
+}
+
+/** The image object REST returns: id, url, alt, width, height. */
+export function heroImage(value: SpaFileValue | null | undefined): HeroImage | null {
+  if (!value || Array.isArray(value)) {
+    return null;
+  }
+  const url = typeof value.url === "string" ? value.url : "";
+  if (!url) {
+    return null;
+  }
+  const rawId = value.id ?? value.ID;
+  const id = typeof rawId === "number" ? rawId : 0;
+  return {
+    id,
+    url,
+    alt: typeof value.alt === "string" ? value.alt : "",
+    width: typeof value.width === "number" ? value.width : null,
+    height: typeof value.height === "number" ? value.height : null,
+  };
+}

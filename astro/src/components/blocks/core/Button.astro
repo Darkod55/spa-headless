@@ -1,0 +1,75 @@
+---
+import {
+  buttonLabel,
+  buttonOpensNewTab,
+  buttonShowsArrow,
+  buttonType,
+  buttonUrl,
+} from "../../../lib/blocks/button";
+import "../../../../../wordpress/themes/spa-sage/resources/css/components/spa-button.css";
+
+interface Props {
+  block: {
+    attrs: {
+      url?: unknown;
+      text?: unknown;
+      linkTarget?: unknown;
+      rel?: unknown;
+      button_type?: unknown;
+      arrow?: unknown;
+      blockstudio?: { attributes?: { button_type?: unknown; arrow?: unknown } };
+    };
+    innerHTML?: string;
+  };
+}
+
+const { block } = Astro.props;
+const attrs = block.attrs;
+const type = buttonType(attrs.button_type ?? attrs.blockstudio?.attributes?.button_type);
+const arrow = buttonShowsArrow(attrs);
+const label = buttonLabel(attrs, block.innerHTML ?? "");
+const url = buttonUrl(attrs, block.innerHTML ?? "");
+const newTab = buttonOpensNewTab(attrs);
+const classes = ["cta", "focus-clip", `cta--${type}`, arrow ? "cta--arrow" : "cta--no-arrow"];
+---
+
+{
+  label || url ? (
+    type === "outline-light" ? (
+      <span class="cta-wrap cta-wrap--outline">
+        <a
+          class:list={classes}
+          href={url || "#"}
+          target={newTab ? "_blank" : undefined}
+          rel={newTab ? (typeof attrs.rel === "string" && attrs.rel ? attrs.rel : "noopener noreferrer") : undefined}
+        >
+          <span class="cta__label">{label || url}</span>
+          {arrow && (
+            <svg class="cta__arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" aria-hidden="true" focusable="false">
+              <path d="M0 6 H16" stroke="currentColor" stroke-width="1.8" />
+              <path d="M12 1 L17 6 L12 11" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="miter" />
+            </svg>
+          )}
+        </a>
+      </span>
+    ) : (
+      <a
+        class:list={classes}
+        href={url || "#"}
+        target={newTab ? "_blank" : undefined}
+        rel={newTab ? (typeof attrs.rel === "string" && attrs.rel ? attrs.rel : "noopener noreferrer") : undefined}
+      >
+        <span class="cta__label">{label || url}</span>
+        {arrow && (
+          <svg class="cta__arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" aria-hidden="true" focusable="false">
+            <path d="M0 6 H16" stroke="currentColor" stroke-width="1.8" />
+            <path d="M12 1 L17 6 L12 11" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="miter" />
+          </svg>
+        )}
+      </a>
+    )
+  ) : (
+    <Fragment set:html={block.innerHTML} />
+  )
+}
+<slot />

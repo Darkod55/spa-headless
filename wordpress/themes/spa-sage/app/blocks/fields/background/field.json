@@ -1,0 +1,40 @@
+{
+  "name": "background",
+  "attributes": [
+    {
+      "id": "bg_colour",
+      "type": "color",
+      "label": "Background Colour",
+      "clearable": false,
+      "disableCustomColors": true,
+      "populate": {
+        "type": "custom",
+        "custom": "bgColours"
+      }
+    },
+    {
+      "id": "use_background_image",
+      "type": "toggle",
+      "label": "Use background image",
+      "default": false
+    },
+    {
+      "id": "background_image",
+      "type": "files",
+      "label": "Background image",
+      "help": "Shown full-bleed behind the section content, with a fixed overlay for text contrast.",
+      "allowedTypes": ["image"],
+      "multiple": false,
+      "returnFormat": "object",
+      "conditions": [
+        [
+          {
+            "id": "use_background_image",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      ]
+    }
+  ]
+}

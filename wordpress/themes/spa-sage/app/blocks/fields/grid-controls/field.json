@@ -1,0 +1,68 @@
+{
+  "name": "grid_controls",
+  "attributes": [
+    {
+      "id": "grid_controls",
+      "type": "group",
+      "title": "Grid Controls",
+      "attributes": [
+        {
+          "id": "cols_desktop",
+          "type": "unit",
+          "label": "Width (desktop)",
+          "description": "Default track for children without a per-item width. Use auto so an unset item fills space beside a fixed px item. Gap is accounted for with %.",
+          "default": "50%",
+          "units": [
+            { "value": "%", "label": "%", "default": 50 },
+            { "value": "px", "label": "px", "default": 300 },
+            { "value": "auto", "label": "auto", "default": 0 }
+          ]
+        },
+        {
+          "id": "cols_tablet",
+          "type": "unit",
+          "label": "Width (tablet)",
+          "default": "50%",
+          "units": [
+            { "value": "%", "label": "%", "default": 50 },
+            { "value": "px", "label": "px", "default": 300 },
+            { "value": "auto", "label": "auto", "default": 0 }
+          ]
+        },
+        {
+          "id": "cols_mobile",
+          "type": "unit",
+          "label": "Width (mobile)",
+          "default": "100%",
+          "units": [
+            { "value": "%", "label": "%", "default": 100 },
+            { "value": "px", "label": "px", "default": 300 },
+            { "value": "auto", "label": "auto", "default": 0 }
+          ]
+        },
+        {
+          "id": "gap_col_desktop",
+          "type": "unit",
+          "label": "Column gap (desktop)",
+          "description": "Used from the desktop breakpoint up. Tablet and mobile are fixed at 30px.",
+          "default": "20px",
+          "units": [
+            { "value": "px", "label": "px", "default": 20 },
+            { "value": "rem", "label": "rem", "default": 1.25 }
+          ]
+        },
+        {
+          "id": "gap_row_desktop",
+          "type": "unit",
+          "label": "Row gap (desktop)",
+          "description": "Used from the desktop breakpoint up. Tablet and mobile are fixed at 30px.",
+          "default": "20px",
+          "units": [
+            { "value": "px", "label": "px", "default": 20 },
+            { "value": "rem", "label": "rem", "default": 1.25 }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "$schema": "https://blockstudio.dev/schema/extend",
+  "name": "core/list",
+  "blockstudio": {
+    "extend": true,
+    "attributes": [
+      {
+        "type": "custom/typography"
+      },
+      {
+        "id": "use_heading_font",
+        "type": "toggle",
+        "label": "Use Heading Font?",
+        "help": "Applies the heading font family to this list.",
+        "default": false,
+        "set": [
+          {
+            "attribute": "class",
+            "value": "font-heading"
+          }
+        ]
+      },
+      {
+        "id": "use_italic",
+        "type": "toggle",
+        "label": "Italic?",
+        "help": "Applies italic style to this list.",
+        "default": false,
+        "set": [
+          {
+            "attribute": "class",
+            "value": "italic"
+          }
+        ]
+      },
+      {
+        "id": "use_uppercase",
+        "type": "toggle",
+        "label": "Uppercase?",
+        "help": "Transforms this list (and tags) to uppercase.",
+        "default": false,
+        "set": [
+          {
+            "attribute": "class",
+            "value": "uppercase"
+          }
+        ]
+      },
+      {
+        "type": "group",
+        "title": "Theme list",
+        "attributes": [
+          {
+            "id": "theme_list",
+            "type": "toggle",
+            "label": "Styled list",
+            "help": "Circular bullets and spacing for Topics / services lists.",
+            "default": false,
+            "conditions": [
+              [
+                {
+                  "id": "tag_list",
+                  "operator": "!=",
+                  "value": true
+                }
+              ]
+            ],
+            "set": [
+              {
+                "attribute": "class",
+                "value": "spa-list"
+              }
+            ]
+          },
+          {
+            "id": "tag_list",
+            "type": "toggle",
+            "label": "Tag list",
+            "help": "Renders items as inline pill tags (e.g. Ideal for audiences).",
+            "default": false,
+            "conditions": [
+              [
+                {
+                  "id": "theme_list",
+                  "operator": "!=",
+                  "value": true
+                }
+              ]
+            ],
+            "set": [
+              {
+                "attribute": "class",
+                "value": "spa-list spa-list--tags"
+              }
+            ]
+          },
+          {
+            "id": "tag_bg_colour",
+            "type": "color",
+            "label": "Tag background",
+            "help": "Background fill for each tag. Leave unset for Light. Text colour and size use the list typography controls above.",
+            "clearable": true,
+            "disableCustomColors": true,
+            "default": {
+              "value": "var(--color-light)",
+              "name": "Light",
+              "slug": "light"
+            },
+            "populate": {
+              "type": "custom",
+              "custom": "tagBgColours"
+            },
+            "conditions": [
+              [
+                {
+                  "id": "tag_list",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            ],
+            "set": [
+              {
+                "attribute": "style",
+                "value": "--spa-list-tag-bg: {attributes.tag_bg_colour.value}"
+              }
+            ]
+          },
+          {
+            "id": "bullet_colour",
+            "type": "color",
+            "label": "Bullet colour",
+            "clearable": false,
+            "disableCustomColors": true,
+            "default": {
+              "value": "var(--color-secondary)",
+              "name": "Secondary",
+              "slug": "secondary"
+            },
+            "populate": {
+              "type": "custom",
+              "custom": "textColours"
+            },
+            "conditions": [
+              [
+                {
+                  "id": "theme_list",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            ],
+            "set": [
+              {
+                "attribute": "style",
+                "value": "--spa-list-bullet: {attributes.bullet_colour.value}"
+              }
+            ]
+          },
+          {
+            "id": "show_dividers",
+            "type": "toggle",
+            "label": "Dividers between items",
+            "help": "Thin horizontal rules between list items.",
+            "default": false,
+            "conditions": [
+              [
+                {
+                  "id": "theme_list",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            ],
+            "set": [
+              {
+                "attribute": "class",
+                "value": "spa-list--divided"
+              }
+            ]
+          },
+          {
+            "id": "divider_colour",
+            "type": "color",
+            "label": "Divider colour",
+            "help": "Leave unset to use a faint tint of the text colour. Prefer White / Gold / Primary for navy or cream panels.",
+            "clearable": true,
+            "disableCustomColors": true,
+            "populate": {
+              "type": "custom",
+              "custom": "textColours"
+            },
+            "conditions": [
+              [
+                {
+                  "id": "show_dividers",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            ],
+            "set": [
+              {
+                "attribute": "style",
+                "value": "--spa-list-divider: {attributes.divider_colour.value}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

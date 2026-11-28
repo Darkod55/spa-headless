@@ -1,0 +1,12 @@
+---
+import type { WpBlock } from "../../../lib/wp/types";
+
+interface Props {
+  block: WpBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<Fragment set:html={block.innerHTML} />
+<slot />

@@ -1,0 +1,75 @@
+{
+  "name": "typography",
+  "attributes": [
+    {
+      "id": "text_colour",
+      "type": "color",
+      "label": "Text Colour",
+      "clearable": false,
+      "disableCustomColors": true,
+      "populate": {
+        "type": "custom",
+        "custom": "textColours"
+      },
+      "set": [
+        {
+          "attribute": "class",
+          "value": "has-text-{attributes.text_colour.slug}"
+        },
+        {
+          "attribute": "style",
+          "value": "color: {attributes.text_colour.value}"
+        }
+      ]
+    },
+    {
+      "id": "text_size",
+      "type": "select",
+      "label": "Font Size",
+      "default": "",
+      "returnFormat": "both",
+      "options": [
+        { "value": "", "label": "Default" },
+        { "value": "fs-display", "label": "Display" },
+        { "value": "fs-h1-page", "label": "Page title" },
+        { "value": "fs-h2", "label": "Heading" },
+        { "value": "fs-h2-lg", "label": "Large heading" },
+        { "value": "fs-statement", "label": "Statement" },
+        { "value": "fs-h3", "label": "Subheading" },
+        { "value": "fs-tagline", "label": "Tagline" },
+        { "value": "fs-eyebrow", "label": "Eyebrow" },
+        { "value": "fs-hero-sub", "label": "Hero sub" },
+        { "value": "fs-lead", "label": "Lead" },
+        { "value": "fs-body", "label": "Body" },
+        { "value": "fs-small", "label": "Small" },
+        { "value": "fs-meta", "label": "Meta" }
+      ],
+      "set": [
+        {
+          "attribute": "class",
+          "value": "{attributes.text_size.value}"
+        }
+      ]
+    },
+    {
+      "id": "text_weight",
+      "type": "select",
+      "label": "Font Weight",
+      "default": "",
+      "returnFormat": "both",
+      "options": [
+        { "value": "", "label": "Default" },
+        { "value": "fw-400", "label": "Regular" },
+        { "value": "fw-500", "label": "Medium" },
+        { "value": "fw-600", "label": "Semibold" },
+        { "value": "fw-700", "label": "Bold" }
+      ],
+      "set": [
+        {
+          "attribute": "class",
+          "value": "{attributes.text_weight.value}"
+        }
+      ]
+    }
+  ]
+}

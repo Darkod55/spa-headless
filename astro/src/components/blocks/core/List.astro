@@ -1,0 +1,15 @@
+---
+import type { WpBlock } from "../../../lib/wp/types";
+
+interface Props {
+  block: WpBlock;
+}
+
+const { block } = Astro.props;
+const ordered = block.attrs.ordered === true;
+const Tag = ordered ? "ol" : "ul";
+---
+
+<Tag class="wp-list">
+  <slot />
+</Tag>

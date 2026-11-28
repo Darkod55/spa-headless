@@ -1,0 +1,127 @@
+/*
+  Classes for the brand colour dataset. The variables are defined in
+  theme/color-tokens.css, imported here so this file never ships alone.
+*/
+@import "../theme/color-tokens.css";
+
+.has-text-navy,
+.hero__copy .has-text-navy,
+.editor-styles-wrapper .hero__copy .has-text-navy {
+  color: var(--color-navy);
+}
+
+.has-text-red,
+.hero__copy .has-text-red,
+.editor-styles-wrapper .hero__copy .has-text-red {
+  color: var(--color-red);
+}
+
+.has-text-royal,
+.hero__copy .has-text-royal,
+.editor-styles-wrapper .hero__copy .has-text-royal {
+  color: var(--color-royal);
+}
+
+.has-text-black,
+.hero__copy .has-text-black,
+.editor-styles-wrapper .hero__copy .has-text-black {
+  color: var(--color-black);
+}
+
+.has-text-white,
+.hero__copy .has-text-white,
+.editor-styles-wrapper .hero__copy .has-text-white {
+  color: var(--color-white);
+}
+
+.has-bg-navy {
+  background-color: var(--color-navy);
+}
+
+.has-bg-red {
+  background-color: var(--color-red);
+}
+
+.has-bg-royal {
+  background-color: var(--color-royal);
+}
+
+.has-bg-black {
+  background-color: var(--color-black);
+}
+
+.has-bg-white {
+  background-color: var(--color-white);
+}
+
+.has-text-primary,
+.hero__copy .has-text-primary,
+.editor-styles-wrapper .hero__copy .has-text-primary {
+  color: var(--color-primary);
+}
+
+.has-text-secondary,
+.hero__copy .has-text-secondary,
+.editor-styles-wrapper .hero__copy .has-text-secondary {
+  color: var(--color-secondary);
+}
+
+.has-text-tertiary,
+.hero__copy .has-text-tertiary,
+.editor-styles-wrapper .hero__copy .has-text-tertiary {
+  color: var(--color-tertiary);
+}
+
+.has-text-gray,
+.hero__copy .has-text-gray,
+.editor-styles-wrapper .hero__copy .has-text-gray {
+  color: var(--color-gray);
+}
+
+.has-text-secondary-deep,
+.hero__copy .has-text-secondary-deep,
+.editor-styles-wrapper .hero__copy .has-text-secondary-deep {
+  color: var(--color-secondary-deep);
+}
+
+.has-text-secondary-on-primary,
+.hero__copy .has-text-secondary-on-primary,
+.editor-styles-wrapper .hero__copy .has-text-secondary-on-primary {
+  color: var(--color-secondary-on-primary);
+}
+
+.has-text-secondary-on-tertiary,
+.hero__copy .has-text-secondary-on-tertiary,
+.editor-styles-wrapper .hero__copy .has-text-secondary-on-tertiary {
+  color: var(--color-secondary-on-tertiary);
+}
+
+.has-text-grey,
+.hero__copy .has-text-grey,
+.editor-styles-wrapper .hero__copy .has-text-grey {
+  color: var(--color-grey);
+}
+
+.has-text-red-deep,
+.hero__copy .has-text-red-deep,
+.editor-styles-wrapper .hero__copy .has-text-red-deep {
+  color: var(--color-red-deep);
+}
+
+.has-text-red-on-navy,
+.hero__copy .has-text-red-on-navy,
+.editor-styles-wrapper .hero__copy .has-text-red-on-navy {
+  color: var(--color-red-on-navy);
+}
+
+.has-text-red-on-royal,
+.hero__copy .has-text-red-on-royal,
+.editor-styles-wrapper .hero__copy .has-text-red-on-royal {
+  color: var(--color-red-on-royal);
+}
+
+.has-bg-primary { background-color: var(--color-primary); }
+.has-bg-secondary { background-color: var(--color-secondary); }
+.has-bg-tertiary { background-color: var(--color-tertiary); }
+.has-bg-gray { background-color: var(--color-gray); }
+.has-bg-secondary-deep { background-color: var(--color-secondary-deep); }

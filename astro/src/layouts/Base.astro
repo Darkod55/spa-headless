@@ -1,0 +1,79 @@
+---
+import "../styles/global.css";
+import "../styles/content.css";
+import "../../../wordpress/themes/spa-sage/resources/css/components/spa-brand-colours.css";
+import "../../../wordpress/themes/spa-sage/resources/css/components/spa-typography.css";
+import Footer from "../components/layout/Footer.astro";
+import SiteHeader from "../components/layout/SiteHeader.astro";
+import { gaMeasurementId } from "../lib/analytics";
+import { getMenu, getSite } from "../lib/wp/client";
+import { siteIconTags, stripHeadIconTags } from "../lib/wp/icons";
+
+interface Props {
+  title: string;
+  path: string;
+  head?: string | null;
+  fixtureNotice?: string | null;
+}
+
+const { title, path, head = null, fixtureNotice = null } = Astro.props;
+const gaId = gaMeasurementId();
+const [site, menu, footerMenu, legalMenu, socialMenu] = await Promise.all([
+  getSite(),
+  getMenu("primary"),
+  getMenu("footer"),
+  getMenu("legal"),
+  getMenu("footer-social"),
+]);
+const iconTags = siteIconTags(site.siteIcon);
+const seoHead = head && iconTags.length > 0 ? stripHeadIconTags(head) : head;
+---
+
+<!doctype html>
+<html lang="en" data-ga={gaId}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {
+      iconTags.map((tag) =>
+        tag.kind === "link" ? (
+          <link rel={tag.rel} href={tag.href} type={tag.type} sizes={tag.sizes} />
+        ) : (
+          <meta name={tag.name} content={tag.content} />
+        ),
+      )
+    }
+    {
+      seoHead ? (
+        <Fragment set:html={seoHead} />
+      ) : (
+        <title>{title} — The Square Peg Agency</title>
+      )
+    }
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to content</a>
+    {fixtureNotice && <p class="draft-banner">{fixtureNotice}</p>}
+    <SiteHeader site={site} items={menu.items} path={path} />
+    <main id="content">
+      <slot />
+    </main>
+    <Footer site={site} path={path} footer={footerMenu.items} legal={legalMenu.items} social={socialMenu.items} />
+    <script>
+      const measurementId = document.documentElement.dataset.ga ?? "";
+      if (/^G-[A-Z0-9]+$/.test(measurementId)) {
+        const analytics = window as Window & { dataLayer?: unknown[][] };
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+        document.head.append(script);
+        analytics.dataLayer = analytics.dataLayer ?? [];
+        const gtag = (...args: unknown[]) => {
+          analytics.dataLayer?.push(args);
+        };
+        gtag("js", new Date());
+        gtag("config", measurementId);
+      }
+    </script>
+  </body>
+</html>

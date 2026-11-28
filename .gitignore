@@ -1,0 +1,20 @@
+# Dependencies and build output
+node_modules/
+vendor/
+dist/
+.astro/
+
+# Secrets. Commit only .env.example (the negation below).
+.env*
+!.env.example
+!**/.env.example
+
+# WordPress uploads — never part of this repo
+uploads/
+**/uploads/
+
+# OS / IDE
+.DS_Store
+.idea/
+*.log
+*.tsbuildinfo

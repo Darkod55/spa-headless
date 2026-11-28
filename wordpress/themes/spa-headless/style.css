@@ -1,0 +1,71 @@
+/*
+Theme Name: Square Peg Headless
+Theme URI: https://thesquarepeg.agency
+Author: The Square Peg Agency
+Description: Deprecated. Use the Square Peg Agency theme (spa-sage). This theme is kept so existing Local sites can still boot. Do not add blocks here.
+Version: 0.1.2
+Requires at least: 6.5
+Requires PHP: 8.2
+Text Domain: spa-headless
+*/
+
+/*
+ * Tailwind v4 tokens for the editor. BlockStudio compiles this file.
+ * The browser-facing fallback is assets/preview.css — do not rely on
+ * @apply rules surviving in the raw stylesheet WordPress enqueues.
+ */
+
+@theme {
+	--font-sans: "Avenir Next", "Segoe UI", sans-serif;
+	--font-serif: "Iowan Old Style", Palatino, Georgia, serif;
+	--color-bg: #f4f1ea;
+	--color-elevated: #fffcf7;
+	--color-heading: #1c1915;
+	--color-body: #3f3a33;
+	--color-muted: #5c564c;
+	--color-accent: #1f4d3a;
+	--color-accent-hover: #16382b;
+	--color-subtle: #ddd6c8;
+}
+
+body {
+	@apply bg-bg font-sans text-body antialiased;
+}
+
+@layer base {
+	h1,
+	h2,
+	h3 {
+		text-wrap: balance;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+}
+
+@utility container-px {
+	@apply mx-auto max-w-5xl px-6;
+}
+
+@utility container {
+	@apply container-px py-20 sm:py-28;
+}
+
+@utility container-no-pb {
+	@apply pb-0 sm:pb-0;
+}
+
+@utility card {
+	@apply rounded-2xl border border-subtle bg-elevated p-8;
+}
+
+@utility btn-primary {
+	@apply inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white;
+}
+
+@utility btn-secondary {
+	@apply inline-flex items-center rounded-full border border-subtle px-5 py-2.5 text-sm font-medium;
+}
+
+@source inline("bg-bg bg-accent-tint container container-px container-no-pb");

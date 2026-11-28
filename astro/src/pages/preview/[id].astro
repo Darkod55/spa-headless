@@ -1,0 +1,29 @@
+---
+export const prerender = false;
+
+import Base from "../../layouts/Base.astro";
+import BlockRenderer from "../../components/blocks/BlockRenderer.astro";
+import { getPreview } from "../../lib/wp/client";
+
+const id = Number(Astro.params.id);
+const result = Number.isInteger(id) && id > 0 ? await getPreview(id) : { error: "Missing preview id." };
+const content = result && !("error" in result) ? result : null;
+const error = content ? null : "error" in result ? result.error : "Preview failed.";
+---
+
+<Base title={content?.title ?? "Preview"} path={content?.path ?? "/preview"}>
+  {
+    content ? (
+      <article>
+        <p class="draft-banner">
+          Preview of a {content.status} {content.type}. This page is not part of the public build.
+        </p>
+        {content.blocks.map((block) => (
+          <BlockRenderer block={block} />
+        ))}
+      </article>
+    ) : (
+      <p class="preview-note">{error}</p>
+    )
+  }
+</Base>

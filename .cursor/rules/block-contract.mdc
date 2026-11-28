@@ -1,0 +1,16 @@
+---
+description: End-to-end contract for BlockStudio blocks and their Astro components
+globs:
+  - wordpress/themes/spa-sage/app/blocks/**/*
+  - wordpress/themes/spa-headless/blockstudio/**/*
+  - astro/src/components/blocks/**/*
+  - astro/src/generated/**/*
+  - scripts/**/*.ts
+alwaysApply: false
+---
+
+# Block contract
+
+Follow [docs/blockstudio-blocks.md](docs/blockstudio-blocks.md). `block.json` is the source of truth. Update the PHP template, the shared CSS, the Astro component, the contract, and `BlockRenderer.astro` together, then run `pnpm generate`.
+
+Do not hand-edit `astro/src/generated/blocks.ts`. Do not add ACF. Use `register_post_meta` with `show_in_rest` for post meta.

@@ -1,0 +1,28 @@
+---
+import PageView from "../components/PageView.astro";
+import { fixtureNotice, getContent, getRankMathHead, getRoutes } from "../lib/wp/client";
+
+export async function getStaticPaths() {
+  const routes = await getRoutes();
+  return routes
+    .filter((route) => route.path !== "/")
+    .map((route) => ({
+      params: { slug: route.path.replace(/^\//, "") },
+      props: { path: route.path },
+    }));
+}
+
+interface Props {
+  path: string;
+}
+
+const { path } = Astro.props;
+const content = await getContent(path);
+const notice = fixtureNotice();
+if (!content) {
+  throw new Error(`No content for ${path}.`);
+}
+const head = await getRankMathHead(path);
+---
+
+<PageView content={content} head={head} fixtureNotice={notice} />

@@ -1,0 +1,73 @@
+/**
+ * Font size and weight classes for the heading and paragraph extensions.
+ * Size does not set colour, so a text-colour choice still wins.
+ * Loaded by the theme (editor iframe) and by Astro.
+ * Tokens come from color-tokens.css so this file still works on its own.
+ */
+@import "../theme/color-tokens.css";
+
+.fs-display,
+.fs-h1-page,
+.fs-h2,
+.fs-h2-lg,
+.fs-statement,
+.fs-h3,
+.fs-tagline,
+.fs-eyebrow {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+}
+
+.fs-display { font-size: var(--fs-display); font-weight: 700; line-height: 0.96; }
+.fs-h1-page { font-size: var(--fs-h1-page); font-weight: 700; line-height: 0.98; }
+.fs-h2 { font-size: var(--fs-h2); font-weight: 600; line-height: 1.04; }
+.fs-h2-lg { font-size: var(--fs-h2-lg); font-weight: 600; line-height: 0.98; }
+.fs-statement { font-size: var(--fs-statement); font-weight: 500; line-height: 1.15; }
+.fs-h3 { font-size: var(--fs-h3); font-weight: 600; line-height: 1.1; }
+.fs-tagline { font-size: var(--fs-tagline); font-weight: 500; line-height: 1.2; letter-spacing: 0.03em; }
+.fs-eyebrow { font-size: var(--fs-eyebrow); font-weight: 500; line-height: 1.2; letter-spacing: 0.12em; }
+
+.fs-hero-sub,
+.fs-lead,
+.fs-body,
+.fs-small,
+.fs-meta {
+  font-family: var(--font-body);
+  text-transform: none;
+}
+
+.fs-hero-sub { font-size: var(--fs-hero-sub); font-weight: 500; line-height: 1.5; }
+.fs-lead { font-size: var(--fs-lead); font-weight: 500; line-height: 1.6; }
+.fs-body { font-size: var(--fs-body); font-weight: 400; line-height: 1.75; }
+.fs-small { font-size: var(--fs-small); font-weight: 400; line-height: 1.75; }
+.fs-meta { font-size: var(--fs-meta); font-weight: 600; line-height: 1.5; letter-spacing: 0.04em; }
+
+/* Older select values, kept so a saved block still sizes. */
+.fs-xs { font-size: var(--font-size-xs, 12px); }
+.fs-sm { font-size: var(--font-size-sm, 14px); }
+.fs-base { font-size: var(--font-size-base, 16px); }
+
+.fw-400 { font-weight: 400; }
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+.fw-700 { font-weight: 700; }
+
+/* Beat the editor's heading rules. The class sits on the block root. */
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-display { font-size: var(--fs-display); line-height: 0.96; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-h1-page { font-size: var(--fs-h1-page); line-height: 0.98; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-h2 { font-size: var(--fs-h2); line-height: 1.04; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-h2-lg { font-size: var(--fs-h2-lg); line-height: 0.98; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-statement { font-size: var(--fs-statement); line-height: 1.15; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-h3 { font-size: var(--fs-h3); line-height: 1.1; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-tagline { font-size: var(--fs-tagline); line-height: 1.2; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-eyebrow { font-size: var(--fs-eyebrow); line-height: 1.2; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-hero-sub { font-size: var(--fs-hero-sub); line-height: 1.5; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-lead { font-size: var(--fs-lead); line-height: 1.6; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-body { font-size: var(--fs-body); line-height: 1.75; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-small { font-size: var(--fs-small); line-height: 1.75; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fs-meta { font-size: var(--fs-meta); line-height: 1.5; }
+
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fw-400 { font-weight: 400; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fw-500 { font-weight: 500; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fw-600 { font-weight: 600; }
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6, p).fw-700 { font-weight: 700; }

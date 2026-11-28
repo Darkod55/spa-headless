@@ -1,0 +1,14 @@
+@import "./theme/color-tokens.css";
+@import "tailwindcss" theme(static);
+@import "./theme.css";
+@source "../../app/**/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.js";
+
+[x-cloak] {
+  display: none !important;
+}
+
+.icon {
+  fill: currentColor;
+}

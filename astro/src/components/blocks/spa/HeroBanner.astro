@@ -1,0 +1,57 @@
+---
+import type { SpaFileValue } from "../../../generated/blocks";
+import { heroBackgroundClass, heroImage, type HeroBackgroundValue } from "../../../lib/blocks/hero-banner";
+import "../../../../../wordpress/themes/spa-sage/resources/css/components/spa-hero-banner.css";
+
+interface Props {
+  variant: "main" | "default";
+  background?: HeroBackgroundValue;
+  image?: SpaFileValue | null;
+}
+
+const { variant, background, image } = Astro.props;
+const photo = heroImage(image);
+---
+
+<div class="hero-root">
+  <section class:list={["hero", variant === "main" ? "hero--main" : "hero--default", heroBackgroundClass(background)]}>
+    {
+      photo ? (
+        <div class="hero__photo">
+          <img
+            class="hero__img"
+            src={photo.url}
+            alt={photo.alt}
+            width={photo.width ?? undefined}
+            height={photo.height ?? undefined}
+            decoding="async"
+          />
+        </div>
+      ) : (
+        <div class="hero__photo hero__photo--placeholder" aria-hidden="true" />
+      )
+    }
+    <div class="hero__bands" aria-hidden="true">
+      <div class="hero__band hero__band--shape-1"></div>
+      <div class="hero__band hero__band--shape-2"></div>
+      {variant === "main" && <div class="hero__band hero__band--bg-corner"></div>}
+      <div class="hero__band hero__band--corner"></div>
+      <div class="hero__band hero__band--mobile-edge"></div>
+      {
+        variant === "main" && (
+          <div class="hero-squares">
+            <div class="hero-squares__sq hero-squares__sq--1"></div>
+            <div class="hero-squares__sq hero-squares__sq--2"></div>
+          </div>
+        )
+      }
+    </div>
+    <div class="hero__content">
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <slot />
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

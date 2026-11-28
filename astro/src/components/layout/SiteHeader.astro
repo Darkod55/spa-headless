@@ -1,0 +1,322 @@
+---
+import "../../styles/header.css";
+import MenuList from "./MenuList.astro";
+import { announcementLines, splitMenu, withCurrent, type MenuItem, type WpSite } from "../../lib/wp/menu";
+
+interface Props {
+  site: WpSite;
+  items: MenuItem[];
+  path: string;
+}
+
+const { site, items, path } = Astro.props;
+const menu = withCurrent(items, path);
+const { links, cta } = splitMenu(menu);
+const logo = site.logo;
+const logoAlt = logo?.alt || site.title || "Home";
+const ctaExternal = cta?.target === "_blank";
+const announcement = site.announcement?.enabled ? site.announcement : null;
+const announcementParts = announcement ? announcementLines(announcement.message) : [];
+const announcementExternal = announcement?.target === "_blank";
+---
+
+<div class="site-chrome" id="site-chrome">
+  {
+    announcement && (announcementParts.length > 0 || announcement.url) && (
+      <aside class="audit-bar" aria-label="Website audit">
+        <div class="audit-bar__deco audit-bar__deco--left" aria-hidden="true" />
+        <div class="audit-bar__deco audit-bar__deco--right" aria-hidden="true" />
+        <div class="container audit-bar__inner">
+          {
+            announcementParts.length > 0 && (
+              <p class="audit-bar__text">
+                {announcementParts.map((line, index) => (
+                  <>
+                    {index > 0 && <br class="audit-bar__break" />}
+                    {index > 0 ? ` ${line}` : line}
+                  </>
+                ))}
+              </p>
+            )
+          }
+          {
+            announcement.url && announcement.linkLabel && (
+              <a
+                class="audit-bar__link"
+                href={announcement.url}
+                target={announcementExternal ? "_blank" : undefined}
+                rel={announcementExternal ? "noopener noreferrer" : undefined}
+              >
+                {announcement.linkLabel}
+              </a>
+            )
+          }
+        </div>
+      </aside>
+    )
+  }
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="site-header__logo" href="/" aria-label={`${site.title || "Home"} – home`}>
+        {
+          logo?.url ? (
+            <img
+              src={logo.url}
+              alt={logoAlt}
+              class="site-header__logo-img"
+              width={logo.width ?? undefined}
+              height={logo.height ?? undefined}
+              decoding="async"
+            />
+          ) : (
+            <span class="site-header__logo-text">{site.title || "Home"}</span>
+          )
+        }
+      </a>
+
+      <div class="site-header__desktop">
+        <nav class="site-header__nav" aria-label="Main">
+          <MenuList items={links} variant="desktop" />
+        </nav>
+        {
+          cta && (
+            <span class="btn-wrap btn-wrap--sm site-header__cta">
+              <a
+                class="btn btn--dark btn--sm btn--no-arrow focus-clip"
+                href={cta.url}
+                target={ctaExternal ? "_blank" : undefined}
+                rel={ctaExternal ? "noopener noreferrer" : undefined}
+              >
+                <span class="btn__label">{cta.title}</span>
+              </a>
+            </span>
+          )
+        }
+      </div>
+
+      <span class="site-header__toggle-wrap">
+        <button
+          type="button"
+          class="site-header__toggle"
+          id="site-header-toggle"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="site-header-panel"
+        >
+          <span class="site-header__toggle-bars" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      </span>
+    </div>
+
+    <div class="site-header__panel" id="site-header-panel" aria-hidden="true" inert>
+      <div class="site-header__panel-clip">
+        <div class="site-header__panel-inner">
+          <div class="site-header__panel-deco site-header__panel-deco--royal" aria-hidden="true"></div>
+          <div class="site-header__panel-deco site-header__panel-deco--red" aria-hidden="true"></div>
+          <div class="site-header__panel-deco site-header__panel-deco--triangle" aria-hidden="true"></div>
+          <nav class="site-header__panel-nav" aria-label="Mobile">
+            <MenuList items={links} variant="mobile" />
+            {
+              cta && (
+                <div class="site-header__panel-cta">
+                  <span class="btn-wrap site-header__panel-btn">
+                    <a
+                      class="btn btn--primary focus-clip"
+                      href={cta.url}
+                      target={ctaExternal ? "_blank" : undefined}
+                      rel={ctaExternal ? "noopener noreferrer" : undefined}
+                    >
+                      <span class="btn__label">{cta.title}</span>
+                      <svg class="btn__arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" aria-hidden="true">
+                        <path d="M0 6 H16" stroke="currentColor" stroke-width="1.8"></path>
+                        <path d="M12 1 L17 6 L12 11" stroke="currentColor" stroke-width="1.8" fill="none"></path>
+                      </svg>
+                    </a>
+                  </span>
+                </div>
+              )
+            }
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+
+<noscript>
+  <style>
+    .site-header__toggle-wrap {
+      display: none !important;
+    }
+    @media (max-width: 1023px) {
+      .site-header__panel {
+        position: static !important;
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        grid-template-rows: 1fr !important;
+      }
+    }
+  </style>
+</noscript>
+
+<script>
+  function initSiteHeader() {
+    const chrome = document.getElementById("site-chrome");
+    const toggle = document.getElementById("site-header-toggle");
+    const panel = document.getElementById("site-header-panel");
+    if (!(chrome instanceof HTMLElement) || !(toggle instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) {
+      return;
+    }
+    if (chrome.dataset.bound === "true") {
+      return;
+    }
+    chrome.dataset.bound = "true";
+
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let lockedScrollY = 0;
+
+    const syncChromeHeight = () => {
+      document.documentElement.style.setProperty("--site-chrome-height", `${chrome.getBoundingClientRect().height}px`);
+    };
+
+    const setMenuOpen = (open: boolean) => {
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      panel.classList.toggle("is-open", open);
+      panel.setAttribute("aria-hidden", open ? "false" : "true");
+      if (open) {
+        syncChromeHeight();
+        lockedScrollY = window.scrollY;
+        document.body.style.top = `-${lockedScrollY}px`;
+        document.body.classList.add("is-menu-open");
+        panel.removeAttribute("inert");
+        window.setTimeout(
+          () => {
+            panel.querySelector<HTMLElement>(".site-header__panel-link")?.focus();
+          },
+          reduceMotion.matches ? 0 : 320,
+        );
+      } else {
+        document.body.classList.remove("is-menu-open");
+        document.body.style.top = "";
+        window.scrollTo(0, lockedScrollY);
+        panel.setAttribute("inert", "");
+      }
+    };
+
+    const closeMenu = (restoreFocus: boolean) => {
+      if (toggle.getAttribute("aria-expanded") !== "true") {
+        return;
+      }
+      setMenuOpen(false);
+      if (restoreFocus) {
+        toggle.focus();
+      }
+    };
+
+    toggle.addEventListener("click", () => {
+      setMenuOpen(toggle.getAttribute("aria-expanded") !== "true");
+    });
+
+    panel.addEventListener("click", (event) => {
+      const target = event.target;
+      if (target instanceof Element && target.closest("a")) {
+        closeMenu(false);
+      }
+    });
+
+    const submenuButtons = chrome.querySelectorAll<HTMLButtonElement>(".site-header__subtoggle");
+
+    const setSubmenu = (item: HTMLElement, open: boolean) => {
+      item.classList.toggle("is-open", open);
+      const button = item.querySelector<HTMLButtonElement>(":scope > .site-header__subtoggle");
+      button?.setAttribute("aria-expanded", open ? "true" : "false");
+      const label = button?.getAttribute("aria-label") ?? "";
+      if (button && label.startsWith("Show ") && open) {
+        button.setAttribute("aria-label", label.replace(/^Show /, "Hide "));
+      }
+      if (button && label.startsWith("Hide ") && !open) {
+        button.setAttribute("aria-label", label.replace(/^Hide /, "Show "));
+      }
+    };
+
+    const closeSubmenus = () => {
+      chrome.querySelectorAll<HTMLElement>(".site-header__item.is-open").forEach((item) => {
+        setSubmenu(item, false);
+      });
+    };
+
+    submenuButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const item = button.closest<HTMLElement>(".site-header__item");
+        if (!item) {
+          return;
+        }
+        const open = !item.classList.contains("is-open");
+        closeSubmenus();
+        if (open) {
+          setSubmenu(item, true);
+        }
+      });
+    });
+
+    chrome.querySelectorAll<HTMLElement>(".site-header__item.has-children").forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        if (!desktop.matches) {
+          return;
+        }
+        closeSubmenus();
+        setSubmenu(item, true);
+      });
+      item.addEventListener("mouseleave", () => {
+        if (item.contains(document.activeElement)) {
+          return;
+        }
+        setSubmenu(item, false);
+      });
+      item.addEventListener("focusout", (event) => {
+        const next = event.relatedTarget;
+        if (!(next instanceof Node) || !item.contains(next)) {
+          setSubmenu(item, false);
+        }
+      });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") {
+        return;
+      }
+      closeSubmenus();
+      closeMenu(true);
+    });
+
+    desktop.addEventListener("change", () => {
+      if (desktop.matches) {
+        closeMenu(false);
+      }
+    });
+
+    const onScroll = () => {
+      chrome.classList.toggle("is-scrolled", window.scrollY > 12);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => {
+      if (panel.classList.contains("is-open")) {
+        syncChromeHeight();
+      }
+    });
+  }
+
+  initSiteHeader();
+  document.addEventListener("astro:page-load", initSiteHeader);
+</script>

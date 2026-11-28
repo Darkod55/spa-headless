@@ -1,0 +1,92 @@
+/*
+  Live site Label (src/components/ui/Label.astro), default size, red variant.
+  Parallelogram via clip-path, slant 12px. Not a skew transform.
+  Imported by the theme bundle so the editor iframe has it. Colour
+  variables come from color-tokens.css, already on :root.
+*/
+
+.badge {
+  --badge-slant: 12px;
+  --badge-bg: var(--color-secondary);
+  --badge-color: var(--color-white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 8px 26px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: var(--badge-bg);
+  color: var(--badge-color);
+  clip-path: polygon(
+    var(--badge-slant) 0,
+    100% 0,
+    calc(100% - var(--badge-slant)) 100%,
+    0 100%
+  );
+}
+
+.badge__text {
+  display: inline-block;
+}
+
+.badge--bg-primary,
+.badge--bg-navy { --badge-bg: var(--color-primary); }
+.badge--bg-secondary,
+.badge--bg-red { --badge-bg: var(--color-secondary); }
+.badge--bg-tertiary,
+.badge--bg-royal { --badge-bg: var(--color-tertiary); }
+.badge--bg-white { --badge-bg: var(--color-white); }
+.badge--bg-gray,
+.badge--bg-grey { --badge-bg: var(--color-gray); }
+.badge--bg-black { --badge-bg: var(--color-black); }
+.badge--bg-secondary-deep,
+.badge--bg-red-deep { --badge-bg: var(--color-secondary-deep); }
+
+.badge--text-primary,
+.badge--text-navy { --badge-color: var(--color-primary); }
+.badge--text-secondary,
+.badge--text-red { --badge-color: var(--color-secondary); }
+.badge--text-tertiary,
+.badge--text-royal { --badge-color: var(--color-tertiary); }
+.badge--text-white { --badge-color: var(--color-white); }
+.badge--text-gray,
+.badge--text-grey { --badge-color: var(--color-gray); }
+.badge--text-black { --badge-color: var(--color-black); }
+.badge--text-secondary-deep,
+.badge--text-red-deep { --badge-color: var(--color-secondary-deep); }
+.badge--text-secondary-on-primary,
+.badge--text-red-on-navy { --badge-color: var(--color-secondary-on-primary); }
+.badge--text-secondary-on-tertiary,
+.badge--text-red-on-royal { --badge-color: var(--color-secondary-on-tertiary); }
+
+/*
+  The hero editor rule paints `.block-editor-rich-text__editable` with
+  `color: inherit`. The badge's RichText element has that class, so the
+  type, tracking, and colour have to be repeated on it or the label
+  looks like a plain paragraph.
+*/
+.badge,
+.hero__copy .badge,
+.editor-styles-wrapper .hero__copy .badge,
+.editor-styles-wrapper .hero__copy .badge .block-editor-rich-text__editable,
+.editor-styles-wrapper .hero__copy .badge .badge__text {
+  background: var(--badge-bg);
+  color: var(--badge-color);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.editor-styles-wrapper .hero__copy .badge .block-editor-rich-text__editable,
+.editor-styles-wrapper .hero__copy .badge .badge__text {
+  background: transparent;
+}

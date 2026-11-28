@@ -1,0 +1,17 @@
+---
+description: Golden rules for the Square Peg headless repo
+alwaysApply: true
+---
+
+# Core rules
+
+Read [AGENTS.md](AGENTS.md) and the doc for the area you are about to change before editing.
+
+- [docs/architecture.md](docs/architecture.md)
+- [docs/blockstudio-blocks.md](docs/blockstudio-blocks.md)
+- [docs/design-tokens.md](docs/design-tokens.md)
+- [docs/blockstudio-fields-and-extensions.md](docs/blockstudio-fields-and-extensions.md)
+- [docs/theme-customizer-and-menus.md](docs/theme-customizer-and-menus.md)
+- [docs/local-setup.md](docs/local-setup.md)
+
+`block.json` is the source of truth. Never edit [Darkod55/spa](https://github.com/Darkod55/spa) or the live host. No secrets or `.env` in git. Editor and front end share CSS and class names. BlockStudio `set` is not saved into `innerHTML`; Astro applies classes from `attrs`. Regenerate types. Keep `pnpm test`, `pnpm check`, and `pnpm build` green.
