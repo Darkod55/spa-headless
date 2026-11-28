@@ -28,6 +28,20 @@ test("background values map to modifier classes", () => {
   assert.equal(heroBackgroundClass("lime"), "hero--bg-navy");
 });
 
+test("the hero template keeps InnerBlocks unlocked and shapes click-through", () => {
+  const template = readFileSync(
+    new URL("../wordpress/themes/spa-headless/blockstudio/sections/hero-banner/template.php", import.meta.url),
+    "utf8",
+  );
+  assert.match(template, /<InnerBlocks/);
+  assert.match(template, /templateLock="false"/);
+  assert.doesNotMatch(template, /templateLock="(?:all|insert|contentOnly)"/);
+  assert.match(css, /\.hero__bands\s*\{[^}]*pointer-events:\s*none/);
+  assert.match(css, /\.hero__band[\s\S]*?pointer-events:\s*none/);
+  assert.match(css, /\.hero__photo\s*\{[^}]*pointer-events:\s*none/);
+  assert.match(css, /\.editor-styles-wrapper \.hero__copy[\s\S]*color:\s*var\(--hero-text/);
+});
+
 test("each background class sets bg, both shapes, and readable text", () => {
   for (const name of heroBackgrounds) {
     const start = css.indexOf(`.hero--bg-${name} {`);

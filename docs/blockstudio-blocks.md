@@ -65,4 +65,5 @@ They share `blockstudio/sections/hero-banner/template.php` and `assets/hero-bann
 - A second stylesheet that drifts from the editor.
 - Nesting two `<InnerBlocks />`. WordPress allows one.
 - Assuming `set` classes are in `innerHTML`. Apply them from `attrs`.
+- Putting `display: flex` on `.block-editor-block-list__layout`, or leaving `.hero { overflow: hidden }` to clip the editor toolbar. Shapes need `pointer-events: none`. Editor heading colour must be `var(--hero-text)` at a higher specificity than `.editor-styles-wrapper h1`, or the type disappears on navy.
 - Putting blocks in the plugin. BlockStudio will not register them.

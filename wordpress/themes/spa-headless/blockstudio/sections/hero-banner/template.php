@@ -79,6 +79,7 @@ $template = array(
 					<InnerBlocks
 						allowedBlocks="<?php echo spa_json_attr( array( 'core/heading', 'core/paragraph' ) ); ?>"
 						template="<?php echo spa_json_attr( $template ); ?>"
+						templateLock="false"
 					/>
 				</div>
 			</div>

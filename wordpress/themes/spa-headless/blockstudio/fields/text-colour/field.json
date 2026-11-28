@@ -8,7 +8,7 @@
       "type": "color",
       "label": "Text colour",
       "disableCustomColors": true,
-      "clearable": false,
+      "clearable": true,
       "populate": {
         "type": "custom",
         "custom": "brandColours"

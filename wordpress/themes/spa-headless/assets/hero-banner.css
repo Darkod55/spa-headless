@@ -87,6 +87,7 @@
   z-index: 0;
   overflow: hidden;
   background: #9aa3b5;
+  pointer-events: none;
 }
 
 .hero--main .hero__photo {
@@ -270,18 +271,62 @@
   border: 2px solid color-mix(in srgb, var(--hero-shape-2) 55%, transparent);
 }
 
-.hero__copy .block-editor-block-list__layout {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 22px;
-}
-
 .hero__copy .wp-block {
   margin-top: 0;
   margin-bottom: 0;
   max-width: none;
 }
+
+/*
+  Editor canvas. Core heading colour (#1e1e1e) is as specific as
+  `.hero__copy h1`, so it was painting dark type on the navy field.
+  The inline toolbar and appender sit inside .hero and were inheriting
+  white, which left a blank white control. Shapes stay click-through.
+*/
+.editor-styles-wrapper .hero {
+  overflow: visible;
+}
+
+.editor-styles-wrapper .hero__content,
+.editor-styles-wrapper .hero .block-editor-inner-blocks,
+.editor-styles-wrapper .hero .block-editor-block-list__layout {
+  position: relative;
+  z-index: 3;
+}
+
+.editor-styles-wrapper .hero__copy :is(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  .wp-block-heading,
+  .wp-block-paragraph,
+  .block-editor-rich-text__editable
+) {
+  color: var(--hero-text, #ffffff);
+  caret-color: var(--hero-text, #ffffff);
+}
+
+.editor-styles-wrapper .hero :is(
+  .block-editor-block-toolbar,
+  .block-editor-block-contextual-toolbar,
+  .block-editor-block-list__insertion-point,
+  .block-editor-inserter,
+  .block-list-appender,
+  .block-editor-button-block-appender,
+  .components-dropdown
+) {
+  color: #1e1e1e;
+}
+
+.editor-styles-wrapper .hero__copy .has-text-navy { color: var(--color-navy); }
+.editor-styles-wrapper .hero__copy .has-text-red { color: var(--color-red); }
+.editor-styles-wrapper .hero__copy .has-text-royal { color: var(--color-royal); }
+.editor-styles-wrapper .hero__copy .has-text-black { color: var(--color-black); }
+.editor-styles-wrapper .hero__copy .has-text-white { color: var(--color-white); }
 
 @media (max-width: 1023px) and (min-width: 768px) {
   .hero--main .hero__copy,

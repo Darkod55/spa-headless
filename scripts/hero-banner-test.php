@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 require dirname( __DIR__ ) . '/wordpress/themes/spa-headless/inc/hero-banner.php';
 
+$template = (string) file_get_contents( dirname( __DIR__ ) . '/wordpress/themes/spa-headless/blockstudio/sections/hero-banner/template.php' );
+$css      = (string) file_get_contents( dirname( __DIR__ ) . '/wordpress/themes/spa-headless/assets/hero-banner.css' );
+
 /**
  * @param bool   $condition
  * @param string $message
@@ -32,6 +35,10 @@ spa_hero_assert(
 );
 spa_hero_assert( 'hero--bg-navy' === spa_hero_banner_modifier( 'lime' ), 'Unknown backgrounds fall back to navy.' );
 spa_hero_assert( 'hero--bg-navy' === spa_hero_banner_modifier( null ), 'A missing background falls back to navy.' );
+spa_hero_assert( str_contains( $template, '<InnerBlocks' ), 'The hero template must include the InnerBlocks tag.' );
+spa_hero_assert( str_contains( $template, 'templateLock="false"' ), 'Inner blocks must stay unlocked.' );
+spa_hero_assert( ! str_contains( $template, 'templateLock="all"' ), 'The hero template must not lock the inner blocks.' );
+spa_hero_assert( str_contains( $css, 'pointer-events: none' ), 'Hero shapes must ignore pointer events.' );
 spa_hero_assert( 'hero--main' === spa_hero_banner_variant_class( 'main' ), 'Main uses hero--main.' );
 spa_hero_assert( 'hero--default' === spa_hero_banner_variant_class( 'default' ), 'Default uses hero--default.' );
 

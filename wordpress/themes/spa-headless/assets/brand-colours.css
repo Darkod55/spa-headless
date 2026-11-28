@@ -6,27 +6,32 @@
 */
 
 .has-text-navy,
-.hero__copy .has-text-navy {
+.hero__copy .has-text-navy,
+.editor-styles-wrapper .hero__copy .has-text-navy {
   color: var(--color-navy);
 }
 
 .has-text-red,
-.hero__copy .has-text-red {
+.hero__copy .has-text-red,
+.editor-styles-wrapper .hero__copy .has-text-red {
   color: var(--color-red);
 }
 
 .has-text-royal,
-.hero__copy .has-text-royal {
+.hero__copy .has-text-royal,
+.editor-styles-wrapper .hero__copy .has-text-royal {
   color: var(--color-royal);
 }
 
 .has-text-black,
-.hero__copy .has-text-black {
+.hero__copy .has-text-black,
+.editor-styles-wrapper .hero__copy .has-text-black {
   color: var(--color-black);
 }
 
 .has-text-white,
-.hero__copy .has-text-white {
+.hero__copy .has-text-white,
+.editor-styles-wrapper .hero__copy .has-text-white {
   color: var(--color-white);
 }
 
