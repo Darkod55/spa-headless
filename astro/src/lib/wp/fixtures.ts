@@ -324,8 +324,54 @@ const legal = (id: number, slug: string, title: string): FixtureEntry =>
     ],
   });
 
+const textColour = page({
+  id: 15,
+  path: "/text-colour",
+  title: "Text colour",
+  description: "Fixture for a heading colour chosen in the editor.",
+  blocks: [
+    block(
+      "spa/hero-banner-main",
+      { background: "navy", image: heroPhoto },
+      [
+        block(
+          "core/heading",
+          {
+            level: 1,
+            text_colour: {
+              value: "var(--color-secondary-on-tertiary)",
+              slug: "secondary-on-tertiary",
+              name: "Red on royal",
+            },
+          },
+          [],
+          '<h1 class="wp-block-heading">Why fit in when you can <mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-secondary-on-primary-color">stand out?</mark></h1>',
+        ),
+        block(
+          "core/paragraph",
+          {
+            text_colour: { value: "var(--color-secondary)", slug: "secondary", name: "Secondary" },
+          },
+          [],
+          '<p class="wp-block-paragraph">A paragraph with text colour secondary.</p>',
+        ),
+      ],
+    ),
+    block(
+      "core/heading",
+      {
+        level: 2,
+        text_colour: { value: "var(--color-secondary)", slug: "secondary", name: "Secondary" },
+      },
+      [],
+      '<h2 class="wp-block-heading">Heading outside the hero</h2>',
+    ),
+  ],
+});
+
 export const fixtures: FixtureEntry[] = [
   home,
+  textColour,
   about,
   services,
   contact,

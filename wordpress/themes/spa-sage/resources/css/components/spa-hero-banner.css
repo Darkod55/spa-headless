@@ -230,6 +230,31 @@
   margin: 0;
   font-family: var(--font-heading);
   text-transform: uppercase;
+}
+
+/*
+  Default hero type inherits --hero-text. A chosen text colour
+  (has-text-*) must win over that, including when this file loads
+  after spa-brand-colours.css.
+*/
+.hero__copy :is(h1, h2, .wp-block-heading):not(
+  .has-text-navy,
+  .has-text-red,
+  .has-text-royal,
+  .has-text-black,
+  .has-text-white,
+  .has-text-primary,
+  .has-text-secondary,
+  .has-text-tertiary,
+  .has-text-gray,
+  .has-text-grey,
+  .has-text-secondary-deep,
+  .has-text-secondary-on-primary,
+  .has-text-secondary-on-tertiary,
+  .has-text-red-deep,
+  .has-text-red-on-navy,
+  .has-text-red-on-royal
+) {
   color: inherit;
 }
 
@@ -254,9 +279,29 @@
   font-weight: 500;
   font-size: 1.1875rem;
   line-height: 1.55;
+  max-width: 36rem;
+}
+
+.hero__copy :is(p, .wp-block-paragraph):not(
+  .has-text-navy,
+  .has-text-red,
+  .has-text-royal,
+  .has-text-black,
+  .has-text-white,
+  .has-text-primary,
+  .has-text-secondary,
+  .has-text-tertiary,
+  .has-text-gray,
+  .has-text-grey,
+  .has-text-secondary-deep,
+  .has-text-secondary-on-primary,
+  .has-text-secondary-on-tertiary,
+  .has-text-red-deep,
+  .has-text-red-on-navy,
+  .has-text-red-on-royal
+) {
   color: inherit;
   opacity: 0.92;
-  max-width: 36rem;
 }
 
 .hero--default .hero__copy p,
@@ -392,6 +437,23 @@
   .wp-block-heading,
   .wp-block-paragraph,
   .block-editor-rich-text__editable
+):not(
+  .has-text-navy,
+  .has-text-red,
+  .has-text-royal,
+  .has-text-black,
+  .has-text-white,
+  .has-text-primary,
+  .has-text-secondary,
+  .has-text-tertiary,
+  .has-text-gray,
+  .has-text-grey,
+  .has-text-secondary-deep,
+  .has-text-secondary-on-primary,
+  .has-text-secondary-on-tertiary,
+  .has-text-red-deep,
+  .has-text-red-on-navy,
+  .has-text-red-on-royal
 ) {
   color: var(--hero-text, #ffffff);
   caret-color: var(--hero-text, #ffffff);

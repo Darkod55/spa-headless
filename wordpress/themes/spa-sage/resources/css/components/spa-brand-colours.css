@@ -96,6 +96,30 @@
   color: var(--color-secondary-on-tertiary);
 }
 
+.has-text-grey,
+.hero__copy .has-text-grey,
+.editor-styles-wrapper .hero__copy .has-text-grey {
+  color: var(--color-grey);
+}
+
+.has-text-red-deep,
+.hero__copy .has-text-red-deep,
+.editor-styles-wrapper .hero__copy .has-text-red-deep {
+  color: var(--color-red-deep);
+}
+
+.has-text-red-on-navy,
+.hero__copy .has-text-red-on-navy,
+.editor-styles-wrapper .hero__copy .has-text-red-on-navy {
+  color: var(--color-red-on-navy);
+}
+
+.has-text-red-on-royal,
+.hero__copy .has-text-red-on-royal,
+.editor-styles-wrapper .hero__copy .has-text-red-on-royal {
+  color: var(--color-red-on-royal);
+}
+
 .has-bg-primary { background-color: var(--color-primary); }
 .has-bg-secondary { background-color: var(--color-secondary); }
 .has-bg-tertiary { background-color: var(--color-tertiary); }
