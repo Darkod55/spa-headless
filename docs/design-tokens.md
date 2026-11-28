@@ -39,6 +39,14 @@ Audited against `Darkod55/spa` `src/styles/global.css`, `DESIGN.md`, `src/design
 
 Hero backgrounds accept primary/navy, secondary/red, tertiary/royal, white, gray, black, and secondary deep. Red on navy and red on royal are text colours, so they are not hero backgrounds. An unknown hero background still falls back to navy.
 
+## WordPress palette
+
+`theme.json` `settings.color.palette` is the only list the core Highlight popover and other core colour UI see. Tailwind tokens are not copied into it (`disableTailwindColors` in the theme Vite config). The palette is these nine slugs, once each: `primary`, `secondary`, `tertiary`, `secondary-deep`, `secondary-on-primary`, `secondary-on-tertiary`, `gray`, `white`, `black`.
+
+Aliases (`navy`, `red`, `royal`) and the token-only shades stay as `--color-*` for CSS. They are not palette entries.
+
+Highlight saves `color: var(--wp--preset--color--{slug})` and `has-{slug}-color`. Those variables and classes are in `astro/src/styles/global.css` and in the theme's `typography.css`, and they point at the `--color-*` tokens.
+
 White text on a white background is not allowed. The white and gray heroes use primary text (`--hero-text: #031433`).
 
 ## Not part of the live brand

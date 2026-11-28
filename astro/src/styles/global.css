@@ -44,6 +44,21 @@
 	--color-secondary-on-primary: #e8324c;
 	--color-secondary-on-tertiary: #ff8a9a;
 
+	/*
+	  WordPress Highlight stores
+	  color: var(--wp--preset--color--{slug}) and class has-{slug}-color.
+	  Only the theme.json palette slugs. Aliases stay as --color-* only.
+	*/
+	--wp--preset--color--primary: var(--color-primary);
+	--wp--preset--color--secondary: var(--color-secondary);
+	--wp--preset--color--tertiary: var(--color-tertiary);
+	--wp--preset--color--secondary-deep: var(--color-secondary-deep);
+	--wp--preset--color--secondary-on-primary: var(--color-secondary-on-primary);
+	--wp--preset--color--secondary-on-tertiary: var(--color-secondary-on-tertiary);
+	--wp--preset--color--gray: var(--color-gray);
+	--wp--preset--color--white: var(--color-white);
+	--wp--preset--color--black: var(--color-black);
+
 	/* Legacy aliases (prefer primary / secondary / tertiary in new code) */
 	--color-navy: var(--color-primary);
 	--color-royal: var(--color-tertiary);
@@ -126,6 +141,26 @@
 	--focus-ring: 3px solid var(--color-secondary-on-primary);
 	--focus-offset: 3px;
 }
+
+/* Highlight format. Inline style uses the preset variable; the class is the fallback. */
+.has-primary-color { color: var(--wp--preset--color--primary); }
+.has-secondary-color { color: var(--wp--preset--color--secondary); }
+.has-tertiary-color { color: var(--wp--preset--color--tertiary); }
+.has-secondary-deep-color { color: var(--wp--preset--color--secondary-deep); }
+.has-secondary-on-primary-color { color: var(--wp--preset--color--secondary-on-primary); }
+.has-secondary-on-tertiary-color { color: var(--wp--preset--color--secondary-on-tertiary); }
+.has-gray-color { color: var(--wp--preset--color--gray); }
+.has-white-color { color: var(--wp--preset--color--white); }
+.has-black-color { color: var(--wp--preset--color--black); }
+.has-primary-background-color { background-color: var(--wp--preset--color--primary); }
+.has-secondary-background-color { background-color: var(--wp--preset--color--secondary); }
+.has-tertiary-background-color { background-color: var(--wp--preset--color--tertiary); }
+.has-secondary-deep-background-color { background-color: var(--wp--preset--color--secondary-deep); }
+.has-secondary-on-primary-background-color { background-color: var(--wp--preset--color--secondary-on-primary); }
+.has-secondary-on-tertiary-background-color { background-color: var(--wp--preset--color--secondary-on-tertiary); }
+.has-gray-background-color { background-color: var(--wp--preset--color--gray); }
+.has-white-background-color { background-color: var(--wp--preset--color--white); }
+.has-black-background-color { background-color: var(--wp--preset--color--black); }
 
 /* -------------------------------------------------------------------------- */
 /* Reset                                                                      */

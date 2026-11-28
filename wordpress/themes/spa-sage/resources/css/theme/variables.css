@@ -4,8 +4,8 @@
  * Human edits: docs/design-tokens.md (§ Active brand tokens / type scale).
  * This file is the runtime CSS the agent writes from that playbook.
  *
- * `@theme static` + `--color-*: initial` keeps only these brand colours in
- * the generated theme.json palette (and as Tailwind utilities).
+ * `@theme static` + `--color-*: initial` keeps these as Tailwind utilities.
+ * theme.json's colour palette is the curated list in theme.json, not this file.
  *
  * Consume via var(--…).
  */

@@ -15,6 +15,37 @@ test("colorSlug reads a slug, a CSS variable, and a colour object", () => {
   assert.equal(colorSlug({ slug: "nope" }), null);
 });
 
+test("the WordPress palette is only the curated brand colours", () => {
+  const theme = JSON.parse(
+    readFileSync(new URL("../wordpress/themes/spa-sage/theme.json", import.meta.url), "utf8"),
+  ) as { settings: { color: { palette: Array<{ slug: string; color: string }> } } };
+  const vite = readFileSync(
+    new URL("../wordpress/themes/spa-sage/vite.config.js", import.meta.url),
+    "utf8",
+  );
+  const astro = readFileSync(new URL("../astro/src/styles/global.css", import.meta.url), "utf8");
+  const slugs = theme.settings.color.palette.map((entry) => entry.slug);
+  assert.deepEqual(slugs, [
+    "primary",
+    "secondary",
+    "tertiary",
+    "secondary-deep",
+    "secondary-on-primary",
+    "secondary-on-tertiary",
+    "gray",
+    "white",
+    "black",
+  ]);
+  assert.equal(new Set(slugs).size, slugs.length);
+  assert.match(vite, /disableTailwindColors:\s*true/);
+  for (const slug of slugs) {
+    assert.match(astro, new RegExp(`--wp--preset--color--${slug}:`));
+    assert.match(astro, new RegExp(`\\.has-${slug}-color`));
+  }
+  assert.doesNotMatch(astro, /--wp--preset--color--navy:/);
+  assert.doesNotMatch(astro, /--wp--preset--color--grey-100:/);
+});
+
 test("admin chrome defines the brand variables the sidebar swatches resolve", () => {
   const css = readFileSync(
     new URL("../wordpress/themes/spa-sage/resources/css/editor-canvas.css", import.meta.url),
