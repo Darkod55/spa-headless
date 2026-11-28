@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawn, type ChildProcess } from "node:child_process";
-import { readdirSync, readFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync } from "node:fs";
 import { createServer, type Server } from "node:http";
 import { dirname, join } from "node:path";
 import test from "node:test";
@@ -336,6 +336,19 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
     assert.equal(buttons.saved.arrow, true);
     assert.equal(buttons.saved.href, "/saved");
     assert.equal(buttons.gap, "14px");
+    mkdirSync("/opt/cursor/artifacts", { recursive: true });
+    await page.locator('a.cta--primary[href="/contact"]').scrollIntoViewIfNeeded();
+    const frontPair = await page.evaluate<{ x: number; y: number; width: number; height: number }>(`(() => {
+      const a = document.querySelector('a.cta--primary[href="/contact"]').getBoundingClientRect();
+      const b = document.querySelector("a.cta--light").getBoundingClientRect();
+      const paragraph = document.querySelector(".hero__copy p");
+      const left = Math.max(0, (paragraph ? paragraph.getBoundingClientRect().left : Math.min(a.left, b.left)) - 8);
+      const top = Math.max(0, Math.min(a.top, b.top) - 16);
+      const right = Math.max(a.right, b.right) + 24;
+      const bottom = Math.max(a.bottom, b.bottom) + 16;
+      return { x: left, y: top, width: Math.min(right, window.innerWidth) - left, height: bottom - top };
+    })()`);
+    await page.screenshot({ path: "/opt/cursor/artifacts/buttons-front-row.png", clip: frontPair });
     await page.hover('a.cta--primary[href="/contact"]');
     await page.waitForFunction(`(() => {
       const el = document.querySelector('a.cta--primary[href="/contact"]');
@@ -343,7 +356,7 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
       const hex = match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : "";
       return hex === "#970c23";
     })()`);
-    const primaryHover = await page.evaluate<{ background: string; color: string; arrow: string }>(`(() => {
+    const primaryHover = await page.evaluate<{ background: string; color: string; arrow: string; arrowBg: string; arrowWidth: string; arrowHeight: string }>(`(() => {
       const el = document.querySelector('a.cta--primary[href="/contact"]');
       const arrow = el.querySelector(".cta__arrow");
       const hex = (value) => {
@@ -351,11 +364,29 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
         return match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : value;
       };
       const style = getComputedStyle(el);
-      return { background: hex(style.backgroundColor), color: hex(style.color), arrow: hex(getComputedStyle(arrow).color) };
+      const arrowStyle = getComputedStyle(arrow);
+      return {
+        background: hex(style.backgroundColor),
+        color: hex(style.color),
+        arrow: hex(arrowStyle.color),
+        arrowBg: arrowStyle.backgroundColor,
+        arrowWidth: arrowStyle.width,
+        arrowHeight: arrowStyle.height,
+      };
     })()`);
     assert.equal(primaryHover.background, "#970c23");
     assert.equal(primaryHover.color, "#ffffff");
     assert.equal(primaryHover.arrow, "#ffffff");
+    assert.equal(primaryHover.arrowBg, "rgba(0, 0, 0, 0)");
+    assert.equal(primaryHover.arrowWidth, "20px");
+    assert.equal(primaryHover.arrowHeight, "12px");
+    const frontHover = await page.evaluate<{ x: number; y: number; width: number; height: number }>(`(() => {
+      const a = document.querySelector('a.cta--primary[href="/contact"]').getBoundingClientRect();
+      const left = Math.max(0, a.left - 16);
+      const top = Math.max(0, a.top - 16);
+      return { x: left, y: top, width: Math.min(window.innerWidth, a.right + 24) - left, height: a.bottom + 16 - top };
+    })()`);
+    await page.screenshot({ path: "/opt/cursor/artifacts/buttons-front-hover.png", clip: frontHover });
     await page.hover("a.cta--light");
     await page.waitForFunction(`(() => {
       const el = document.querySelector("a.cta--light");
@@ -385,6 +416,7 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
     const editorHtml = `<!doctype html>
       <style>
         a:hover, a:focus, a:active, .wp-element-button:hover { color: #970c23; }
+        .block-editor-block-list__layout > .wp-block + .wp-block { margin-left: 90px; }
         .wp-block-button__link, .wp-element-button {
           display: inline-block;
           border-radius: 9999px;
@@ -609,15 +641,21 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
         clip: boolean;
         direction: string;
         gap: string;
+        wrap: string;
         primaryWidth: number;
         lightWidth: number;
         rowWidth: number;
+        sameRow: boolean;
+        offset: number;
       }>(`(() => {
         const link = document.querySelector('[data-button="primary"] .wp-block-button__link');
+        const help = document.querySelector('[data-button="light-off"] .wp-block-button__link');
         const light = document.querySelector('[data-button="light"] .wp-block-button__link');
         const row = document.querySelector('[data-type="core/buttons"] .block-editor-block-list__layout');
         const style = getComputedStyle(link);
         const rowStyle = getComputedStyle(link.closest('[data-type="core/button"]').parentElement);
+        const a = link.getBoundingClientRect();
+        const b = help.getBoundingClientRect();
         return {
           padding: style.padding,
           font: style.fontFamily,
@@ -626,9 +664,12 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
           clip: style.clipPath !== "none",
           direction: rowStyle.flexDirection,
           gap: rowStyle.gap,
-          primaryWidth: link.getBoundingClientRect().width,
+          wrap: rowStyle.flexWrap,
+          primaryWidth: a.width,
           lightWidth: light.getBoundingClientRect().width,
           rowWidth: row.getBoundingClientRect().width,
+          sameRow: Math.abs(a.top - b.top) < 2,
+          offset: Math.round(b.left - a.right),
         };
       })()`);
       assert.equal(editorShape.padding, "0px 34px");
@@ -637,7 +678,21 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
       assert.equal(editorShape.weight, "500");
       assert.equal(editorShape.clip, true);
       assert.equal(editorShape.direction, "row");
+      assert.equal(editorShape.wrap, "nowrap");
       assert.equal(editorShape.gap, "14px");
+      assert.equal(editorShape.sameRow, true);
+      assert.ok(editorShape.offset >= 10 && editorShape.offset <= 20);
+      await page.locator('[data-button="primary"]').scrollIntoViewIfNeeded();
+      const editorPair = await page.evaluate<{ x: number; y: number; width: number; height: number }>(`(() => {
+        const a = document.querySelector('[data-button="primary"]').getBoundingClientRect();
+        const b = document.querySelector('[data-button="light-off"]').getBoundingClientRect();
+        const left = Math.max(0, Math.min(a.left, b.left) - 16);
+        const top = Math.max(0, Math.min(a.top, b.top) - 16);
+        const right = Math.min(window.innerWidth, Math.max(a.right, b.right) + 24);
+        const bottom = Math.max(a.bottom, b.bottom) + 16;
+        return { x: left, y: top, width: right - left, height: bottom - top };
+      })()`);
+      await page.screenshot({ path: "/opt/cursor/artifacts/buttons-editor-row.png", clip: editorPair });
       assert.ok(editorShape.primaryWidth < editorShape.rowWidth * 0.8);
       assert.ok(editorShape.lightWidth < editorShape.primaryWidth);
       await page.hover('[data-button="primary"] .wp-block-button__link');
@@ -647,7 +702,7 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
         const hex = match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : "";
         return hex === "#970c23";
       })()`);
-      const editorHover = await page.evaluate<{ background: string; color: string; arrow: string }>(`(() => {
+      const editorHover = await page.evaluate<{ background: string; color: string; arrow: string; arrowWidth: string; arrowHeight: string; mask: string }>(`(() => {
         const link = document.querySelector('[data-button="primary"] .wp-block-button__link');
         const after = getComputedStyle(link, "::after");
         const hex = (value) => {
@@ -655,11 +710,28 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
           return match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : value;
         };
         const style = getComputedStyle(link);
-        return { background: hex(style.backgroundColor), color: hex(style.color), arrow: hex(after.backgroundColor) };
+        return {
+          background: hex(style.backgroundColor),
+          color: hex(style.color),
+          arrow: hex(after.backgroundColor),
+          arrowWidth: after.width,
+          arrowHeight: after.height,
+          mask: after.webkitMaskImage || after.maskImage,
+        };
       })()`);
       assert.equal(editorHover.background, "#970c23");
       assert.equal(editorHover.color, "#ffffff");
       assert.equal(editorHover.arrow, "#ffffff");
+      assert.equal(editorHover.arrowWidth, "20px");
+      assert.equal(editorHover.arrowHeight, "12px");
+      assert.notEqual(editorHover.mask, "none");
+      const editorHoverShot = await page.evaluate<{ x: number; y: number; width: number; height: number }>(`(() => {
+        const a = document.querySelector('[data-button="primary"]').getBoundingClientRect();
+        const left = Math.max(0, a.left - 16);
+        const top = Math.max(0, a.top - 16);
+        return { x: left, y: top, width: Math.min(window.innerWidth, a.right + 24) - left, height: a.bottom + 16 - top };
+      })()`);
+      await page.screenshot({ path: "/opt/cursor/artifacts/buttons-editor-hover.png", clip: editorHoverShot });
     } finally {
       server.close();
     }
