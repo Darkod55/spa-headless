@@ -18,13 +18,24 @@ if (! function_exists('spa_sage_hero_modifier')) {
         $slug = 'navy';
         if (is_array($background) && isset($background['slug']) && is_string($background['slug'])) {
             $slug = $background['slug'];
-        } elseif (is_string($background) && preg_match('/^var\(--color-([a-z]+)\)$/', $background, $match)) {
+        } elseif (is_string($background) && preg_match('/^var\(--color-([a-z0-9-]+)\)$/', $background, $match)) {
             $slug = $match[1];
         } elseif (is_string($background) && $background !== '') {
             $slug = $background;
         }
 
-        $known = ['navy', 'red', 'royal', 'black', 'white'];
+        $aliases = [
+            'primary' => 'navy',
+            'secondary' => 'red',
+            'tertiary' => 'royal',
+            'grey' => 'gray',
+            'red-deep' => 'secondary-deep',
+        ];
+        if (isset($aliases[$slug])) {
+            $slug = $aliases[$slug];
+        }
+
+        $known = ['navy', 'red', 'royal', 'black', 'white', 'gray', 'secondary-deep'];
 
         return 'hero--bg-' . (in_array($slug, $known, true) ? $slug : 'navy');
     }

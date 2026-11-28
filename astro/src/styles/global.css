@@ -68,6 +68,13 @@
 	--color-text-on-red: #fbe7ea;
 	--color-text-on-secondary: var(--color-text-on-red);
 
+	/* Component states. Not brand swatches. */
+	--color-success: #0f5132;
+	--color-success-bg: #e8f5ec;
+	--color-danger-bg: #fde8ec;
+	--color-team-name: #31394a;
+	--color-team-rule: #c9cfda;
+
 	/* Typography — headings (Oswald, uppercase) */
 	--fs-display: clamp(3.5rem, 6.4vw, 6rem);
 	--fs-h1-page: clamp(3rem, 5.6vw, 5.25rem);

@@ -6,6 +6,8 @@ import { addClassToRoot } from "../astro/src/lib/blocks/markup.ts";
 test("colorSlug reads a slug, a CSS variable, and a colour object", () => {
   assert.equal(colorSlug("navy"), "navy");
   assert.equal(colorSlug("var(--color-red)"), "red");
+  assert.equal(colorSlug("var(--color-secondary-on-primary)"), "secondary-on-primary");
+  assert.equal(colorSlug("primary"), "primary");
   assert.equal(colorSlug({ value: "var(--color-royal)", name: "Royal", slug: "royal" }), "royal");
   assert.equal(colorSlug(null), null);
   assert.equal(colorSlug("lime"), null);

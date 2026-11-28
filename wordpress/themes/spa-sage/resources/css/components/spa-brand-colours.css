@@ -54,3 +54,51 @@
 .has-bg-white {
   background-color: var(--color-white);
 }
+
+.has-text-primary,
+.hero__copy .has-text-primary,
+.editor-styles-wrapper .hero__copy .has-text-primary {
+  color: var(--color-primary);
+}
+
+.has-text-secondary,
+.hero__copy .has-text-secondary,
+.editor-styles-wrapper .hero__copy .has-text-secondary {
+  color: var(--color-secondary);
+}
+
+.has-text-tertiary,
+.hero__copy .has-text-tertiary,
+.editor-styles-wrapper .hero__copy .has-text-tertiary {
+  color: var(--color-tertiary);
+}
+
+.has-text-gray,
+.hero__copy .has-text-gray,
+.editor-styles-wrapper .hero__copy .has-text-gray {
+  color: var(--color-gray);
+}
+
+.has-text-secondary-deep,
+.hero__copy .has-text-secondary-deep,
+.editor-styles-wrapper .hero__copy .has-text-secondary-deep {
+  color: var(--color-secondary-deep);
+}
+
+.has-text-secondary-on-primary,
+.hero__copy .has-text-secondary-on-primary,
+.editor-styles-wrapper .hero__copy .has-text-secondary-on-primary {
+  color: var(--color-secondary-on-primary);
+}
+
+.has-text-secondary-on-tertiary,
+.hero__copy .has-text-secondary-on-tertiary,
+.editor-styles-wrapper .hero__copy .has-text-secondary-on-tertiary {
+  color: var(--color-secondary-on-tertiary);
+}
+
+.has-bg-primary { background-color: var(--color-primary); }
+.has-bg-secondary { background-color: var(--color-secondary); }
+.has-bg-tertiary { background-color: var(--color-tertiary); }
+.has-bg-gray { background-color: var(--color-gray); }
+.has-bg-secondary-deep { background-color: var(--color-secondary-deep); }

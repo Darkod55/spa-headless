@@ -55,6 +55,20 @@
   --hero-text: #031433;
 }
 
+.hero--bg-gray {
+  --hero-bg: #f4f5f7;
+  --hero-shape-1: #012169;
+  --hero-shape-2: #c8102e;
+  --hero-text: #031433;
+}
+
+.hero--bg-secondary-deep {
+  --hero-bg: #970c23;
+  --hero-shape-1: #031433;
+  --hero-shape-2: #012169;
+  --hero-text: #ffffff;
+}
+
 .hero-root {
   display: block;
 }

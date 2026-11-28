@@ -2,19 +2,8 @@
 
 Runtime tokens are `resources/css/theme/variables.css` and `resources/css/theme/fonts.css`.
 
-| Token | Value |
-| --- | --- |
-| `--color-navy` / `--color-primary` | `#031433` |
-| `--color-red` / `--color-secondary` | `#c8102e` |
-| `--color-royal` / `--color-tertiary` | `#012169` |
-| `--color-black` | `#000` |
-| `--color-white` | `#fff` |
-| `--font-heading` | Oswald |
-| `--font-sans` | Montserrat |
-| `--width-container` | `1280px` |
+The colour list, including which swatches are in the BlockStudio picker, is the repo doc [docs/design-tokens.md](../../../../docs/design-tokens.md). It matches Darkod55/spa `src/styles/global.css`.
 
-Colour datasets (`textColours`, `bgColours`, `tagBgColours`) use navy, red, royal, black, and white. Slugs match the Astro `colorSlug` set.
+Primary `#031433`, secondary `#C8102E`, tertiary `#012169`, white, gray `#F4F5F7`, black, and secondary deep `#970C23` are background and text swatches. Red on navy `#E8324C` and red on royal `#FF8A9A` are text swatches only. Greys, body text, and form states are tokens only.
 
-Oswald and Montserrat latin woff2 files in `resources/fonts` are OFL (see `OFL.txt`).
-
-The repo-level notes are in `/docs/design-tokens.md`.
+`navy`, `red`, and `royal` are aliases of primary, secondary, and tertiary. Saved heroes that use those slugs still render.

@@ -22,19 +22,29 @@ if ( function_exists( 'add_filter' ) ) {
 function spa_brand_colours(): array {
 	return array(
 		array(
-			'value' => 'var(--color-navy)',
-			'name'  => 'Navy',
-			'slug'  => 'navy',
+			'value' => 'var(--color-primary)',
+			'name'  => 'Primary',
+			'slug'  => 'primary',
 		),
 		array(
-			'value' => 'var(--color-red)',
-			'name'  => 'Red',
-			'slug'  => 'red',
+			'value' => 'var(--color-secondary)',
+			'name'  => 'Secondary',
+			'slug'  => 'secondary',
 		),
 		array(
-			'value' => 'var(--color-royal)',
-			'name'  => 'Royal',
-			'slug'  => 'royal',
+			'value' => 'var(--color-tertiary)',
+			'name'  => 'Tertiary',
+			'slug'  => 'tertiary',
+		),
+		array(
+			'value' => 'var(--color-white)',
+			'name'  => 'White',
+			'slug'  => 'white',
+		),
+		array(
+			'value' => 'var(--color-gray)',
+			'name'  => 'Gray',
+			'slug'  => 'gray',
 		),
 		array(
 			'value' => 'var(--color-black)',
@@ -42,9 +52,19 @@ function spa_brand_colours(): array {
 			'slug'  => 'black',
 		),
 		array(
-			'value' => 'var(--color-white)',
-			'name'  => 'White',
-			'slug'  => 'white',
+			'value' => 'var(--color-secondary-deep)',
+			'name'  => 'Secondary deep',
+			'slug'  => 'secondary-deep',
+		),
+		array(
+			'value' => 'var(--color-secondary-on-primary)',
+			'name'  => 'Red on navy',
+			'slug'  => 'secondary-on-primary',
+		),
+		array(
+			'value' => 'var(--color-secondary-on-tertiary)',
+			'name'  => 'Red on royal',
+			'slug'  => 'secondary-on-tertiary',
 		),
 	);
 }

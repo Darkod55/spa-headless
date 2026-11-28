@@ -283,15 +283,21 @@ trait blocks
      */
     public function populateTextColours() {
         add_filter('blockstudio/blocks/attributes/populate', function ($options) {
-            $brand = [
-                ['value' => 'var(--color-navy)', 'name' => 'Navy', 'slug' => 'navy'],
-                ['value' => 'var(--color-red)', 'name' => 'Red', 'slug' => 'red'],
-                ['value' => 'var(--color-royal)', 'name' => 'Royal', 'slug' => 'royal'],
-                ['value' => 'var(--color-black)', 'name' => 'Black', 'slug' => 'black'],
+            $surfaces = [
+                ['value' => 'var(--color-primary)', 'name' => 'Primary', 'slug' => 'primary'],
+                ['value' => 'var(--color-secondary)', 'name' => 'Secondary', 'slug' => 'secondary'],
+                ['value' => 'var(--color-tertiary)', 'name' => 'Tertiary', 'slug' => 'tertiary'],
                 ['value' => 'var(--color-white)', 'name' => 'White', 'slug' => 'white'],
+                ['value' => 'var(--color-gray)', 'name' => 'Gray', 'slug' => 'gray'],
+                ['value' => 'var(--color-black)', 'name' => 'Black', 'slug' => 'black'],
+                ['value' => 'var(--color-secondary-deep)', 'name' => 'Secondary deep', 'slug' => 'secondary-deep'],
             ];
-            $options['textColours'] = $brand;
-            $options['tagBgColours'] = $brand;
+            $text = array_merge($surfaces, [
+                ['value' => 'var(--color-secondary-on-primary)', 'name' => 'Red on navy', 'slug' => 'secondary-on-primary'],
+                ['value' => 'var(--color-secondary-on-tertiary)', 'name' => 'Red on royal', 'slug' => 'secondary-on-tertiary'],
+            ]);
+            $options['textColours'] = $text;
+            $options['tagBgColours'] = $surfaces;
 
             return $options;
         });
@@ -304,11 +310,13 @@ trait blocks
     public function populateBGColours() {
         add_filter('blockstudio/blocks/attributes/populate', function ($options) {
             $options['bgColours'] = [
-                ['value' => 'var(--color-navy)', 'name' => 'Navy', 'slug' => 'navy'],
-                ['value' => 'var(--color-red)', 'name' => 'Red', 'slug' => 'red'],
-                ['value' => 'var(--color-royal)', 'name' => 'Royal', 'slug' => 'royal'],
-                ['value' => 'var(--color-black)', 'name' => 'Black', 'slug' => 'black'],
+                ['value' => 'var(--color-primary)', 'name' => 'Primary', 'slug' => 'primary'],
+                ['value' => 'var(--color-secondary)', 'name' => 'Secondary', 'slug' => 'secondary'],
+                ['value' => 'var(--color-tertiary)', 'name' => 'Tertiary', 'slug' => 'tertiary'],
                 ['value' => 'var(--color-white)', 'name' => 'White', 'slug' => 'white'],
+                ['value' => 'var(--color-gray)', 'name' => 'Gray', 'slug' => 'gray'],
+                ['value' => 'var(--color-black)', 'name' => 'Black', 'slug' => 'black'],
+                ['value' => 'var(--color-secondary-deep)', 'name' => 'Secondary deep', 'slug' => 'secondary-deep'],
             ];
 
             return $options;

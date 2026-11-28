@@ -257,11 +257,22 @@ function spa_headless_value_is_empty( mixed $value ): bool {
  */
 function spa_headless_colour_object( mixed $value ): ?array {
 	$names = array(
-		'navy'  => 'Navy',
-		'red'   => 'Red',
-		'royal' => 'Royal',
-		'black' => 'Black',
-		'white' => 'White',
+		'navy'                   => 'Primary',
+		'primary'                => 'Primary',
+		'red'                    => 'Secondary',
+		'secondary'              => 'Secondary',
+		'royal'                  => 'Tertiary',
+		'tertiary'               => 'Tertiary',
+		'black'                  => 'Black',
+		'white'                  => 'White',
+		'gray'                   => 'Gray',
+		'grey'                   => 'Gray',
+		'secondary-deep'         => 'Secondary deep',
+		'red-deep'               => 'Secondary deep',
+		'secondary-on-primary'   => 'Red on navy',
+		'red-on-navy'            => 'Red on navy',
+		'secondary-on-tertiary'  => 'Red on royal',
+		'red-on-royal'           => 'Red on royal',
 	);
 
 	if ( is_array( $value ) && isset( $value['slug'] ) && is_string( $value['slug'] ) && isset( $names[ $value['slug'] ] ) ) {
@@ -278,7 +289,7 @@ function spa_headless_colour_object( mixed $value ): ?array {
 	}
 
 	$slug = trim( $value );
-	if ( preg_match( '/^var\(--color-([a-z]+)\)$/', $slug, $match ) ) {
+	if ( preg_match( '/^var\(--color-([a-z0-9-]+)\)$/', $slug, $match ) ) {
 		$slug = $match[1];
 	}
 	if ( ! isset( $names[ $slug ] ) ) {

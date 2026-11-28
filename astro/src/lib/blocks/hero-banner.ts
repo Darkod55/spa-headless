@@ -7,12 +7,19 @@ export const heroBackgrounds = ["navy", "red", "royal", "black", "white"] as con
 
 export type HeroBackground = (typeof heroBackgrounds)[number];
 
-const modifiers: Record<HeroBackground, string> = {
+const modifiers: Record<string, string> = {
   navy: "hero--bg-navy",
+  primary: "hero--bg-navy",
   red: "hero--bg-red",
+  secondary: "hero--bg-red",
   royal: "hero--bg-royal",
+  tertiary: "hero--bg-royal",
   black: "hero--bg-black",
   white: "hero--bg-white",
+  gray: "hero--bg-gray",
+  grey: "hero--bg-gray",
+  "secondary-deep": "hero--bg-secondary-deep",
+  "red-deep": "hero--bg-secondary-deep",
 };
 
 /** Unknown or empty backgrounds use the live homepage navy. */

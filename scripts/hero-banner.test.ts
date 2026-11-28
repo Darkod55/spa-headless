@@ -18,6 +18,11 @@ const colours: Record<(typeof heroBackgrounds)[number], Record<string, string>> 
 
 test("background values map to modifier classes", () => {
   assert.equal(heroBackgroundClass("navy"), "hero--bg-navy");
+  assert.equal(heroBackgroundClass("primary"), "hero--bg-navy");
+  assert.equal(heroBackgroundClass("secondary"), "hero--bg-red");
+  assert.equal(heroBackgroundClass("tertiary"), "hero--bg-royal");
+  assert.equal(heroBackgroundClass("gray"), "hero--bg-gray");
+  assert.equal(heroBackgroundClass("secondary-deep"), "hero--bg-secondary-deep");
   assert.equal(heroBackgroundClass("red"), "hero--bg-red");
   assert.equal(heroBackgroundClass("royal"), "hero--bg-royal");
   assert.equal(heroBackgroundClass("black"), "hero--bg-black");
