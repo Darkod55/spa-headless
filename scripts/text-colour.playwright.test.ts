@@ -254,6 +254,88 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
     assert.equal(reduced.name, "none");
     assert.equal(reduced.opacity, "1");
     await page.emulateMedia({ reducedMotion: "no-preference" });
+    const buttons = await page.evaluate<{
+      primary: { background: string; color: string; arrow: boolean; target: string; rel: string; text: string };
+      light: { background: string; color: string; arrow: boolean };
+      dark: { background: string; color: string; arrow: string };
+      darkOff: { arrow: boolean };
+      outline: { background: string; color: string; shell: string; arrow: boolean };
+      outlineOff: { arrow: boolean };
+      text: { color: string; clip: string; border: string; arrow: boolean };
+      textOff: { arrow: boolean };
+      saved: { text: string; arrow: boolean; href: string };
+      gap: string;
+    } | null>(`(() => {
+      const hex = (value) => {
+        const match = value.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+        return match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : value;
+      };
+      const paint = (el) => {
+        const style = getComputedStyle(el);
+        const arrow = el.querySelector(".cta__arrow");
+        return {
+          background: hex(style.backgroundColor),
+          color: hex(style.color),
+          clip: style.clipPath,
+          border: style.borderBottomWidth,
+          arrow: Boolean(arrow),
+          arrowColor: arrow ? hex(getComputedStyle(arrow).color) : "",
+        };
+      };
+      const primary = document.querySelector('a.cta--primary[href="/contact"]');
+      const light = document.querySelector("a.cta--light");
+      const dark = document.querySelector('a.cta--dark[href="#dark"]');
+      const darkOff = document.querySelector('a.cta--dark[href="#dark-off"]');
+      const outline = document.querySelector('a.cta--outline-light[href="#outline"]');
+      const outlineOff = document.querySelector('a.cta--outline-light[href="#outline-off"]');
+      const text = document.querySelector('a.cta--text[href="#text"]');
+      const textOff = document.querySelector('a.cta--text[href="#text-off"]');
+      const saved = document.querySelector('a.cta[href="/saved"]');
+      const row = document.querySelector(".hero__copy .wp-block-buttons");
+      if (!primary || !light || !dark || !darkOff || !outline || !outlineOff || !text || !textOff || !saved || !row || !outline.parentElement) return null;
+      return {
+        primary: { ...paint(primary), target: primary.target, rel: primary.rel, text: primary.textContent.trim() },
+        light: paint(light),
+        dark: { ...paint(dark), arrow: paint(dark).arrowColor },
+        darkOff: { arrow: paint(darkOff).arrow },
+        outline: { ...paint(outline), shell: hex(getComputedStyle(outline.parentElement).backgroundColor) },
+        outlineOff: { arrow: paint(outlineOff).arrow },
+        text: paint(text),
+        textOff: { arrow: paint(textOff).arrow },
+        saved: { text: saved.textContent.trim(), arrow: paint(saved).arrow, href: saved.getAttribute("href") },
+        gap: getComputedStyle(row).columnGap || getComputedStyle(row).gap,
+      };
+    })()`);
+    if (!buttons) {
+      throw new Error("the fixture page is missing a hero button");
+    }
+    assert.equal(buttons.primary.background, "#c8102e");
+    assert.equal(buttons.primary.color, "#ffffff");
+    assert.equal(buttons.primary.arrow, true);
+    assert.equal(buttons.primary.target, "_blank");
+    assert.equal(buttons.primary.rel, "noopener noreferrer");
+    assert.equal(buttons.primary.text, "Book a discovery call");
+    assert.equal(buttons.light.background, "#ffffff");
+    assert.equal(buttons.light.color, "#031433");
+    assert.equal(buttons.light.arrow, false);
+    assert.equal(buttons.dark.background, "#031433");
+    assert.equal(buttons.dark.color, "#ffffff");
+    assert.equal(buttons.dark.arrow, "#ffffff");
+    assert.equal(buttons.darkOff.arrow, false);
+    assert.equal(buttons.outline.background, "#031433");
+    assert.equal(buttons.outline.color, "#ffffff");
+    assert.equal(buttons.outline.shell, "#ffffff");
+    assert.equal(buttons.outline.arrow, true);
+    assert.equal(buttons.outlineOff.arrow, false);
+    assert.equal(buttons.text.color, "#c8102e");
+    assert.equal(buttons.text.clip, "none");
+    assert.equal(buttons.text.border, "2px");
+    assert.equal(buttons.text.arrow, true);
+    assert.equal(buttons.textOff.arrow, false);
+    assert.equal(buttons.saved.text, "Saved markup");
+    assert.equal(buttons.saved.arrow, true);
+    assert.equal(buttons.saved.href, "/saved");
+    assert.equal(buttons.gap, "14px");
 
     const editorCss = builtEditorCss();
     const badgeSource = badgeCss();
@@ -279,6 +361,24 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
               </div>
               <div class="wp-block has-text-secondary" data-block="para-1" data-type="core/paragraph">
                 <p class="wp-block-paragraph block-editor-rich-text__editable">A paragraph with text colour secondary.</p>
+              </div>
+              <div class="wp-block cta cta--primary cta--arrow" data-type="core/button" data-button="primary">
+                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Primary</a></div>
+              </div>
+              <div class="wp-block cta cta--light cta--arrow" data-type="core/button" data-button="light">
+                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Light</a></div>
+              </div>
+              <div class="wp-block cta cta--light cta--no-arrow" data-type="core/button" data-button="light-off">
+                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Light off</a></div>
+              </div>
+              <div class="wp-block cta cta--dark cta--arrow" data-type="core/button" data-button="dark">
+                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Dark</a></div>
+              </div>
+              <div class="wp-block cta cta--outline-light cta--arrow" data-type="core/button" data-button="outline">
+                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Outline</a></div>
+              </div>
+              <div class="wp-block cta cta--text cta--no-arrow" data-type="core/button" data-button="text">
+                <div class="wp-block-button"><a class="wp-block-button__link block-editor-rich-text__editable">Text</a></div>
               </div>
               <div class="wp-block" data-block="heading-2" data-type="core/heading">
                 <h2 class="wp-block-heading block-editor-rich-text__editable">Uncoloured hero heading</h2>
@@ -378,6 +478,66 @@ test("a chosen text colour beats the hero and editor defaults", { timeout: 60_00
       assert.equal(editorBadge.animation, "none");
       assert.equal(editorBadge.animateClass, false);
       assert.equal(editorCss.includes("label-char-in"), false);
+      const editorButtons = await page.evaluate<{
+        primary: { background: string; color: string; arrow: string };
+        light: { background: string; color: string; arrow: string };
+        lightOff: { arrow: string };
+        dark: { background: string; color: string };
+        outline: { background: string; color: string; shell: string };
+        text: { color: string; clip: string };
+      } | null>(`(() => {
+        const hex = (value) => {
+          const match = value.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+          return match ? "#" + [match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("") : value;
+        };
+        const read = (name) => {
+          const wrap = document.querySelector('[data-button="' + name + '"]');
+          const link = wrap && wrap.querySelector(".wp-block-button__link");
+          if (!wrap || !link) return null;
+          const style = getComputedStyle(link);
+          const after = getComputedStyle(link, "::after");
+          return {
+            background: hex(style.backgroundColor),
+            color: hex(style.color),
+            clip: style.clipPath,
+            shell: hex(getComputedStyle(wrap).backgroundColor),
+            arrow: after.content,
+            arrowColor: hex(after.backgroundColor),
+          };
+        };
+        const primary = read("primary");
+        const light = read("light");
+        const lightOff = read("light-off");
+        const dark = read("dark");
+        const outline = read("outline");
+        const text = read("text");
+        if (!primary || !light || !lightOff || !dark || !outline || !text) return null;
+        return {
+          primary: { background: primary.background, color: primary.color, arrow: primary.arrowColor },
+          light: { background: light.background, color: light.color, arrow: light.arrowColor },
+          lightOff: { arrow: lightOff.arrow },
+          dark: { background: dark.background, color: dark.color },
+          outline: { background: outline.background, color: outline.color, shell: outline.shell },
+          text: { color: text.color, clip: text.clip },
+        };
+      })()`);
+      if (!editorButtons) {
+        throw new Error("the editor fixture is missing a button");
+      }
+      assert.equal(editorButtons.primary.background, "#c8102e");
+      assert.equal(editorButtons.primary.color, "#ffffff");
+      assert.equal(editorButtons.primary.arrow, "#ffffff");
+      assert.equal(editorButtons.light.background, "#ffffff");
+      assert.equal(editorButtons.light.color, "#031433");
+      assert.equal(editorButtons.light.arrow, "#c8102e");
+      assert.equal(editorButtons.lightOff.arrow, "none");
+      assert.equal(editorButtons.dark.background, "#031433");
+      assert.equal(editorButtons.dark.color, "#ffffff");
+      assert.equal(editorButtons.outline.background, "#031433");
+      assert.equal(editorButtons.outline.color, "#ffffff");
+      assert.equal(editorButtons.outline.shell, "#ffffff");
+      assert.equal(editorButtons.text.color, "#c8102e");
+      assert.equal(editorButtons.text.clip, "none");
     } finally {
       server.close();
     }

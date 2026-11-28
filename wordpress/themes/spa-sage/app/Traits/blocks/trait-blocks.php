@@ -369,15 +369,11 @@ trait blocks
     public function populateButtonTypes() {
         add_filter('blockstudio/blocks/attributes/populate', function ($options) {
             $options['buttonTypes'] = [
-                ['value' => 'btn-primary', 'label' => 'Primary'],
-                ['value' => 'btn-secondary', 'label' => 'Secondary'],
-                ['value' => 'btn-secondary-inverse', 'label' => 'Secondary inverse'],
-                ['value' => 'btn-secondary-outline', 'label' => 'Secondary outline'],
-                ['value' => 'btn-tertiary', 'label' => 'Tertiary'],
-                ['value' => 'btn-dark-blue', 'label' => 'Dark blue'],
-                ['value' => 'btn-white', 'label' => 'White'],
-                ['value' => 'btn-white-inverse', 'label' => 'White inverse'],
-                ['value' => 'btn-gradient', 'label' => 'Gradient'],
+                ['value' => 'primary', 'label' => 'Primary'],
+                ['value' => 'light', 'label' => 'Light'],
+                ['value' => 'dark', 'label' => 'Dark'],
+                ['value' => 'outline-light', 'label' => 'Outline'],
+                ['value' => 'text', 'label' => 'Text'],
             ];
 
             return $options;
@@ -411,16 +407,26 @@ trait blocks
 
             $attrs = $block['attrs']['blockstudio']['attributes'] ?? [];
 
-            $button_type = $attrs['button_type'] ?? 'btn-primary';
+            $button_type = $attrs['button_type'] ?? 'primary';
             if (is_array($button_type)) {
-                $button_type = $button_type['value'] ?? 'btn-primary';
+                $button_type = $button_type['value'] ?? 'primary';
             }
             $button_type = is_string($button_type) ? trim($button_type) : '';
+            $live_types = ['primary', 'light', 'dark', 'outline-light', 'text'];
+            $is_live = in_array($button_type, $live_types, true);
             if ($button_type === '') {
-                $button_type = 'btn-primary';
+                $button_type = 'primary';
+                $is_live = true;
             }
 
-            $include_icon = ! empty($attrs['include_icon']);
+            if (array_key_exists('arrow', $attrs)) {
+                $arrow = ! in_array($attrs['arrow'], [false, 'false', 0, '0'], true);
+            } elseif (array_key_exists('include_icon', $attrs)) {
+                $arrow = ! empty($attrs['include_icon']);
+            } else {
+                $arrow = true;
+            }
+            $include_icon = $arrow;
 
             $processor = new \WP_HTML_Tag_Processor($content);
 
@@ -449,6 +455,18 @@ trait blocks
                     continue;
                 }
 
+                if ($class === 'cta' || str_starts_with($class, 'cta--')) {
+                    $move[] = $class;
+                    if ($class === 'cta') {
+                        $has_btn = true;
+                    }
+                    if (str_starts_with($class, 'cta--') && ! in_array($class, ['cta--arrow', 'cta--no-arrow'], true)) {
+                        $has_type = true;
+                    }
+
+                    continue;
+                }
+
                 if ($class === 'btn' || str_starts_with($class, 'btn-')) {
                     $move[] = $class;
                     if ($class === 'btn') {
@@ -474,14 +492,24 @@ trait blocks
                 }
             }
 
-            if (! $has_btn) {
-                $move[] = 'btn';
-            }
-            if (! $has_type) {
-                $move[] = $button_type;
-            }
-            if ($include_icon && ! in_array('btn-has-icon', $move, true)) {
-                $move[] = 'btn-has-icon';
+            if ($is_live) {
+                if (! $has_btn) {
+                    $move[] = 'cta';
+                }
+                if (! $has_type) {
+                    $move[] = 'cta--' . $button_type;
+                }
+                $move[] = $arrow ? 'cta--arrow' : 'cta--no-arrow';
+            } else {
+                if (! $has_btn) {
+                    $move[] = 'btn';
+                }
+                if (! $has_type) {
+                    $move[] = $button_type;
+                }
+                if ($include_icon && ! in_array('btn-has-icon', $move, true)) {
+                    $move[] = 'btn-has-icon';
+                }
             }
 
             $move = array_values(array_unique($move));
@@ -519,15 +547,17 @@ trait blocks
 
             $html = $processor->get_updated_html();
 
-            if (! $include_icon || str_contains($html, 'icon-arrow-insert')) {
+            if (! $arrow || str_contains($html, 'cta__arrow') || str_contains($html, 'icon-arrow-insert')) {
                 return $html;
             }
 
-            $icon = \App\helpers()->getSvg([
-                'icon'  => 'arrow-insert',
-                'width' => 12,
-                'title' => '',
-            ]);
+            $icon = $is_live
+                ? '<svg class="cta__arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M0 6 H16" stroke="currentColor" stroke-width="1.8"/><path d="M12 1 L17 6 L12 11" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="miter"/></svg>'
+                : \App\helpers()->getSvg([
+                    'icon'  => 'arrow-insert',
+                    'width' => 12,
+                    'title' => '',
+                ]);
 
             return preg_replace('/<\/a>/', $icon . '</a>', $html, 1) ?: $html;
         }, 20, 2);

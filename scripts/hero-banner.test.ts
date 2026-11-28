@@ -42,6 +42,8 @@ test("the hero template keeps InnerBlocks unlocked and shapes click-through", ()
   assert.match(template, /templateLock="false"/);
   assert.match(template, /spa\/badge[\s\S]*core\/heading[\s\S]*core\/paragraph/);
   assert.match(template, /allowedBlocks[\s\S]*spa\/badge/);
+  assert.match(template, /allowedBlocks[\s\S]*core\/buttons/);
+  assert.match(template, /core\/buttons[\s\S]*core\/button/);
   assert.doesNotMatch(template, /templateLock="(?:all|insert|contentOnly)"/);
   assert.match(css, /\.hero__bands\s*\{[^}]*pointer-events:\s*none/);
   assert.match(css, /\.hero__band[\s\S]*?pointer-events:\s*none/);

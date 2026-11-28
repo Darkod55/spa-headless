@@ -8,25 +8,28 @@
         "id": "button_type",
         "type": "select",
         "label": "Button Types",
-        "default": "btn-primary",
+        "default": "primary",
         "returnFormat": "both",
         "options": [
-          { "value": "btn-primary", "label": "Primary" },
-          { "value": "btn-secondary", "label": "Secondary" },
-          { "value": "btn-secondary-inverse", "label": "Secondary inverse" },
-          { "value": "btn-secondary-outline", "label": "Secondary outline" },
-          { "value": "btn-tertiary", "label": "Tertiary" },
-          { "value": "btn-dark-blue", "label": "Dark blue" },
-          { "value": "btn-white", "label": "White" },
-          { "value": "btn-white-inverse", "label": "White inverse" },
-          { "value": "btn-gradient", "label": "Gradient" }
+          { "value": "primary", "label": "Primary" },
+          { "value": "light", "label": "Light" },
+          { "value": "dark", "label": "Dark" },
+          { "value": "outline-light", "label": "Outline" },
+          { "value": "text", "label": "Text" }
         ],
         "set": [
           {
             "attribute": "class",
-            "value": "btn {attributes.button_type.value}"
+            "value": "cta cta--{attributes.button_type.value}"
           }
         ]
+      },
+      {
+        "id": "arrow",
+        "type": "toggle",
+        "label": "Arrow",
+        "default": true,
+        "help": "Show the arrow. Its colour follows the button type. On when this was never saved."
       },
       {
         "id": "full_width",
@@ -36,17 +39,6 @@
           {
             "attribute": "class",
             "value": "btn-full"
-          }
-        ]
-      },
-      {
-        "id": "include_icon",
-        "type": "toggle",
-        "label": "Include icon",
-        "set": [
-          {
-            "attribute": "class",
-            "value": "btn-has-icon"
           }
         ]
       },

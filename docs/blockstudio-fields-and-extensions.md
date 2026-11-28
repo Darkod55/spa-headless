@@ -48,7 +48,7 @@ Unknown values are null. The hero then falls back to navy.
 
 ## Extensions
 
-`app/blocks/extensions/heading.json` and `paragraph.json` extend `core/heading` and `core/paragraph` with `custom/typography` (text colour, font size, font weight). `set` paints the editor and the WordPress preview. It is not saved into `innerHTML`. The values live at `attrs.blockstudio.attributes`. `spa_headless_normalize_blocks()` copies them onto `attrs`. `Heading.astro` and `Paragraph.astro` add the same classes from those attributes.
+`app/blocks/extensions/button.json` extends `core/button` with button type (`primary`, `light`, `dark`, `outline-light`, `text`) and an Arrow toggle. `app/blocks/extensions/heading.json` and `paragraph.json` extend `core/heading` and `core/paragraph` with `custom/typography` (text colour, font size, font weight). `set` paints the editor and the WordPress preview. It is not saved into `innerHTML`. The values live at `attrs.blockstudio.attributes`. `spa_headless_normalize_blocks()` copies them onto `attrs`. `Heading.astro` and `Paragraph.astro` add the same classes from those attributes.
 
 | Control | Saved shape | Editor output | Astro class |
 | --- | --- | --- | --- |

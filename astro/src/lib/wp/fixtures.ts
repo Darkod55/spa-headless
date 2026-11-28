@@ -380,6 +380,30 @@ const textColour = page({
           [],
           '<p class="wp-block-paragraph">A paragraph with text colour secondary.</p>',
         ),
+        block("core/buttons", {}, [
+          block("core/button", {
+            url: "/contact",
+            text: "Book a discovery call",
+            linkTarget: "_blank",
+            rel: "noopener noreferrer",
+          }),
+          block("core/button", {
+            url: "/services",
+            text: "How we help",
+            button_type: { value: "light", label: "Light" },
+            blockstudio: { attributes: { button_type: { value: "light", label: "Light" }, arrow: false } },
+          }),
+          block("core/button", { url: "#dark", text: "Dark on", button_type: "dark", arrow: true }),
+          block("core/button", { url: "#dark-off", text: "Dark off", button_type: "dark", arrow: false }),
+          block("core/button", { url: "#outline", text: "Outline on", button_type: "outline-light" }),
+          block("core/button", { url: "#outline-off", text: "Outline off", button_type: "outline-light", arrow: false }),
+          block("core/button", { url: "#text", text: "Text on", button_type: "text", arrow: true }),
+          block("core/button", { url: "#text-off", text: "Text off", button_type: "text", arrow: false }),
+          block("core/button", {
+            text: "Saved markup",
+            blockstudio: { attributes: { button_type: "primary" } },
+          }, [], '<div class="wp-block-button"><a class="wp-block-button__link" href="/saved">Saved markup</a></div>'),
+        ]),
       ],
     ),
     block("spa/badge", {

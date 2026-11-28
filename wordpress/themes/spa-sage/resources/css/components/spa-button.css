@@ -1,0 +1,165 @@
+/*
+  Live Button.astro, default (md) size.
+  Primary, light, dark, and outline are parallelograms (slant 14px).
+  Text is an underlined link. The arrow is the 20×12 stroke.
+  Light keeps a red arrow. The other types use the label colour.
+  Editor `set` lands on the block wrapper, so the painted control is the inner link.
+*/
+
+.cta,
+.editor-styles-wrapper .cta .wp-block-button__link {
+  --slant: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  box-sizing: border-box;
+  min-height: 54px;
+  min-width: 44px;
+  margin: 0;
+  padding: 0 34px;
+  border: none;
+  border-radius: 0;
+  background: var(--color-red);
+  color: var(--color-white);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: none;
+  clip-path: polygon(var(--slant) 0, 100% 0, calc(100% - var(--slant)) 100%, 0 100%);
+  cursor: pointer;
+}
+
+.cta__label {
+  white-space: nowrap;
+}
+
+.cta__arrow {
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+.cta--primary,
+.editor-styles-wrapper .cta--primary .wp-block-button__link {
+  background: var(--color-red);
+  color: var(--color-white);
+}
+
+.cta--light,
+.editor-styles-wrapper .cta--light .wp-block-button__link {
+  background: var(--color-white);
+  color: var(--color-navy);
+}
+
+.cta--light .cta__arrow {
+  color: var(--color-red);
+}
+
+.cta--dark,
+.editor-styles-wrapper .cta--dark .wp-block-button__link {
+  background: var(--color-navy);
+  color: var(--color-white);
+}
+
+.cta-wrap--outline {
+  --slant: 14px;
+  display: inline-flex;
+  box-sizing: border-box;
+  padding: 2px;
+  background: var(--color-white);
+  clip-path: polygon(var(--slant) 0, 100% 0, calc(100% - var(--slant)) 100%, 0 100%);
+}
+
+.cta--outline-light,
+.editor-styles-wrapper .cta--outline-light .wp-block-button__link {
+  --slant: 12px;
+  background: var(--btn-surface, var(--color-navy));
+  color: var(--color-white);
+}
+
+.editor-styles-wrapper .cta--outline-light {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: auto;
+  padding: 2px;
+  background: var(--color-white);
+  clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+}
+
+.cta--text,
+.editor-styles-wrapper .cta--text .wp-block-button__link {
+  --slant: 0px;
+  gap: 10px;
+  min-height: 44px;
+  padding: 4px 0;
+  background: none;
+  color: var(--color-red);
+  border-bottom: 2px solid var(--color-red);
+  border-radius: 0;
+  clip-path: none;
+}
+
+.editor-styles-wrapper .cta--arrow:not(.cta--no-arrow) .wp-block-button__link::after {
+  content: "";
+  display: inline-block;
+  flex-shrink: 0;
+  width: 20px;
+  height: 12px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'%3E%3Cpath d='M0 6 H16 M12 1 L17 6 L12 11' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='miter'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'%3E%3Cpath d='M0 6 H16 M12 1 L17 6 L12 11' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='miter'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.editor-styles-wrapper .cta--light.cta--arrow:not(.cta--no-arrow) .wp-block-button__link::after {
+  background-color: var(--color-red);
+}
+
+.editor-styles-wrapper .cta--no-arrow .wp-block-button__link::after {
+  content: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cta:hover .cta__arrow {
+    transform: translateX(4px);
+  }
+
+  .cta--no-arrow:hover .cta__label {
+    transform: translateY(-2px);
+  }
+}
+
+.hero__copy .wp-block-buttons,
+.hero__copy .wp-buttons,
+.editor-styles-wrapper .hero__copy [data-type="core/buttons"] > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.editor-styles-wrapper .hero__copy .wp-block-buttons > .block-editor-inner-blocks > .block-editor-block-list__layout {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px !important;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.editor-styles-wrapper .hero__copy [data-type="core/button"] {
+  width: auto;
+  margin: 0;
+}
+
+@media (max-width: 639px) {
+  .hero__copy .wp-block-buttons,
+  .hero__copy .wp-buttons,
+  .editor-styles-wrapper .hero__copy [data-type="core/buttons"] > .block-editor-inner-blocks > .block-editor-block-list__layout {
+    flex-direction: column !important;
+    align-items: stretch;
+  }
+
+  .hero__copy .cta-wrap,
+  .hero__copy .cta:not(.cta--text) {
+    display: flex;
+    width: 100%;
+  }
+}

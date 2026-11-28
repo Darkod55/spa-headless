@@ -77,6 +77,35 @@ $template = [
             'placeholder' => 'Supporting line',
         ],
     ],
+    [
+        'core/buttons',
+        [],
+        [
+            [
+                'core/button',
+                [
+                    'text' => 'Book a discovery call',
+                    'url' => '/contact',
+                ],
+            ],
+            [
+                'core/button',
+                [
+                    'text' => 'How we help',
+                    'url' => '/services',
+                    'blockstudio' => [
+                        'attributes' => [
+                            'button_type' => [
+                                'value' => 'light',
+                                'label' => 'Light',
+                            ],
+                            'arrow' => false,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 ];
 ?>
 <div class="hero-root">
@@ -116,7 +145,7 @@ $template = [
 			<div class="container hero__inner">
 				<div class="hero__copy">
 					<InnerBlocks
-						allowedBlocks="<?php echo spa_sage_json_attr(['spa/badge', 'core/heading', 'core/paragraph']); ?>"
+						allowedBlocks="<?php echo spa_sage_json_attr(['spa/badge', 'core/heading', 'core/paragraph', 'core/buttons']); ?>"
 						template="<?php echo spa_sage_json_attr($template); ?>"
 						templateLock="false"
 					/>
