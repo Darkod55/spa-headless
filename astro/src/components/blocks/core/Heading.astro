@@ -1,5 +1,5 @@
 ---
-import { colorSlug } from "../../../lib/blocks/color";
+import { typographyClasses } from "../../../lib/blocks/typography";
 import { addClassToRoot } from "../../../lib/blocks/markup";
 import type { WpBlock } from "../../../lib/wp/types";
 
@@ -14,8 +14,10 @@ const raw =
   (typeof block.attrs.content === "string" && level
     ? `<h${level}>${block.attrs.content}</h${level}>`
     : "");
-const textColour = colorSlug(block.attrs.text_colour);
-const html = textColour ? addClassToRoot(raw, `has-text-${textColour}`) : raw;
+const html = typographyClasses(block.attrs).reduce(
+  (markup, className) => addClassToRoot(markup, className),
+  raw,
+);
 ---
 
 <div class="wp-heading" data-level={level}>

@@ -23,6 +23,7 @@
 @import "./components/spa-keynote.css";
 @import "./components/spa-row.css";
 @import "./components/spa-hero-banner.css";
+@import "./components/spa-typography.css";
 
 @source inline("text-primary text-secondary text-tertiary text-navy text-red text-royal text-dark-blue text-black text-white text-gold text-light");
 @source inline("bg-primary bg-secondary bg-tertiary bg-navy bg-red bg-royal bg-dark-blue bg-black bg-white bg-gold bg-light");

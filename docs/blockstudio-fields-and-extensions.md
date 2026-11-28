@@ -21,7 +21,8 @@ Hex stays in CSS. See [design-tokens.md](design-tokens.md).
 | Field | File | Id | Notes |
 | --- | --- | --- | --- |
 | `custom/background-colour` | `spa-sage/app/blocks/fields/background-colour/field.json` | `bg_colour` | Dataset `bgColours`. Heroes override the id to `background` so the Astro contract stays `background`. |
-| `custom/text-colour` | `spa-sage/app/blocks/fields/text-colour/field.json` | `text_colour` | No `set`. Reading `.slug` when the value is empty blanks the editor canvas. Astro applies `has-text-{slug}`. |
+| `custom/text-colour` | `spa-sage/app/blocks/fields/text-colour/field.json` | `text_colour` | `set` writes `color: {attributes.text_colour.value}` (`var(--color-…)`). Do not read `.slug` in `set`. Astro adds `has-text-{slug}`. |
+| `custom/typography` | `spa-sage/app/blocks/fields/typography/field.json` | `text_colour`, `text_size`, `text_weight` | Heading and paragraph. Size classes are the live scale (`fs-display` … `fs-meta`). Weight classes are `fw-400` … `fw-700`. |
 | `custom/section` | `blockstudio/fields/section/field.json` | `removeBottomPadding`, `accentBg` | Shared section toggles |
 
 Use one from a block:
@@ -47,7 +48,15 @@ Unknown values are null. The hero then falls back to navy.
 
 ## Extensions
 
-`blockstudio/extensions/heading.json` and `paragraph.json` extend `core/heading` and `core/paragraph` with `custom/text-colour`. They use the styles tab. `theme.json` turns off the default palette, custom colours, and the native text and background controls on those two blocks, so the BlockStudio picker is the one editors see.
+`app/blocks/extensions/heading.json` and `paragraph.json` extend `core/heading` and `core/paragraph` with `custom/typography` (text colour, font size, font weight). `set` paints the editor and the WordPress preview. It is not saved into `innerHTML`. The values live at `attrs.blockstudio.attributes`. `spa_headless_normalize_blocks()` copies them onto `attrs`. `Heading.astro` and `Paragraph.astro` add the same classes from those attributes.
+
+| Control | Saved shape | Editor output | Astro class |
+| --- | --- | --- | --- |
+| Text colour | `{ value: "var(--color-primary)", name, slug }` or a legacy slug / `var(--color-…)` string | inline `color: var(--color-primary)` | `has-text-primary` |
+| Font size | `{ value: "fs-h2", label }` or the string `fs-h2` | class `fs-h2` | `fs-h2` |
+| Font weight | `{ value: "fw-700", label }` or the string `fw-700` | class `fw-700` | `fw-700` |
+
+Size and weight CSS is `resources/css/components/spa-typography.css`, imported by the theme and by Astro. Tokens are `--fs-*` (the live type scale). A chosen size or weight overrides the hero's default type; a heading with neither still uses the hero size.
 
 There is no PHP template for an extension. The file is not named `block.json`.
 
@@ -57,7 +66,7 @@ There is no PHP template for an extension. The file is not named `block.json`.
 
 `spa_headless_normalize_blocks()` copies those keys onto `attrs` and leaves the nest in place. Hero image normalisation looks at the top-level `image` and, if that is missing, at the nested one.
 
-Astro does not read `innerHTML` for the class. `Heading.astro` and `Paragraph.astro` call `addClassToRoot()` so the root element gains `has-text-{slug}` without a regex that would break an existing `class` attribute.
+Astro does not read `innerHTML` for these controls. `typographyClasses()` turns the flattened attributes into classes, and `addClassToRoot()` puts them on the heading or paragraph. A colour may be a slug, `var(--color-…)`, or `{ slug, value, name }`. A select may be the class string or `{ value, label }`.
 
 ## Checklist
 

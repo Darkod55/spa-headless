@@ -101,9 +101,23 @@
   --font-size-btn: 14px;
 
   /**
-   * Body text scale (`.fs-*` field classes).
-   * Type-scale Active overrides brand-token values for these keys.
+   * Live type scale. Same values as astro/src/styles/global.css.
+   * `.fs-*` classes in spa-typography.css consume these.
    */
+  --fs-display: clamp(3.5rem, 6.4vw, 6rem);
+  --fs-h1-page: clamp(3rem, 5.6vw, 5.25rem);
+  --fs-h2: clamp(2.375rem, 3.8vw, 3.5rem);
+  --fs-h2-lg: clamp(2.75rem, 4.8vw, 4.5rem);
+  --fs-statement: clamp(1.875rem, 3.2vw, 2.875rem);
+  --fs-h3: 1.75rem;
+  --fs-tagline: 1.5rem;
+  --fs-eyebrow: 1rem;
+  --fs-hero-sub: 1.25rem;
+  --fs-lead: 1.125rem;
+  --fs-body: 0.9375rem;
+  --fs-small: 0.875rem;
+  --fs-meta: 0.75rem;
+
   --font-size-xs: 12px;
   --font-size-sm: 14px;
   --font-size-base: 16px;

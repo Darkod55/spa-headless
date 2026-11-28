@@ -10,7 +10,13 @@
       "populate": {
         "type": "custom",
         "custom": "textColours"
-      }
+      },
+      "set": [
+        {
+          "attribute": "style",
+          "value": "color: {attributes.text_colour.value}"
+        }
+      ]
     }
   ]
 }

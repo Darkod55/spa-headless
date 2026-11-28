@@ -10,29 +10,40 @@
       "populate": {
         "type": "custom",
         "custom": "textColours"
-      }
+      },
+      "set": [
+        {
+          "attribute": "style",
+          "value": "color: {attributes.text_colour.value}"
+        }
+      ]
     },
     {
       "id": "text_size",
       "type": "select",
       "label": "Font Size",
       "default": "",
+      "returnFormat": "both",
       "options": [
         { "value": "", "label": "Default" },
-        { "value": "fs-xs", "label": "Extra Small" },
-        { "value": "fs-sm", "label": "Small" },
-        { "value": "fs-base", "label": "Regular" },
+        { "value": "fs-display", "label": "Display" },
+        { "value": "fs-h1-page", "label": "Page title" },
+        { "value": "fs-h2", "label": "Heading" },
+        { "value": "fs-h2-lg", "label": "Large heading" },
+        { "value": "fs-statement", "label": "Statement" },
+        { "value": "fs-h3", "label": "Subheading" },
+        { "value": "fs-tagline", "label": "Tagline" },
+        { "value": "fs-eyebrow", "label": "Eyebrow" },
+        { "value": "fs-hero-sub", "label": "Hero sub" },
         { "value": "fs-lead", "label": "Lead" },
-        { "value": "h2", "label": "H2" },
-        { "value": "h3", "label": "H3" },
-        { "value": "h4", "label": "H4" },
-        { "value": "h5", "label": "H5" },
-        { "value": "h6", "label": "H6" }
+        { "value": "fs-body", "label": "Body" },
+        { "value": "fs-small", "label": "Small" },
+        { "value": "fs-meta", "label": "Meta" }
       ],
       "set": [
         {
           "attribute": "class",
-          "value": "{attributes.text_size}"
+          "value": "{attributes.text_size.value}"
         }
       ]
     },
@@ -41,17 +52,18 @@
       "type": "select",
       "label": "Font Weight",
       "default": "",
+      "returnFormat": "both",
       "options": [
         { "value": "", "label": "Default" },
-        { "value": "font-light", "label": "Light" },
-        { "value": "font-normal", "label": "Regular" },
-        { "value": "font-semibold", "label": "Semibold" },
-        { "value": "font-bold", "label": "Bold" }
+        { "value": "fw-400", "label": "Regular" },
+        { "value": "fw-500", "label": "Medium" },
+        { "value": "fw-600", "label": "Semibold" },
+        { "value": "fw-700", "label": "Bold" }
       ],
       "set": [
         {
           "attribute": "class",
-          "value": "{attributes.text_weight}"
+          "value": "{attributes.text_weight.value}"
         }
       ]
     }

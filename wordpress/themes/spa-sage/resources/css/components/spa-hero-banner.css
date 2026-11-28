@@ -229,19 +229,20 @@
 .hero__copy .wp-block-heading {
   margin: 0;
   font-family: var(--font-heading);
-  font-weight: 700;
   text-transform: uppercase;
   color: inherit;
 }
 
-.hero--main .hero__copy h1,
-.hero--main .hero__copy .wp-block-heading {
+.hero__copy :is(h1, h2, .wp-block-heading):not([class*="fw-"]) {
+  font-weight: 700;
+}
+
+.hero--main .hero__copy :is(h1, h2, .wp-block-heading):not([class*="fs-"]) {
   font-size: var(--fs-display);
   line-height: 0.96;
 }
 
-.hero--default .hero__copy h1,
-.hero--default .hero__copy .wp-block-heading {
+.hero--default .hero__copy :is(h1, h2, .wp-block-heading):not([class*="fs-"]) {
   font-size: var(--fs-h1-page);
   line-height: 0.98;
 }
@@ -356,13 +357,13 @@
   margin-block: 0 !important;
 }
 
-.editor-styles-wrapper .hero--main .hero__copy :is(h1, h2, .wp-block-heading) {
+.editor-styles-wrapper .hero--main .hero__copy :is(h1, h2, .wp-block-heading):not([class*="fs-"]) {
   margin: 0;
   font-size: var(--fs-display);
   line-height: 0.96;
 }
 
-.editor-styles-wrapper .hero--default .hero__copy :is(h1, h2, .wp-block-heading) {
+.editor-styles-wrapper .hero--default .hero__copy :is(h1, h2, .wp-block-heading):not([class*="fs-"]) {
   margin: 0;
   font-size: var(--fs-h1-page);
   line-height: 0.98;
