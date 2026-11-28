@@ -1,8 +1,18 @@
 @import "@fontsource/montserrat/600.css";
 @import "@fontsource/oswald/500.css";
 
+:root {
+  --header-height: 5.5rem;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --header-height: 4.5rem;
+  }
+}
+
 .site-chrome {
-  --site-chrome-height: 5.5rem;
+  --site-chrome-height: var(--header-height);
   position: sticky;
   top: 0;
   z-index: 50;
@@ -123,6 +133,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px 32px;
+  min-height: var(--header-height);
   padding-block: 11px;
   transition: padding-block 0.45s ease;
 }
@@ -158,6 +169,7 @@
 }
 
 .site-chrome.is-scrolled .site-header__bar {
+  min-height: 0;
   padding-block: 8px;
 }
 

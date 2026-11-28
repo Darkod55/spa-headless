@@ -119,13 +119,17 @@ Three examples ship with the theme:
 
 | Block | What it is |
 | --- | --- |
-| `spa/hero` | Kicker, heading, text, two links, optional image |
+| `spa/hero-banner-main` | Homepage hero. Viewport height minus `--header-height`. Background plus image. Heading and paragraph are inner blocks |
+| `spa/hero-banner-default` | Inner-page hero, 540px on desktop (the live page hero). Same fields |
+| `spa/hero` | Deprecated scaffold (hidden from the inserter). Existing content still renders |
 | `spa/section` | Heading plus one `InnerBlocks` region (core paragraph, heading, image, list, buttons, group, columns, plus hero and card grid) |
 | `spa/card-grid` | Heading and a repeater of cards |
 
 Shared spacing toggles live in `blockstudio/fields/section/field.json` and are pulled in with `"type": "custom/section"`.
 
 To add a block, follow [AGENTS.md](AGENTS.md). Short version: `block.json`, `index.php`, an Astro component with a slot, a `*.contract.ts` that lists every field (repeater rows included), register it in `BlockRenderer.astro`, run `pnpm generate`. The generator fails if a BlockStudio block has no component, or if a field was added, renamed, or removed without updating the contract and the component. `astro check` fails as well, because the contract must `satisfy` the generated field map.
+
+Hero Banner Main and Hero Banner Default are the page heroes. Insert one at the top of a page. Pick a background (navy, red, royal, black, white). The stripes follow that choice. Add the image in the block sidebar. The heading is an H1 inner block and the line under it is a paragraph. Main is the homepage height (`100vh` / `100svh` / `100dvh` minus the header). Default is the shorter inner-page band (540px, the live page hero). The old Hero block is hidden from the inserter.
 
 Core blocks the renderer knows: paragraph, heading, image, list (and list item), buttons (and button), group, columns (and column). Any other block, including classic HTML, renders the saved `innerHTML`, with inner blocks spliced in from `innerContent`.
 

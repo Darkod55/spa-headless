@@ -3,11 +3,15 @@ import type { WpBlock } from "../../lib/wp/types";
 import type {
   SpaCardGridAttributes,
   SpaHeroAttributes,
+  SpaHeroBannerDefaultAttributes,
+  SpaHeroBannerMainAttributes,
   SpaSectionAttributes,
 } from "../../generated/blocks";
 import { fallbackPlan } from "../../lib/blocks/fallback";
 import BlockRenderer from "./BlockRenderer.astro";
 import Hero from "./spa/Hero.astro";
+import HeroBannerMain from "./spa/HeroBannerMain.astro";
+import HeroBannerDefault from "./spa/HeroBannerDefault.astro";
 import Section from "./spa/Section.astro";
 import CardGrid from "./spa/CardGrid.astro";
 import Paragraph from "./core/Paragraph.astro";
@@ -30,6 +34,8 @@ const name = block.blockName;
 const pieces = fallbackPlan(block);
 const mapped = new Set([
   "spa/hero",
+  "spa/hero-banner-main",
+  "spa/hero-banner-default",
   "spa/section",
   "spa/card-grid",
   "core/paragraph",
@@ -52,6 +58,24 @@ const mapped = new Set([
         <BlockRenderer block={child} />
       ))}
     </Hero>
+  )
+}
+{
+  name === "spa/hero-banner-main" && (
+    <HeroBannerMain attrs={block.attrs as SpaHeroBannerMainAttributes}>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </HeroBannerMain>
+  )
+}
+{
+  name === "spa/hero-banner-default" && (
+    <HeroBannerDefault attrs={block.attrs as SpaHeroBannerDefaultAttributes}>
+      {block.innerBlocks.map((child) => (
+        <BlockRenderer block={child} />
+      ))}
+    </HeroBannerDefault>
   )
 }
 {

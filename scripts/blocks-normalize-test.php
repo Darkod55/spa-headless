@@ -78,4 +78,38 @@ spa_assert( null === $out[1]['blockName'], 'Freeform HTML keeps a null blockName
 spa_assert( '<p>Classic HTML</p>' === $out[1]['innerHTML'], 'Freeform innerHTML must be preserved.' );
 spa_assert( array( 'post', 'page' ) === spa_headless_post_types(), 'Default post types should be post and page.' );
 
+$hero = spa_headless_normalize_blocks(
+	array(
+		array(
+			'blockName'    => 'spa/hero-banner-main',
+			'attrs'        => array(
+				'background' => 'red',
+				'image'      => array(
+					'ID'  => 9,
+					'url' => 'https://squarepeg-cms.local/wp-content/uploads/hero.jpg',
+					'alt' => 'Team',
+					'sizes' => array(
+						'full' => array(
+							'width'  => 1600,
+							'height' => 900,
+						),
+					),
+				),
+			),
+			'innerBlocks'  => array(),
+			'innerHTML'    => '',
+			'innerContent' => array(),
+		),
+	)
+);
+$image = $hero[0]['attrs']['image'];
+spa_assert( is_array( $image ), 'Hero image should be normalized to an object.' );
+spa_assert( 9 === $image['id'], 'Hero image id should come from ID.' );
+spa_assert( 'https://squarepeg-cms.local/wp-content/uploads/hero.jpg' === $image['url'], 'Hero image url should be kept.' );
+spa_assert( 'Team' === $image['alt'], 'Hero image alt should be kept.' );
+spa_assert( 1600 === $image['width'] && 900 === $image['height'], 'Hero image size should come from sizes.full.' );
+
+$empty = spa_headless_prepare_hero_image( null );
+spa_assert( null === $empty, 'A missing hero image should be null.' );
+
 fwrite( STDOUT, "blocks normalizer ok\n" );

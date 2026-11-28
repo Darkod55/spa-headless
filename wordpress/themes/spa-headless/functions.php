@@ -15,11 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once __DIR__ . '/inc/hero-banner.php';
+
 add_action( 'after_setup_theme', 'spa_theme_setup' );
 add_action( 'customize_register', 'spa_theme_customize_identity' );
 add_action( 'customize_register', 'spa_theme_customize_announcement' );
 add_action( 'customize_controls_enqueue_scripts', 'spa_theme_customize_controls' );
 add_action( 'wp_enqueue_scripts', 'spa_theme_assets' );
+add_action( 'enqueue_block_assets', 'spa_theme_hero_banner_assets' );
 add_action( 'wp_head', 'spa_theme_noindex', 0 );
 add_filter( 'block_categories_all', 'spa_theme_block_category' );
 add_filter( 'blockstudio/settings/tailwind/config', 'spa_theme_tailwind_config' );
@@ -34,6 +37,8 @@ function spa_theme_setup(): void {
 	add_theme_support( 'post-thumbnails' );
 	add_theme_support( 'editor-styles' );
 	add_editor_style( 'assets/preview.css' );
+	add_editor_style( 'assets/editor.css' );
+	add_editor_style( 'assets/hero-banner.css' );
 	add_theme_support(
 		'html5',
 		array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' )
@@ -108,8 +113,19 @@ function spa_theme_fix_svg_mime( array $data, string $file, string $filename, $m
 }
 
 /**
- * Plain CSS so the WordPress preview is readable before Tailwind runs.
+ * Hero banner stylesheet for the editor iframe and the WordPress preview.
+ * block.json also points style and editorStyle at this file. The Astro app
+ * imports the same path.
  */
+function spa_theme_hero_banner_assets(): void {
+	wp_enqueue_style(
+		'spa-hero-banner',
+		get_stylesheet_directory_uri() . '/assets/hero-banner.css',
+		array(),
+		wp_get_theme()->get( 'Version' )
+	);
+}
+
 function spa_theme_assets(): void {
 	wp_enqueue_style(
 		'spa-headless-preview',

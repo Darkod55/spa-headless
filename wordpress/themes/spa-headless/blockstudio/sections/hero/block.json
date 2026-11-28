@@ -1,10 +1,11 @@
 {
   "$schema": "https://blockstudio.dev/schema/block",
   "name": "spa/hero",
-  "title": "Hero",
+  "title": "Hero (deprecated)",
   "category": "spa",
   "icon": "star-filled",
-  "description": "Page hero with kicker, heading, text, two links, and an optional image.",
+  "inserter": false,
+  "description": "Deprecated scaffold. Use Hero Banner Main or Hero Banner Default. Existing content still renders.",
   "blockstudio": {
     "attributes": [
       {

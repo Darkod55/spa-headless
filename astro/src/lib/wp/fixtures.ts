@@ -32,6 +32,23 @@ function heading(level: number, text: string): WpBlock {
   return block("core/heading", { level, content: text }, [], html);
 }
 
+const heroPhoto = {
+  id: 42,
+  url: "/fixtures/hero-photo.svg",
+  alt: "The Square Peg Agency",
+  width: 1200,
+  height: 800,
+};
+
+function heroBanner(
+  name: "spa/hero-banner-main" | "spa/hero-banner-default",
+  background: string,
+  title: string,
+  text: string,
+): WpBlock {
+  return block(name, { background, image: heroPhoto }, [heading(1, title), paragraph(text)]);
+}
+
 function page(options: {
   id: number;
   path: string;
@@ -77,16 +94,12 @@ const home = page({
     "The Square Peg Agency helps organisations in addiction, mental health, behavioural health and wellness stand out.",
   eyebrow: "The Square Peg Agency",
   blocks: [
-    block("spa/hero", {
-      eyebrow: "Addiction, mental health and wellness",
-      heading: "Why fit in when you can stand out?",
-      description:
-        "Strategic marketing for organisations that need a team who understands the sector and the people it serves.",
-      primaryButton: { title: "Our services", url: "/services" },
-      secondaryButton: { title: "Get in touch", url: "/contact" },
-      accentBg: false,
-      removeBottomPadding: false,
-    }),
+    heroBanner(
+      "spa/hero-banner-main",
+      "navy",
+      "Why fit in when you can stand out?",
+      "Strategic marketing for organisations in the addiction, mental health, behavioural health and wellness sectors.",
+    ),
     block(
       "spa/section",
       {
@@ -145,6 +158,12 @@ const about = page({
   title: "About",
   description: "A specialist marketing agency working across addiction, mental health and wellness.",
   blocks: [
+    heroBanner(
+      "spa/hero-banner-main",
+      "red",
+      "A specialist team, not a generalist roster",
+      "Strategy, content, design, and development, held in one place.",
+    ),
     block(
       "spa/section",
       {
@@ -193,13 +212,12 @@ const services = page({
   title: "Services",
   description: "Marketing, brand, digital, content, and ongoing support for specialist organisations.",
   blocks: [
-    block("spa/hero", {
-      eyebrow: "Services",
-      heading: "Marketing that holds together",
-      description:
-        "Strategy, brand, website, content, search, and the work that keeps it moving. Slugs stay identical to the live site.",
-      primaryButton: { title: "Start a conversation", url: "/contact" },
-    }),
+    heroBanner(
+      "spa/hero-banner-default",
+      "royal",
+      "Marketing that holds together",
+      "Strategy, brand, website, content, search, and the work that keeps it moving.",
+    ),
     block("spa/card-grid", {
       heading: "The set",
       cards: [
@@ -220,6 +238,12 @@ const contact = page({
   title: "Contact",
   description: "Talk to The Square Peg Agency.",
   blocks: [
+    heroBanner(
+      "spa/hero-banner-default",
+      "white",
+      "Let's talk",
+      "Tell us what the organisation needs. We'll tell you if we're the right team.",
+    ),
     block(
       "spa/section",
       {

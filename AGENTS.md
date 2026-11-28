@@ -40,6 +40,8 @@ Adding or changing a block touches both trees. `pnpm check` and `pnpm build` run
 5. Register `'spa/<slug>'` in `astro/src/components/blocks/BlockRenderer.astro` and pass inner blocks through the slot.
 6. Run `pnpm generate` (or `pnpm check`).
 
+Hero banners are two blocks, `spa/hero-banner-main` and `spa/hero-banner-default`, because the height is part of the block rather than a field an editor can flip. They share `blockstudio/sections/hero-banner/template.php` and `assets/hero-banner.css`. Astro imports that same CSS file. The background select adds `hero--bg-*`, and that class sets `--hero-bg`, `--hero-shape-1`, `--hero-shape-2`, and `--hero-text`. `--header-height` is set in `header.css` and in the hero stylesheet (5.5rem, 4.5rem under 640px). The old `spa/hero` scaffold stays registered with `inserter: false`.
+
 The generator exits non-zero when:
 
 - a BlockStudio block has no Astro component

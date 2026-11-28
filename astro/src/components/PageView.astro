@@ -10,7 +10,9 @@ interface Props {
 }
 
 const { content, head } = Astro.props;
-const hasHero = content.blocks.some((block) => block.blockName === "spa/hero");
+const hasHero = content.blocks.some((block) =>
+  ["spa/hero", "spa/hero-banner-main", "spa/hero-banner-default"].includes(block.blockName ?? ""),
+);
 const showTitle = !content.meta.spa_hide_title && !hasHero;
 ---
 

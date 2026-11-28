@@ -38,7 +38,7 @@ export interface SpaCardGridAttributes {
   accentBg?: boolean;
 }
 
-/** Hero — spa/hero (wordpress/themes/spa-headless/blockstudio/sections/hero/block.json) */
+/** Hero (deprecated) — spa/hero (wordpress/themes/spa-headless/blockstudio/sections/hero/block.json) */
 export interface SpaHeroAttributes {
   eyebrow?: string;
   heading?: string;
@@ -48,6 +48,18 @@ export interface SpaHeroAttributes {
   image?: SpaFileValue | null;
   removeBottomPadding?: boolean;
   accentBg?: boolean;
+}
+
+/** Hero Banner Default — spa/hero-banner-default (wordpress/themes/spa-headless/blockstudio/sections/hero-banner-default/block.json) */
+export interface SpaHeroBannerDefaultAttributes {
+  background?: string;
+  image?: SpaFileValue | null;
+}
+
+/** Hero Banner Main — spa/hero-banner-main (wordpress/themes/spa-headless/blockstudio/sections/hero-banner-main/block.json) */
+export interface SpaHeroBannerMainAttributes {
+  background?: string;
+  image?: SpaFileValue | null;
 }
 
 /** Section — spa/section (wordpress/themes/spa-headless/blockstudio/sections/section/block.json) */
@@ -81,6 +93,16 @@ export interface SpaHeroFieldMap {
   accentBg: true;
 }
 
+export interface SpaHeroBannerDefaultFieldMap {
+  background: true;
+  image: true;
+}
+
+export interface SpaHeroBannerMainFieldMap {
+  background: true;
+  image: true;
+}
+
 export interface SpaSectionFieldMap {
   heading: true;
   intro: true;
@@ -91,6 +113,8 @@ export interface SpaSectionFieldMap {
 export const spaBlockNames = [
   "spa/card-grid",
   "spa/hero",
+  "spa/hero-banner-default",
+  "spa/hero-banner-main",
   "spa/section",
 ] as const;
 
@@ -99,5 +123,7 @@ export type SpaBlockName = (typeof spaBlockNames)[number];
 export interface SpaBlockAttributesByName {
   "spa/card-grid": SpaCardGridAttributes;
   "spa/hero": SpaHeroAttributes;
+  "spa/hero-banner-default": SpaHeroBannerDefaultAttributes;
+  "spa/hero-banner-main": SpaHeroBannerMainAttributes;
   "spa/section": SpaSectionAttributes;
 }
